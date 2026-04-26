@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeftIcon, CheckCircleIcon, SymbolIcon } from '@/components/icons';
-import { ProjectActionButtons } from '@/components/projectActionButtons';
-import { SiteShell } from '@/components/siteShell';
+import { ProjectActionButtons } from '@/components/ProjectActionButtons';
+import { ProjectLinks } from '@/components/ProjectLinks';
+import { SiteShell } from '@/components/SiteShell';
 import { PageContainer, SurfaceCard, Tag } from '@/components/ui';
 import { getBetterTogetherProject } from '@/data/site';
 
@@ -139,6 +140,7 @@ export default function GetBetterTogetherPage() {
             </SurfaceCard>
           </aside>
         </section>
+        <ProjectLinks currentSlug={project.slug} />
       </PageContainer>
     </SiteShell>
   );

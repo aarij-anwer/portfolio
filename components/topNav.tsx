@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import posthog from 'posthog-js';
 import { GitHubIcon, LinkedInIcon } from '@/components/icons';
-import { ThemeToggle } from '@/components/themeToggle';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { siteMeta } from '@/data/site';
 import { cn } from '@/lib/utils';
 

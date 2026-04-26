@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-export default function TypewriterText({
+export function TypewriterText({
   text,
   delay = 20,
   className = '',

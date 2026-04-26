@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { TopNav } from '@/components/topNav';
+import { TopNav } from '@/components/TopNav';
 
 export function SiteShell({ children }: { children: ReactNode }) {
   return (

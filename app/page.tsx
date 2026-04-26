@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import { SymbolIcon } from '@/components/icons';
-import { HomeCtas } from '@/components/homeCtas';
-import { RichText } from '@/components/richText';
-import { SiteShell } from '@/components/siteShell';
+import { HomeCtas } from '@/components/HomeCtas';
+import { RichText } from '@/components/RichText';
+import { SiteShell } from '@/components/SiteShell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
 import { homeContent } from '@/data/site';
 import { getResumeFromTex } from '@/lib/resume';

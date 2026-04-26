@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import posthog from "posthog-js";
-import { ArrowUpRightIcon } from "@/components/icons";
-import { Tag } from "@/components/ui";
-import type { ProjectSummary } from "@/data/site";
-import { cn } from "@/lib/utils";
+import Image from 'next/image';
+import Link from 'next/link';
+import posthog from 'posthog-js';
+import { ArrowUpRightIcon } from '@/components/icons';
+import { Tag } from '@/components/ui';
+import type { ProjectSummary } from '@/data/site';
+import { cn } from '@/lib/utils';
 
 export function ProjectCard({ project }: { project: ProjectSummary }) {
   const content = (
@@ -22,14 +22,18 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
       </div>
       <div className="space-y-4 p-6 md:p-8">
         <div className="flex items-start justify-between gap-4">
-          <h2 className="text-2xl font-semibold tracking-[-0.02em] text-on-surface">{project.title}</h2>
+          <h2 className="text-2xl font-semibold tracking-[-0.02em] text-on-surface">
+            {project.title}
+          </h2>
           {project.href ? (
             <span className="text-on-surface-variant transition-colors group-hover:text-primary">
               <ArrowUpRightIcon className="h-5 w-5" />
             </span>
           ) : null}
         </div>
-        <p className="line-clamp-3 text-sm leading-7 text-on-surface-variant md:text-base">{project.summary}</p>
+        <p className="line-clamp-3 text-sm leading-7 text-on-surface-variant md:text-base">
+          {project.summary}
+        </p>
         <div className="flex flex-wrap gap-2">
           {project.tags.map((tag) => (
             <Tag key={tag}>{tag}</Tag>
@@ -44,7 +48,13 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
       <Link
         href={project.href}
         className="group block overflow-hidden rounded-2xl border border-surface-variant bg-surface-container-low transition-all duration-300 hover:border-outline"
-        onClick={() => posthog.capture("project_card_clicked", { slug: project.slug, title: project.title, href: project.href })}
+        onClick={() =>
+          posthog.capture('project_card_clicked', {
+            slug: project.slug,
+            title: project.title,
+            href: project.href,
+          })
+        }
       >
         {content}
       </Link>
@@ -54,7 +64,7 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
   return (
     <article
       className={cn(
-        "group block cursor-default overflow-hidden rounded-2xl border border-surface-variant bg-surface-container-low transition-all duration-300 hover:border-outline",
+        'group block cursor-default overflow-hidden rounded-2xl border border-surface-variant bg-surface-container-low transition-all duration-300 hover:border-outline'
       )}
     >
       {content}
