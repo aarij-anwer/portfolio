@@ -85,7 +85,7 @@ export function SurfaceCard({
   return (
     <div
       className={cn(
-        'rounded-2xl border border-outline-variant bg-surface-container shadow-glow min-h-72',
+        'rounded-2xl border border-outline-variant bg-surface-container shadow-glow',
         className
       )}
     >

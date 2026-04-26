@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { SymbolIcon } from '@/components/icons';
 import { HomeCtas } from '@/components/home-ctas';
+import { RichText } from '@/components/rich-text';
 import { SiteShell } from '@/components/site-shell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
 import { homeContent } from '@/data/site';
@@ -46,9 +47,9 @@ export default async function HomePage() {
           <h2 className="text-3xl font-semibold tracking-[-0.02em] text-on-surface md:text-4xl">
             Core Competencies
           </h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {resumeData.competencies.map((item) => (
-              <SurfaceCard key={item.label} className="p-8">
+              <SurfaceCard key={item.label} className="h-full min-h-72 p-8">
                 <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-surface-container-highest text-outline">
                   <SymbolIcon name={item.icon} className="h-6 w-6" />
                 </div>
@@ -56,7 +57,7 @@ export default async function HomePage() {
                   {item.label}
                 </h3>
                 <p className="text-base leading-7 text-on-surface-variant">
-                  {item.value}
+                  <RichText text={item.value} />
                 </p>
               </SurfaceCard>
             ))}

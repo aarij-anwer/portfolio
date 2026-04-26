@@ -8,16 +8,22 @@ export type ResumeContact = {
   icon: string;
 };
 
+export type ResumeTextSegment = {
+  text: string;
+  bold?: boolean;
+  italic?: boolean;
+};
+
 export type ResumeCompetency = {
   label: string;
-  value: string;
+  value: ResumeTextSegment[];
   icon: string;
 };
 
 export type ResumeExperience = {
   role: string;
   companyLine: string;
-  bullets: string[];
+  bullets: ResumeTextSegment[][];
   current?: boolean;
 };
 
@@ -166,28 +172,162 @@ function getSection(input: string, name: string) {
   return input.slice(sectionStart, nextSection === -1 ? undefined : nextSection);
 }
 
+function appendSegment(
+  segments: ResumeTextSegment[],
+  text: string,
+  marks: Omit<ResumeTextSegment, "text">,
+) {
+  if (!text) {
+    return;
+  }
+
+  const lastSegment = segments[segments.length - 1];
+
+  if (lastSegment && lastSegment.bold === marks.bold && lastSegment.italic === marks.italic) {
+    lastSegment.text += text;
+    return;
+  }
+
+  segments.push({ text, ...marks });
+}
+
+function readCommandGroupAt(input: string, command: string, start: number) {
+  const prefix = `\\${command}`;
+
+  if (!input.startsWith(prefix, start)) {
+    return null;
+  }
+
+  let cursor = start + prefix.length;
+
+  while (input[cursor] && /\s/.test(input[cursor])) {
+    cursor += 1;
+  }
+
+  if (input[cursor] !== "{") {
+    return null;
+  }
+
+  return readBraceGroup(input, cursor);
+}
+
+function normalizeSegments(segments: ResumeTextSegment[]) {
+  return segments
+    .map((segment) => ({
+      ...segment,
+      text: segment.text
+        .replace(/---/g, "-")
+        .replace(/--/g, "-")
+        .replace(/–/g, "-")
+        .replace(/~/g, " ")
+        .replace(/\s+/g, " "),
+    }))
+    .filter((segment) => segment.text.length > 0)
+    .map((segment, index, allSegments) => ({
+      ...segment,
+      text:
+        index === 0
+          ? segment.text.trimStart()
+          : index === allSegments.length - 1
+            ? segment.text.trimEnd()
+            : segment.text,
+    }))
+    .filter((segment) => segment.text.length > 0);
+}
+
+function parseLatexInline(input: string, marks: Omit<ResumeTextSegment, "text"> = {}): ResumeTextSegment[] {
+  const source = input.replace(/%.*$/gm, "");
+  const segments: ResumeTextSegment[] = [];
+  let cursor = 0;
+
+  while (cursor < source.length) {
+    const boldGroup = readCommandGroupAt(source, "textbf", cursor);
+
+    if (boldGroup) {
+      parseLatexInline(boldGroup.value, { ...marks, bold: true }).forEach((segment) => segments.push(segment));
+      cursor = boldGroup.end;
+      continue;
+    }
+
+    const italicGroup = readCommandGroupAt(source, "textit", cursor);
+
+    if (italicGroup) {
+      parseLatexInline(italicGroup.value, { ...marks, italic: true }).forEach((segment) => segments.push(segment));
+      cursor = italicGroup.end;
+      continue;
+    }
+
+    const smallGroup = readCommandGroupAt(source, "small", cursor);
+
+    if (smallGroup) {
+      parseLatexInline(smallGroup.value, marks).forEach((segment) => segments.push(segment));
+      cursor = smallGroup.end;
+      continue;
+    }
+
+    if (source.startsWith("\\href", cursor)) {
+      const hrefGroup = readCommandGroupAt(source, "href", cursor);
+
+      if (hrefGroup && source[hrefGroup.end] === "{") {
+        const labelGroup = readBraceGroup(source, hrefGroup.end);
+
+        if (labelGroup) {
+          parseLatexInline(labelGroup.value, marks).forEach((segment) => segments.push(segment));
+          cursor = labelGroup.end;
+          continue;
+        }
+      }
+    }
+
+    if (source.startsWith("\\textasciitilde{}", cursor)) {
+      appendSegment(segments, "~", marks);
+      cursor += "\\textasciitilde{}".length;
+      continue;
+    }
+
+    if (source.startsWith("\\\\", cursor)) {
+      appendSegment(segments, " ", marks);
+      cursor += 2;
+      continue;
+    }
+
+    if (source.startsWith("\\&", cursor)) {
+      appendSegment(segments, "&", marks);
+      cursor += 2;
+      continue;
+    }
+
+    if (source.startsWith("\\%", cursor)) {
+      appendSegment(segments, "%", marks);
+      cursor += 2;
+      continue;
+    }
+
+    const commandMatch = source.slice(cursor).match(/^\\(?:small|scshape|Huge|fa[A-Za-z]+)/);
+
+    if (commandMatch) {
+      cursor += commandMatch[0].length;
+      continue;
+    }
+
+    if (source[cursor] === "{" || source[cursor] === "}") {
+      cursor += 1;
+      continue;
+    }
+
+    appendSegment(segments, source[cursor], marks);
+    cursor += 1;
+  }
+
+  return normalizeSegments(segments);
+}
+
+function textFromSegments(segments: ResumeTextSegment[]) {
+  return segments.map((segment) => segment.text).join("").trim();
+}
+
 function decodeLatex(input: string) {
-  return input
-    .replace(/%.*$/gm, "")
-    .replace(/\\href\{([^{}]*)\}\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, "$2")
-    .replace(/\\textbf\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, "$1")
-    .replace(/\\textit\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, "$1")
-    .replace(/\\small\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, "$1")
-    .replace(/\\small/g, "")
-    .replace(/\\scshape/g, "")
-    .replace(/\\Huge/g, "")
-    .replace(/\\fa[A-Za-z]+/g, "")
-    .replace(/\\\\(?:\[[^\]]*\])?/g, " ")
-    .replace(/[{}]/g, "")
-    .replace(/\\textasciitilde\{\}/g, "~")
-    .replace(/\\&/g, "&")
-    .replace(/\\%/g, "%")
-    .replace(/---/g, "-")
-    .replace(/--/g, "-")
-    .replace(/–/g, "-")
-    .replace(/~/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  return textFromSegments(parseLatexInline(input));
 }
 
 function getHref(input: string) {
@@ -237,13 +377,15 @@ function parseHeading(input: string) {
 
 function parseCompetencies(input: string) {
   return readAllCommands(getSection(input, "Core Competencies"), "resumeItem").map((item) => {
-    const decoded = decodeLatex(item.args[0] ?? "");
+    const raw = item.args[0] ?? "";
+    const decoded = decodeLatex(raw);
     const [label = "Competency", ...valueParts] = decoded.split(":");
     const normalizedLabel = label.trim();
+    const rawValue = raw.replace(/^\\textbf\{[^{}]+\}\s*:\s*/, "");
 
     return {
       label: normalizedLabel,
-      value: valueParts.join(":").trim(),
+      value: parseLatexInline(rawValue || valueParts.join(":").trim()),
       icon: competencyIcons[normalizedLabel] ?? "code",
     };
   });
@@ -257,7 +399,7 @@ function parseExperience(input: string) {
     const nextHeading = headings[index + 1];
     const body = section.slice(heading.end, nextHeading?.start);
     const [role = "", dates = "", company = "", location = ""] = heading.args.map(decodeLatex);
-    const bullets = readAllCommands(body, "resumeItem").map((item) => decodeLatex(item.args[0] ?? ""));
+    const bullets = readAllCommands(body, "resumeItem").map((item) => parseLatexInline(item.args[0] ?? ""));
 
     return {
       role,
