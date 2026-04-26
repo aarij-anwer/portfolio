@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeftIcon, CheckCircleIcon, SymbolIcon } from "@/components/icons";
+import { ProjectActionButtons } from "@/components/project-action-buttons";
 import { SiteShell } from "@/components/site-shell";
-import { ButtonLink, PageContainer, SurfaceCard, Tag } from "@/components/ui";
+import { PageContainer, SurfaceCard, Tag } from "@/components/ui";
 import { getBetterTogetherProject } from "@/data/site";
 
 export default function GetBetterTogetherPage() {
@@ -111,13 +112,7 @@ export default function GetBetterTogetherPage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-10 flex flex-col gap-4 border-t border-outline-variant pt-6">
-                {project.actions.map((action) => (
-                  <ButtonLink key={action.label} href={action.href} variant={action.variant}>
-                    {action.label}
-                  </ButtonLink>
-                ))}
-              </div>
+              <ProjectActionButtons actions={project.actions} projectSlug={project.slug} />
             </SurfaceCard>
           </aside>
         </section>

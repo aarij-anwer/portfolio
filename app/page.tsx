@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { SymbolIcon } from "@/components/icons";
+import { HomeCtas } from "@/components/home-ctas";
 import { SiteShell } from "@/components/site-shell";
-import { ButtonLink, PageContainer, PageSection, SurfaceCard, Tag } from "@/components/ui";
+import { PageContainer, PageSection, SurfaceCard, Tag } from "@/components/ui";
 import { homeContent } from "@/data/site";
 
 export default function HomePage() {
@@ -18,12 +19,7 @@ export default function HomePage() {
               {titleParts[1]}
             </h1>
             <p className="max-w-xl text-lg leading-8 text-on-surface-variant">{homeContent.description}</p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <ButtonLink href="/projects">View Projects</ButtonLink>
-              <ButtonLink href="/resume" variant="secondary">
-                My Resume
-              </ButtonLink>
-            </div>
+            <HomeCtas />
           </div>
 
           <div className="group relative flex-shrink-0">

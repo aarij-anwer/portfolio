@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import posthog from "posthog-js";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { siteMeta } from "@/data/site";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,7 @@ export function TopNav() {
                 "border-b-2 pb-1 text-sm font-medium text-zinc-400 transition-colors hover:text-white",
                 isActive(pathname, item.href) ? "border-primary-container text-primary-container" : "border-transparent",
               )}
+              onClick={() => posthog.capture("nav_link_clicked", { label: item.label, href: item.href })}
             >
               {item.label}
             </Link>
@@ -43,6 +45,7 @@ export function TopNav() {
             aria-label="GitHub"
             className="rounded-md p-2 text-zinc-400 transition-all duration-200 hover:bg-zinc-900/50 hover:text-white"
             href={siteMeta.socialLinks.github}
+            onClick={() => posthog.capture("social_link_clicked", { platform: "github" })}
           >
             <GitHubIcon className="h-5 w-5" />
           </a>
@@ -50,6 +53,7 @@ export function TopNav() {
             aria-label="LinkedIn"
             className="rounded-md p-2 text-zinc-400 transition-all duration-200 hover:bg-zinc-900/50 hover:text-white"
             href={siteMeta.socialLinks.linkedin}
+            onClick={() => posthog.capture("social_link_clicked", { platform: "linkedin" })}
           >
             <LinkedInIcon className="h-5 w-5" />
           </a>

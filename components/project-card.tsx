@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import posthog from "posthog-js";
 import { ArrowUpRightIcon } from "@/components/icons";
 import { Tag } from "@/components/ui";
 import type { ProjectSummary } from "@/data/site";
@@ -41,6 +44,7 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
       <Link
         href={project.href}
         className="group block overflow-hidden rounded-2xl border border-surface-variant bg-surface-container-low transition-all duration-300 hover:border-outline"
+        onClick={() => posthog.capture("project_card_clicked", { slug: project.slug, title: project.title, href: project.href })}
       >
         {content}
       </Link>
