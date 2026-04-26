@@ -129,6 +129,7 @@ export const projects: ProjectSummary[] = [
     summary:
       'Crowdfunding platform specifically tailored for global communities. Involved optimizing the payment gateway integration and revamping the user dashboard for better campaign management.',
     tags: ['Next.js', 'TypeScript', 'Stripe API'],
+    href: '/projects/launchgood',
     image: {
       src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDvori9QWZo3Lv_pX8Sj8MaOpAsgu8Vvu5MoFYn-eJ6oD_Tk5WblYL8Of_SZtviuP0r-qbZLM71GlvouPnT4Y5ViH7f2WsncS1C67VMqU4LQD3mTw2y9G9AKi_7650zAh2r0Xi0M3oF_IJ3ORk6-luZsQTHDcxNapPBDCImbIPgqrJZM8N3fDaEEt3YAwYNe4-PutaGtgmRek-EpTXorXlqjzdDWzt7bPt3hhvHFYaHPnJNh6zxKux8qoGIJFVAnyUn8eHcVLX_MikO',
       alt: 'Diverse group of people collaborating around a table with a laptop.',
@@ -140,17 +141,19 @@ export const projects: ProjectSummary[] = [
     summary:
       'An enterprise-grade analytical tool to calculate and report financed emissions for financial institutions, ensuring compliance with global ESG standards and providing actionable insights.',
     tags: ['Python', 'Pandas', 'AWS'],
+    href: '/projects/esg-financed-emissions',
     image: {
       src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDX_uaOUYZfFUhxfRN5WjwGCj5p8uW58Ng9YdPjxaGPWQogP2AJR-ZWPBo1CMD0lQLDeUtu5ksAKiCuYQe6m9k-W7PenIghBrDOX8dKNfKIphvOWcsTJh4dslbOisA1l5T7fJtGvJLz2AipPYkiw9Boj4UmqilwtoVvHYuWXTrYsCGLWUrfvRx1754BV3NUK0GsZz9vueJYh8m9027kEzDGcRDC3x_Wi5qipp9xOq7DdEOHhl0E3tqfi9MFrhQBzEHdZlJV7se7S73-',
       alt: 'Financial charts and graphs displayed on a modern dark interface.',
     },
   },
   {
-    slug: 'stock-calculator',
-    title: 'Stock Calculator',
+    slug: 'stock-allocation-calculator',
+    title: 'Stock Allocation Calculator',
     summary:
       'A fast, client-side utility for quick financial modeling and stock projection. Designed with a focus on immediate feedback, complex math visualization, and an extremely lightweight footprint.',
     tags: ['Vue.js', 'Tailwind CSS', 'Vite'],
+    href: '/projects/stock-allocation-calculator',
     image: {
       src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCE7QTsKlHPEz5svlMjHPSJTl70K5mx29DZHwjhfVJJf97rXaV-UHCX9Vj9ClJsbW0OUmbs2u5rhU6F8AWNbbb148am6RnmIOdrKsBY3SO9XSKzWJ5xsusS_lJImwQCECuq7eCJ1j8msh5NwCyA_iaOnnEiIAWapxbTYfe4C7vUm2j_bIfLdPMS7G20RXnMU9W7kP56uhDhRvN40LrFnbBaJcbFi8x70V8203wV8O3DNzDoviqMW8y_9iIRbLC4geYHXIEUcMCJi8pE',
       alt: 'Minimalist stock market visuals against a black background.',
