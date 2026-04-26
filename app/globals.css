@@ -3,7 +3,83 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
+  --color-background: 248 250 252;
+  --color-surface: 255 255 255;
+  --color-surface-bright: 255 255 255;
+  --color-surface-container: 255 255 255;
+  --color-surface-container-low: 248 250 252;
+  --color-surface-container-high: 241 245 249;
+  --color-surface-container-highest: 226 232 240;
+  --color-surface-variant: 203 213 225;
+  --color-outline: 100 116 139;
+  --color-outline-variant: 203 213 225;
+  --color-primary: 0 91 193;
+  --color-primary-container: 37 99 235;
+  --color-primary-fixed: 29 78 216;
+  --color-primary-fixed-dim: 30 64 175;
+  --color-inverse-primary: 173 198 255;
+  --color-secondary: 71 85 105;
+  --color-tertiary: 82 82 91;
+  --color-on-background: 15 23 42;
+  --color-on-surface: 15 23 42;
+  --color-on-surface-variant: 71 85 105;
+  --color-on-primary: 255 255 255;
+  --color-on-primary-container: 255 255 255;
+  --color-inverse-surface: 30 41 59;
+  --color-inverse-on-surface: 241 245 249;
+  --background-page:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.1), transparent 22%),
+    radial-gradient(circle at top left, rgba(15, 23, 42, 0.04), transparent 18%),
+    rgb(var(--color-background));
+  --background-page-radial:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 25%),
+    radial-gradient(circle at top left, rgba(15, 23, 42, 0.04), transparent 18%);
+  --shadow-glow: 0 0 0 1px rgba(100, 116, 139, 0.12), 0 16px 48px rgba(15, 23, 42, 0.08);
+  --selection-background: rgba(37, 99, 235, 0.9);
+  --selection-color: #ffffff;
+}
+
+[data-theme="dark"] {
   color-scheme: dark;
+  --color-background: 17 20 21;
+  --color-surface: 17 20 21;
+  --color-surface-bright: 55 57 59;
+  --color-surface-container: 30 32 33;
+  --color-surface-container-low: 26 28 29;
+  --color-surface-container-high: 40 42 44;
+  --color-surface-container-highest: 51 53 55;
+  --color-surface-variant: 51 53 55;
+  --color-outline: 139 144 160;
+  --color-outline-variant: 65 71 85;
+  --color-primary: 173 198 255;
+  --color-primary-container: 75 142 255;
+  --color-primary-fixed: 216 226 255;
+  --color-primary-fixed-dim: 173 198 255;
+  --color-inverse-primary: 0 91 193;
+  --color-secondary: 201 198 197;
+  --color-tertiary: 200 198 197;
+  --color-on-background: 226 226 228;
+  --color-on-surface: 226 226 228;
+  --color-on-surface-variant: 193 198 215;
+  --color-on-primary: 0 46 105;
+  --color-on-primary-container: 0 40 92;
+  --color-inverse-surface: 226 226 228;
+  --color-inverse-on-surface: 47 49 50;
+  --background-page:
+    radial-gradient(circle at top right, rgba(75, 142, 255, 0.1), transparent 22%),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 18%),
+    rgb(var(--color-background));
+  --background-page-radial:
+    radial-gradient(circle at top right, rgba(75, 142, 255, 0.12), transparent 25%),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 18%);
+  --shadow-glow: 0 0 0 1px rgba(139, 144, 160, 0.12), 0 16px 48px rgba(0, 0, 0, 0.2);
+  --selection-background: rgba(75, 142, 255, 0.9);
+  --selection-color: #00285c;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
 }
 
 * {
@@ -17,11 +93,8 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(75, 142, 255, 0.1), transparent 22%),
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 18%),
-    #111415;
-  color: #e2e2e4;
+  background: var(--background-page);
+  color: rgb(var(--color-on-background));
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -40,6 +113,6 @@ select {
 }
 
 ::selection {
-  background: rgba(75, 142, 255, 0.9);
-  color: #00285c;
+  background: var(--selection-background);
+  color: var(--selection-color);
 }

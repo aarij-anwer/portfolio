@@ -45,6 +45,22 @@ export function CheckCircleIcon(props: IconProps) {
   );
 }
 
+export function SunIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v2.25" />
+      <path d="M12 19.25v2.25" />
+      <path d="m4.58 4.58 1.6 1.6" />
+      <path d="m17.82 17.82 1.6 1.6" />
+      <path d="M2.5 12h2.25" />
+      <path d="M19.25 12h2.25" />
+      <path d="m4.58 19.42 1.6-1.6" />
+      <path d="m17.82 6.18 1.6-1.6" />
+    </svg>
+  );
+}
+
 export function SymbolIcon({
   name,
   className,

@@ -57,7 +57,7 @@ export default function ResumePage() {
                 <div
                   className={
                     item.current
-                      ? "absolute -left-[7px] top-2 h-3 w-3 rounded-full bg-primary shadow-[0_0_8px_rgba(173,198,255,0.6)]"
+                      ? "absolute -left-[7px] top-2 h-3 w-3 rounded-full bg-primary shadow-[0_0_8px_rgb(var(--color-primary)_/_0.45)]"
                       : "absolute -left-[7px] top-2 h-3 w-3 rounded-full bg-surface-variant"
                   }
                 />
