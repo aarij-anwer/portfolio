@@ -2,12 +2,15 @@ import { SymbolIcon } from '@/components/icons';
 import { RichText } from '@/components/rich-text';
 import { SiteShell } from '@/components/site-shell';
 import { PageContainer, SurfaceCard } from '@/components/ui';
-import { getResumeFromTex } from '@/lib/resume';
+import { getResumeFromTex, hasResumePdf } from '@/lib/resume';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ResumePage() {
-  const resumeData = await getResumeFromTex();
+  const [resumeData, showResumePdfDownload] = await Promise.all([
+    getResumeFromTex(),
+    hasResumePdf(),
+  ]);
 
   return (
     <SiteShell>
@@ -17,19 +20,21 @@ export default async function ResumePage() {
             <h1 className="text-4xl font-bold tracking-[-0.04em] text-on-surface md:text-5xl">
               Muhammad Anwer
             </h1>
-            <a
-              className="inline-flex w-fit items-center justify-center rounded-lg border border-primary bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-colors duration-200 hover:bg-primary-fixed"
-              href="/Muhammad_Anwer_Resume.pdf"
-              download
-            >
-              Download PDF
-            </a>
+            {showResumePdfDownload ? (
+              <a
+                className="inline-flex w-fit items-center justify-center rounded-lg border border-primary bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-colors duration-200 hover:bg-primary-fixed"
+                href="/Muhammad_Anwer_Resume.pdf"
+                download
+              >
+                Download PDF
+              </a>
+            ) : null}
           </div>
         </header>
 
         <section className="space-y-6">
           <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-primary">
-            <SymbolIcon name="code_blocks" className="h-5 w-5" />
+            <SymbolIcon name="core_competencies" className="h-5 w-5" />
             Core Competencies
           </h2>
           <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">

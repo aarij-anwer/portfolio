@@ -44,7 +44,8 @@ export default async function HomePage() {
         </PageSection>
 
         <PageSection className="space-y-12">
-          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-on-surface md:text-4xl">
+          <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-[-0.02em] text-on-surface md:text-4xl">
+            <SymbolIcon name="core_competencies" className="h-7 w-7 text-primary md:h-8 md:w-8" />
             Core Competencies
           </h2>
           <div className="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

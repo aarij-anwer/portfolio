@@ -77,6 +77,21 @@ export function SymbolIcon({
           <path d="M5.5 19.5A9.5 9.5 0 1 1 18.5 4.5" />
         </svg>
       );
+    case "core_competencies":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className} aria-hidden="true">
+          <path d="M12 3.5 19 7v5c0 4.5-2.9 7.2-7 8.5-4.1-1.3-7-4-7-8.5V7l7-3.5Z" />
+          <path d="m8.5 12 2.2 2.2 4.8-5" />
+        </svg>
+      );
+    case "generative_ai":
+      return (
+        <svg viewBox="0 0 64 64" fill="currentColor" className={className} aria-hidden="true">
+          <path d="M22.625 2c0 15.834-8.557 30-20.625 30 12.068 0 20.625 14.167 20.625 30 0-15.833 8.557-30 20.625-30-12.068 0-20.625-14.166-20.625-30" />
+          <path d="M47 32c0 7.918-4.277 15-10.313 15C42.723 47 47 54.084 47 62c0-7.916 4.277-15 10.313-15C51.277 47 47 39.918 47 32z" />
+          <path d="M51.688 2c0 7.917-4.277 15-10.313 15 6.035 0 10.313 7.084 10.313 15 0-7.916 4.277-15 10.313-15-6.036 0-10.313-7.083-10.313-15" />
+        </svg>
+      );
     case "code_blocks":
     case "code":
       return (

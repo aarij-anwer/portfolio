@@ -1,6 +1,7 @@
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { unstable_noStore as noStore } from "next/cache";
+import { defaultResume } from "@/lib/default-resume";
 
 export type ResumeContact = {
   label: string;
@@ -55,8 +56,11 @@ const competencyIcons: Record<string, string> = {
   "Architecture & Systems": "architecture",
   "Reliability & Operations": "monitoring",
   "Cloud & DevOps": "cloud",
-  "ML & AI": "bolt",
+  "ML & AI": "generative_ai",
 };
+
+const resumeTexPath = path.join(process.cwd(), "public", "resume.tex");
+const resumePdfPath = path.join(process.cwd(), "public", "Muhammad_Anwer_Resume.pdf");
 
 function findMatchingBrace(input: string, openIndex: number) {
   let depth = 0;
@@ -433,16 +437,30 @@ function parseInterests(input: string) {
 export async function getResumeFromTex(): Promise<ParsedResume> {
   noStore();
 
-  const resumePath = path.join(process.cwd(), "public", "resume.tex");
-  const tex = await readFile(resumePath, "utf8");
-  const heading = parseHeading(tex);
+  try {
+    const tex = await readFile(resumeTexPath, "utf8");
+    const heading = parseHeading(tex);
 
-  return {
-    name: heading.name,
-    contact: heading.contact,
-    competencies: parseCompetencies(tex),
-    experience: parseExperience(tex),
-    education: parseEducation(tex),
-    interests: parseInterests(tex),
-  };
+    return {
+      name: heading.name,
+      contact: heading.contact,
+      competencies: parseCompetencies(tex),
+      experience: parseExperience(tex),
+      education: parseEducation(tex),
+      interests: parseInterests(tex),
+    };
+  } catch {
+    return defaultResume;
+  }
+}
+
+export async function hasResumePdf() {
+  noStore();
+
+  try {
+    await access(resumePdfPath);
+    return true;
+  } catch {
+    return false;
+  }
 }
