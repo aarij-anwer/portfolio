@@ -16,7 +16,7 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
           src={project.image.src}
           alt={project.image.alt}
           fill
-          className="object-cover grayscale opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100"
+          className="object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
       </div>

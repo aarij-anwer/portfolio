@@ -32,7 +32,7 @@ export default function GetBetterTogetherPage() {
               src={project.heroImage.src}
               alt={project.heroImage.alt}
               fill
-              className="object-cover grayscale transition-all duration-700 hover:grayscale-0"
+              className="object-cover transition-all duration-700"
               sizes="100vw"
             />
           </div>
@@ -45,7 +45,7 @@ export default function GetBetterTogetherPage() {
                 src={image.src}
                 alt={image.alt}
                 fill
-                className="object-cover grayscale transition-all duration-700 hover:grayscale-0"
+                className="object-cover transition-all duration-700"
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>

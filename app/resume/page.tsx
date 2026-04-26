@@ -1,33 +1,32 @@
 import { SymbolIcon } from "@/components/icons";
 import { SiteShell } from "@/components/site-shell";
-import { PageContainer, SurfaceCard, Tag } from "@/components/ui";
-import { resumeData, siteMeta } from "@/data/site";
+import { PageContainer, SurfaceCard } from "@/components/ui";
+import { getResumeFromTex } from "@/lib/resume";
 
-export default function ResumePage() {
+export const dynamic = "force-dynamic";
+
+export default async function ResumePage() {
+  const resumeData = await getResumeFromTex();
+
   return (
     <SiteShell>
       <PageContainer className="max-w-[900px] space-y-16">
-        <header className="space-y-4 border-b border-surface-variant pb-8">
-          <h1 className="text-4xl font-bold tracking-[-0.04em] text-on-surface md:text-5xl">{siteMeta.name}</h1>
-          <div className="flex flex-wrap gap-4 text-sm text-outline md:text-base">
-            <span className="flex items-center gap-2">
-              <SymbolIcon name="mail" className="h-4 w-4 text-primary" />
-              {resumeData.contact.email}
-            </span>
-            <span className="flex items-center gap-2">
-              <SymbolIcon name="phone" className="h-4 w-4 text-primary" />
-              {resumeData.contact.phone}
-            </span>
-            <span className="flex items-center gap-2">
-              <SymbolIcon name="location_on" className="h-4 w-4 text-primary" />
-              {resumeData.contact.location}
-            </span>
+        <header className="space-y-6 border-b border-surface-variant pb-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <h1 className="text-4xl font-bold tracking-[-0.04em] text-on-surface md:text-5xl">{resumeData.name}</h1>
+            <a
+              className="inline-flex w-fit items-center justify-center rounded-lg border border-primary bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-colors duration-200 hover:bg-primary-fixed"
+              href="/Muhammad_Anwer_Resume.pdf"
+              download
+            >
+              Download PDF
+            </a>
           </div>
         </header>
 
         <section className="space-y-6">
           <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-primary">
-            <SymbolIcon name="psychology" className="h-5 w-5" />
+            <SymbolIcon name="code_blocks" className="h-5 w-5" />
             Core Competencies
           </h2>
           <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
@@ -91,20 +90,6 @@ export default function ResumePage() {
                   <span className="mt-2 text-sm text-outline md:mt-0">{item.details}</span>
                 </div>
               </SurfaceCard>
-            ))}
-          </div>
-        </section>
-
-        <section className="space-y-6">
-          <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-primary">
-            <SymbolIcon name="favorite" className="h-5 w-5" />
-            Interests
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {resumeData.interests.map((item) => (
-              <Tag key={item} className="bg-surface-container-low px-4 py-2 text-sm">
-                {item}
-              </Tag>
             ))}
           </div>
         </section>

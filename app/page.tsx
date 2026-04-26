@@ -29,7 +29,7 @@ export default function HomePage() {
                 src={homeContent.portrait.src}
                 alt={homeContent.portrait.alt}
                 fill
-                className="object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+                className="object-cover transition-all duration-500"
                 sizes="(max-width: 768px) 256px, 320px"
               />
             </div>
