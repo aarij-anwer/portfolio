@@ -1,6 +1,6 @@
 import { SymbolIcon } from '@/components/icons';
-import { RichText } from '@/components/rich-text';
-import { SiteShell } from '@/components/site-shell';
+import { RichText } from '@/components/richText';
+import { SiteShell } from '@/components/siteShell';
 import { PageContainer, SurfaceCard } from '@/components/ui';
 import { getResumeFromTex, hasResumePdf } from '@/lib/resume';
 

@@ -1,7 +1,7 @@
-import { SiteShell } from "@/components/site-shell";
-import { ProjectCard } from "@/components/project-card";
-import { PageContainer, SectionTitle } from "@/components/ui";
-import { projects } from "@/data/site";
+import { SiteShell } from '@/components/siteShell';
+import { ProjectCard } from '@/components/projectCard';
+import { PageContainer, SectionTitle } from '@/components/ui';
+import { projects } from '@/data/site';
 
 export default function ProjectsPage() {
   return (

@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import { SymbolIcon } from '@/components/icons';
-import { HomeCtas } from '@/components/home-ctas';
-import { RichText } from '@/components/rich-text';
-import { SiteShell } from '@/components/site-shell';
+import { HomeCtas } from '@/components/homeCtas';
+import { RichText } from '@/components/richText';
+import { SiteShell } from '@/components/siteShell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
 import { homeContent } from '@/data/site';
 import { getResumeFromTex } from '@/lib/resume';
@@ -45,7 +45,10 @@ export default async function HomePage() {
 
         <PageSection className="space-y-12">
           <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-[-0.02em] text-on-surface md:text-4xl">
-            <SymbolIcon name="core_competencies" className="h-7 w-7 text-primary md:h-8 md:w-8" />
+            <SymbolIcon
+              name="core_competencies"
+              className="h-7 w-7 text-primary md:h-8 md:w-8"
+            />
             Core Competencies
           </h2>
           <div className="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
