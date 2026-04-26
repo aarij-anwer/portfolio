@@ -1,11 +1,15 @@
-import Image from "next/image";
-import { SymbolIcon } from "@/components/icons";
-import { HomeCtas } from "@/components/home-ctas";
-import { SiteShell } from "@/components/site-shell";
-import { PageContainer, PageSection, SurfaceCard, Tag } from "@/components/ui";
-import { homeContent } from "@/data/site";
+import Image from 'next/image';
+import { SymbolIcon } from '@/components/icons';
+import { HomeCtas } from '@/components/home-ctas';
+import { SiteShell } from '@/components/site-shell';
+import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
+import { homeContent } from '@/data/site';
+import { getResumeFromTex } from '@/lib/resume';
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const resumeData = await getResumeFromTex();
   const titleParts = homeContent.title.split(homeContent.accent);
 
   return (
@@ -18,7 +22,9 @@ export default function HomePage() {
               <span className="text-primary">{homeContent.accent}</span>
               {titleParts[1]}
             </h1>
-            <p className="max-w-xl text-lg leading-8 text-on-surface-variant">{homeContent.description}</p>
+            <p className="max-w-xl text-lg leading-8 text-on-surface-variant">
+              {homeContent.description}
+            </p>
             <HomeCtas />
           </div>
 
@@ -37,27 +43,21 @@ export default function HomePage() {
         </PageSection>
 
         <PageSection className="space-y-12">
-          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-on-surface md:text-4xl">Core Competencies</h2>
+          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-on-surface md:text-4xl">
+            Core Competencies
+          </h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {homeContent.competencies.map((item) => (
-              <SurfaceCard
-                key={item.title}
-                className={item.wide ? "p-8 lg:col-span-2" : "p-8"}
-              >
+            {resumeData.competencies.map((item) => (
+              <SurfaceCard key={item.label} className="p-8">
                 <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-surface-container-highest text-outline">
                   <SymbolIcon name={item.icon} className="h-6 w-6" />
                 </div>
-                <h3 className="mb-3 text-2xl font-semibold tracking-[-0.02em] text-on-surface">{item.title}</h3>
-                {item.description ? <p className="text-base leading-7 text-on-surface-variant">{item.description}</p> : null}
-                {item.tags ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {item.tags.map((tag) => (
-                      <Tag key={tag} className="border-transparent bg-surface-container-highest">
-                        {tag}
-                      </Tag>
-                    ))}
-                  </div>
-                ) : null}
+                <h3 className="mb-3 text-2xl font-semibold tracking-[-0.02em] text-on-surface">
+                  {item.label}
+                </h3>
+                <p className="text-base leading-7 text-on-surface-variant">
+                  {item.value}
+                </p>
               </SurfaceCard>
             ))}
           </div>
