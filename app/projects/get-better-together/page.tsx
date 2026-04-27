@@ -1,11 +1,11 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowLeftIcon, CheckCircleIcon, SymbolIcon } from '@/components/icons';
-import { ProjectActionButtons } from '@/components/ProjectActionButtons';
-import { ProjectLinks } from '@/components/ProjectLinks';
-import { SiteShell } from '@/components/SiteShell';
+import { ArrowLeftIcon, SymbolIcon, CheckCircleIcon } from '@/components/icons';
+import ProjectActionButtons from '@/components/ProjectActionButtons';
+import ProjectLinks from '@/components/ProjectLinks';
+import SiteShell from '@/components/SiteShell';
 import { PageContainer, SurfaceCard, Tag } from '@/components/ui';
 import { getBetterTogetherProject } from '@/data/site';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function GetBetterTogetherPage() {
   const project = getBetterTogetherProject;

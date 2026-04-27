@@ -1,6 +1,6 @@
-import type { ResumeTextSegment } from "@/lib/resume";
+import type { ResumeTextSegment } from '@/lib/resume';
 
-export function RichText({ text }: { text: ResumeTextSegment[] }) {
+export default function RichText({ text }: { text: ResumeTextSegment[] }) {
   return (
     <>
       {text.map((segment, index) => {

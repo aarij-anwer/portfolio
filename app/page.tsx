@@ -1,11 +1,11 @@
-import Image from 'next/image';
+import HomeCtas from '@/components/HomeCtas';
 import { SymbolIcon } from '@/components/icons';
-import { HomeCtas } from '@/components/HomeCtas';
-import { RichText } from '@/components/RichText';
-import { SiteShell } from '@/components/SiteShell';
+import RichText from '@/components/RichText';
+import SiteShell from '@/components/SiteShell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
 import { homeContent } from '@/data/site';
 import { getResumeFromTex } from '@/lib/resume';
+import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
 

@@ -9,7 +9,15 @@ import {
 } from '@/lib/types';
 
 // Re-export types for backward compatibility
-export type { NavLink, SocialLinks, ImageAsset, Competency, ProjectSummary, ProjectFeature, ProjectDetail };
+export type {
+  NavLink,
+  SocialLinks,
+  ImageAsset,
+  Competency,
+  ProjectSummary,
+  ProjectFeature,
+  ProjectDetail,
+};
 
 export const siteMeta = {
   name: 'Muhammad Anwer',

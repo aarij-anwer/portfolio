@@ -8,7 +8,7 @@ import { Tag } from '@/components/ui';
 import type { ProjectSummary } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-export function ProjectCard({ project }: { project: ProjectSummary }) {
+export default function ProjectCard({ project }: { project: ProjectSummary }) {
   const content = (
     <>
       <div className="relative aspect-[16/9] overflow-hidden bg-surface-container">

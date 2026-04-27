@@ -1,13 +1,16 @@
-import Link from "next/link";
-import { projects } from "@/data/site";
-import { ProjectLinksProps } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import Link from 'next/link';
+import { projects } from '@/data/site';
+import { ProjectLinksProps } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
-export function ProjectLinks({ currentSlug, className }: ProjectLinksProps) {
+export default function ProjectLinks({
+  currentSlug,
+  className,
+}: ProjectLinksProps) {
   const otherProjects = projects.filter((p) => p.slug !== currentSlug);
 
   return (
-    <section className={cn("space-y-8", className)}>
+    <section className={cn('space-y-8', className)}>
       <div className="border-t border-outline-variant pt-12">
         <h2 className="mb-8 text-2xl font-semibold tracking-[-0.02em] text-on-surface">
           Explore Other Projects

@@ -1,5 +1,5 @@
-import { SiteShell } from '@/components/SiteShell';
-import { ProjectCard } from '@/components/ProjectCard';
+import ProjectCard from '@/components/ProjectCard';
+import SiteShell from '@/components/SiteShell';
 import { PageContainer, SectionTitle } from '@/components/ui';
 import { projects } from '@/data/site';
 

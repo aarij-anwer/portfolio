@@ -1,15 +1,21 @@
-"use client";
+'use client';
 
-import posthog from "posthog-js";
-import { ButtonLink } from "@/components/ui";
+import posthog from 'posthog-js';
+import { ButtonLink } from '@/components/ui';
 
 type Action = {
   label: string;
   href: string;
-  variant: "primary" | "secondary";
+  variant: 'primary' | 'secondary';
 };
 
-export function ProjectActionButtons({ actions, projectSlug }: { actions: Action[]; projectSlug: string }) {
+export default function ProjectActionButtons({
+  actions,
+  projectSlug,
+}: {
+  actions: Action[];
+  projectSlug: string;
+}) {
   return (
     <div className="mt-10 flex flex-col gap-4 border-t border-outline-variant pt-6">
       {actions.map((action) => (
@@ -18,7 +24,7 @@ export function ProjectActionButtons({ actions, projectSlug }: { actions: Action
           href={action.href}
           variant={action.variant}
           onClick={() =>
-            posthog.capture("project_action_clicked", {
+            posthog.capture('project_action_clicked', {
               label: action.label,
               href: action.href,
               project_slug: projectSlug,

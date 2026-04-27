@@ -1,39 +1,39 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import posthog from "posthog-js";
-import { SunIcon } from "@/components/icons";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from 'react';
+import posthog from 'posthog-js';
+import { SunIcon } from '@/components/icons';
+import { cn } from '@/lib/utils';
 
-type ThemeMode = "light" | "dark" | "system";
-type ResolvedTheme = "light" | "dark";
+type ThemeMode = 'light' | 'dark' | 'system';
+type ResolvedTheme = 'light' | 'dark';
 
 const themeOptions: Array<{ mode: ThemeMode; label: string }> = [
-  { mode: "light", label: "Light" },
-  { mode: "dark", label: "Dark" },
-  { mode: "system", label: "System" },
+  { mode: 'light', label: 'Light' },
+  { mode: 'dark', label: 'Dark' },
+  { mode: 'system', label: 'System' },
 ];
 
 function getSystemTheme(): ResolvedTheme {
-  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    return "dark";
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
   }
 
-  return "light";
+  return 'light';
 }
 
 function getStoredMode(): ThemeMode {
-  const storedTheme = window.localStorage.getItem("theme");
+  const storedTheme = window.localStorage.getItem('theme');
 
-  if (storedTheme === "light" || storedTheme === "dark") {
+  if (storedTheme === 'light' || storedTheme === 'dark') {
     return storedTheme;
   }
 
-  return "system";
+  return 'system';
 }
 
 function resolveTheme(mode: ThemeMode): ResolvedTheme {
-  if (mode === "system") {
+  if (mode === 'system') {
     return getSystemTheme();
   }
 
@@ -44,8 +44,8 @@ function applyTheme(theme: ResolvedTheme) {
   document.documentElement.dataset.theme = theme;
 }
 
-export function ThemeToggle() {
-  const [mode, setMode] = useState<ThemeMode>("system");
+export default function ThemeToggle() {
+  const [mode, setMode] = useState<ThemeMode>('system');
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -56,19 +56,19 @@ export function ThemeToggle() {
     applyTheme(initialResolvedTheme);
     setMode(initialMode);
 
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const syncSystemTheme = (event: MediaQueryListEvent) => {
-      if (getStoredMode() !== "system") {
+      if (getStoredMode() !== 'system') {
         return;
       }
 
-      const nextTheme = event.matches ? "dark" : "light";
+      const nextTheme = event.matches ? 'dark' : 'light';
       applyTheme(nextTheme);
     };
 
-    mediaQuery.addEventListener("change", syncSystemTheme);
+    mediaQuery.addEventListener('change', syncSystemTheme);
 
-    return () => mediaQuery.removeEventListener("change", syncSystemTheme);
+    return () => mediaQuery.removeEventListener('change', syncSystemTheme);
   }, []);
 
   useEffect(() => {
@@ -79,32 +79,35 @@ export function ThemeToggle() {
     }
 
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         setIsOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", closeMenu);
-    document.addEventListener("keydown", closeOnEscape);
+    document.addEventListener('mousedown', closeMenu);
+    document.addEventListener('keydown', closeOnEscape);
 
     return () => {
-      document.removeEventListener("mousedown", closeMenu);
-      document.removeEventListener("keydown", closeOnEscape);
+      document.removeEventListener('mousedown', closeMenu);
+      document.removeEventListener('keydown', closeOnEscape);
     };
   }, []);
 
   function selectTheme(nextMode: ThemeMode) {
-    if (nextMode === "system") {
-      window.localStorage.removeItem("theme");
+    if (nextMode === 'system') {
+      window.localStorage.removeItem('theme');
     } else {
-      window.localStorage.setItem("theme", nextMode);
+      window.localStorage.setItem('theme', nextMode);
     }
 
     const nextTheme = resolveTheme(nextMode);
     applyTheme(nextTheme);
     setMode(nextMode);
     setIsOpen(false);
-    posthog.capture("theme_selected", { mode: nextMode, resolvedTheme: nextTheme });
+    posthog.capture('theme_selected', {
+      mode: nextMode,
+      resolvedTheme: nextTheme,
+    });
   }
 
   return (
@@ -133,14 +136,18 @@ export function ThemeToggle() {
               role="menuitemradio"
               aria-checked={mode === option.mode}
               className={cn(
-                "flex w-full items-center justify-between px-3 py-2 text-left text-sm text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface",
-                mode === option.mode && "bg-surface-container-high text-on-surface",
+                'flex w-full items-center justify-between px-3 py-2 text-left text-sm text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface',
+                mode === option.mode &&
+                  'bg-surface-container-high text-on-surface'
               )}
               onClick={() => selectTheme(option.mode)}
             >
               <span>{option.label}</span>
               {mode === option.mode ? (
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden="true" />
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-primary"
+                  aria-hidden="true"
+                />
               ) : null}
             </button>
           ))}
