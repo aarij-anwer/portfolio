@@ -1,9 +1,10 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import posthog from 'posthog-js';
-import { GitHubIcon, LinkedInIcon } from '@/components/icons';
+import { GitHubIcon, LinkedInIcon, MenuIcon, XIcon } from '@/components/icons';
 import { siteMeta } from '@/data/site';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
@@ -17,9 +18,40 @@ function isActive(pathname: string, href: string) {
 
 export function TopNav() {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    function closeMenu(event: PointerEvent) {
+      if (!navRef.current?.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('pointerdown', closeMenu);
+    document.addEventListener('keydown', closeOnEscape);
+
+    return () => {
+      document.removeEventListener('pointerdown', closeMenu);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, []);
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-outline-variant bg-surface/80 backdrop-blur-xl">
+    <nav
+      ref={navRef}
+      className="fixed inset-x-0 top-0 z-50 border-b border-outline-variant bg-surface/80 backdrop-blur-xl"
+    >
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 md:px-12">
         <Link
           className="text-sm font-bold tracking-tight text-on-surface md:text-base"
@@ -51,7 +83,7 @@ export function TopNav() {
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 md:gap-2">
           <ThemeToggle />
           <a
             aria-label="GitHub"
@@ -73,8 +105,52 @@ export function TopNav() {
           >
             <LinkedInIcon className="h-5 w-5" />
           </a>
+          <button
+            type="button"
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-menu"
+            className="ml-1 rounded-md p-2 text-on-surface-variant transition-all duration-200 hover:bg-surface-container-high hover:text-on-surface md:hidden"
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+          >
+            {isMobileMenuOpen ? (
+              <XIcon className="h-5 w-5" />
+            ) : (
+              <MenuIcon className="h-5 w-5" />
+            )}
+          </button>
         </div>
       </div>
+
+      {isMobileMenuOpen ? (
+        <div
+          id="mobile-nav-menu"
+          className="border-t border-outline-variant bg-surface/95 px-6 py-4 backdrop-blur-xl md:hidden"
+        >
+          <div className="mx-auto flex max-w-7xl flex-col gap-2">
+            {siteMeta.navLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  'rounded-lg px-3 py-3 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface',
+                  isActive(pathname, item.href) &&
+                    'bg-surface-container-high text-on-surface'
+                )}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  posthog.capture('nav_link_clicked', {
+                    label: item.label,
+                    href: item.href,
+                  });
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </nav>
   );
 }
