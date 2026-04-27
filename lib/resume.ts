@@ -1,46 +1,24 @@
 import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { unstable_noStore as noStore } from "next/cache";
+import {
+  ResumeContact,
+  ResumeTextSegment,
+  ResumeCompetency,
+  ResumeExperience,
+  ResumeEducation,
+  ParsedResume,
+} from "@/lib/types";
 import { defaultResume } from "@/lib/default-resume";
 
-export type ResumeContact = {
-  label: string;
-  href?: string;
-  icon: string;
-};
-
-export type ResumeTextSegment = {
-  text: string;
-  bold?: boolean;
-  italic?: boolean;
-};
-
-export type ResumeCompetency = {
-  label: string;
-  value: ResumeTextSegment[];
-  icon: string;
-};
-
-export type ResumeExperience = {
-  role: string;
-  companyLine: string;
-  bullets: ResumeTextSegment[][];
-  current?: boolean;
-};
-
-export type ResumeEducation = {
-  school: string;
-  credential: string;
-  details: string;
-};
-
-export type ParsedResume = {
-  name: string;
-  contact: ResumeContact[];
-  competencies: ResumeCompetency[];
-  experience: ResumeExperience[];
-  education: ResumeEducation[];
-  interests: string[];
+// Re-export types for backward compatibility
+export type {
+  ResumeContact,
+  ResumeTextSegment,
+  ResumeCompetency,
+  ResumeExperience,
+  ResumeEducation,
+  ParsedResume,
 };
 
 type LatexCommand = {

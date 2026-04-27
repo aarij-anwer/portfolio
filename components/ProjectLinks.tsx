@@ -1,11 +1,7 @@
 import Link from "next/link";
 import { projects } from "@/data/site";
+import { ProjectLinksProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-interface ProjectLinksProps {
-  currentSlug: string;
-  className?: string;
-}
 
 export function ProjectLinks({ currentSlug, className }: ProjectLinksProps) {
   const otherProjects = projects.filter((p) => p.slug !== currentSlug);

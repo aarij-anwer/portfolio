@@ -5,7 +5,7 @@ import Link from 'next/link';
 import posthog from 'posthog-js';
 import { ArrowUpRightIcon } from '@/components/icons';
 import { Tag } from '@/components/ui';
-import type { ProjectSummary } from '@/data/site';
+import type { ProjectSummary } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 export function ProjectCard({ project }: { project: ProjectSummary }) {

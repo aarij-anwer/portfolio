@@ -1,61 +1,15 @@
-export type NavLink = {
-  label: string;
-  href: string;
-};
+import {
+  NavLink,
+  SocialLinks,
+  ImageAsset,
+  Competency,
+  ProjectSummary,
+  ProjectFeature,
+  ProjectDetail,
+} from '@/lib/types';
 
-export type SocialLinks = {
-  github: string;
-  linkedin: string;
-};
-
-export type ImageAsset = {
-  src: string;
-  alt: string;
-};
-
-export type Competency = {
-  title: string;
-  description?: string;
-  icon: string;
-  tags?: string[];
-  wide?: boolean;
-};
-
-export type ProjectSummary = {
-  slug: string;
-  title: string;
-  summary: string;
-  tags: string[];
-  image: ImageAsset;
-  href?: string;
-};
-
-export type ProjectFeature = {
-  title: string;
-  description: string;
-  icon: string;
-};
-
-export type ProjectDetail = {
-  slug: string;
-  title: string;
-  eyebrow: string;
-  summary: string;
-  heroImage: ImageAsset;
-  gallery: ImageAsset[];
-  overview: string[];
-  features: ProjectFeature[];
-  metrics: string[];
-  techStack: Array<{
-    label: string;
-    items: string[];
-  }>;
-  actions: Array<{
-    label: string;
-    href: string;
-    variant: 'primary' | 'secondary';
-  }>;
-};
+// Re-export types for backward compatibility
+export type { NavLink, SocialLinks, ImageAsset, Competency, ProjectSummary, ProjectFeature, ProjectDetail };
 
 export const siteMeta = {
   name: 'Muhammad Anwer',
