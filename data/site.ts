@@ -74,29 +74,6 @@ export const homeContent = {
 
 export const projects: ProjectSummary[] = [
   {
-    slug: 'get-better-together',
-    title: 'Get Better Together',
-    summary:
-      'A social fitness challenge app designed to drive long-term consistency through accountability and competition. Users create private challenges, invite friends, track daily progress, maintain streaks, and compete via real-time leaderboards. Features guest onboarding (no signup), smart backlog filling, and a mobile-first UX to minimize friction and maximize engagement.',
-    tags: [
-      'React',
-      'TypeScript',
-      'Vite',
-      'Tailwind CSS',
-      'Node.js',
-      'Express',
-      'PostgreSQL',
-      'Prisma',
-      'Product Design',
-      'Buildathon',
-    ],
-    href: '/projects/get-better-together',
-    image: {
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBrc_jCzWD-CVrnV9EGeafSQWkxgZxq-uptsHJwWayF4_Cof7qXD9k-1NCQokKpsfn97svZMOzeF_wMcvT9Pyd-hIQ1tVPEdoVemich8YZ2yxdbG303CGVGgmRByAUAlpoy71eAiVaesc-Qwv0GUKZxFA6R5amjdEyz0UdgZCvPtI5MxtPSxvfYmU4D-0I069f424ii9WinM66F9iGGbEPnWWeBTrtB2uaQr3E01l6pYDaLOFrrPaeamOPUL8ej0vPovZwZfMaWH3Cx',
-      alt: 'Social fitness challenge dashboard with streak tracking and leaderboards.',
-    },
-  },
-  {
     slug: 'launchgood',
     title: 'LaunchGood',
     summary:
@@ -141,6 +118,29 @@ export const projects: ProjectSummary[] = [
     image: {
       src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDX_uaOUYZfFUhxfRN5WjwGCj5p8uW58Ng9YdPjxaGPWQogP2AJR-ZWPBo1CMD0lQLDeUtu5ksAKiCuYQe6m9k-W7PenIghBrDOX8dKNfKIphvOWcsTJh4dslbOisA1l5T7fJtGvJLz2AipPYkiw9Boj4UmqilwtoVvHYuWXTrYsCGLWUrfvRx1754BV3NUK0GsZz9vueJYh8m9027kEzDGcRDC3x_Wi5qipp9xOq7DdEOHhl0E3tqfi9MFrhQBzEHdZlJV7se7S73-',
       alt: 'Enterprise analytics dashboard for emissions and financial data.',
+    },
+  },
+  {
+    slug: 'get-better-together',
+    title: 'Get Better Together',
+    summary:
+      'A social fitness challenge app designed to drive long-term consistency through accountability and competition. Users create private challenges, invite friends, track daily progress, maintain streaks, and compete via real-time leaderboards. Features guest onboarding (no signup), smart backlog filling, and a mobile-first UX to minimize friction and maximize engagement.',
+    tags: [
+      'React',
+      'TypeScript',
+      'Vite',
+      'Tailwind CSS',
+      'Node.js',
+      'Express',
+      'PostgreSQL',
+      'Prisma',
+      'Product Design',
+      'Buildathon',
+    ],
+    href: '/projects/get-better-together',
+    image: {
+      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBrc_jCzWD-CVrnV9EGeafSQWkxgZxq-uptsHJwWayF4_Cof7qXD9k-1NCQokKpsfn97svZMOzeF_wMcvT9Pyd-hIQ1tVPEdoVemich8YZ2yxdbG303CGVGgmRByAUAlpoy71eAiVaesc-Qwv0GUKZxFA6R5amjdEyz0UdgZCvPtI5MxtPSxvfYmU4D-0I069f424ii9WinM66F9iGGbEPnWWeBTrtB2uaQr3E01l6pYDaLOFrrPaeamOPUL8ej0vPovZwZfMaWH3Cx',
+      alt: 'Social fitness challenge dashboard with streak tracking and leaderboards.',
     },
   },
   {

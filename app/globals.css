@@ -152,7 +152,6 @@ select {
 }
 
 .project-gallery-swiper {
-  --swiper-navigation-color: #ffffff;
   --swiper-pagination-color: rgb(var(--color-primary));
   --swiper-pagination-bullet-inactive-color: rgb(
     var(--color-on-surface-variant)
@@ -160,40 +159,45 @@ select {
   --swiper-pagination-bullet-inactive-opacity: 0.35;
 }
 
-.project-gallery-swiper .swiper-button-prev,
-.project-gallery-swiper .swiper-button-next {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(8px);
-  color: white;
+.project-gallery-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgb(var(--color-on-surface-variant));
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1;
+  transform: translateY(-50%);
   transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease,
     transform 0.2s ease;
 }
 
-.project-gallery-swiper .swiper-button-prev {
-  left: 0.75rem;
+.project-gallery-arrow:hover {
+  color: #ffffff;
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05);
 }
 
-.project-gallery-swiper .swiper-button-next {
-  right: 0.75rem;
+.project-gallery-arrow:disabled {
+  opacity: 0.35;
 }
 
-.project-gallery-swiper .swiper-button-prev:hover,
-.project-gallery-swiper .swiper-button-next:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: scale(1.04);
+.project-gallery-arrow-prev {
+  left: 1rem;
 }
 
-.project-gallery-swiper .swiper-button-prev::after,
-.project-gallery-swiper .swiper-button-next::after {
-  font-size: 0.85rem;
-  font-weight: 800;
+.project-gallery-arrow-next {
+  right: 1rem;
 }
 
 .project-gallery-swiper .swiper-button-disabled {

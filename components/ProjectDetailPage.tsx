@@ -14,7 +14,7 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
   return (
     <SiteShell>
       <PageContainer className="space-y-14 md:space-y-20">
-        <header className="max-w-4xl space-y-8">
+        <header className="space-y-8">
           <Link
             href="/projects"
             className="inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-primary-fixed-dim"
@@ -23,16 +23,12 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
             Back to projects
           </Link>
 
-          <div className="space-y-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
-              {project.eyebrow}
-            </p>
-
+          <div className="w-full space-y-5">
             <h1 className="text-4xl font-bold tracking-[-0.05em] text-on-surface md:text-6xl">
               {project.title}
             </h1>
 
-            <p className="max-w-3xl text-lg leading-8 text-on-surface-variant">
+            <p className="text-lg leading-8 text-on-surface-variant">
               {project.summary}
             </p>
           </div>
