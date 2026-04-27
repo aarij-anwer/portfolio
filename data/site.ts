@@ -35,7 +35,7 @@ export const homeContent = {
   title: 'Muhammad Anwer',
   accent: 'Anwer',
   description:
-    'Full-stack engineer focused on building high-impact products: from rapid 0→1 MVPs to scalable, production systems. I combine product thinking, strong systems design, and execution speed to deliver meaningful results.”',
+    'Full-stack engineer focused on building high-impact products: from rapid 0→1 MVPs to scalable, production systems. I combine product thinking, strong systems design, and execution speed to deliver meaningful results.',
   portrait: {
     src: '/C1F0A34C-22D0-425C-9909-2A768B9C1864_1_105_c.jpeg',
     alt: 'Muhammad Anwer',
