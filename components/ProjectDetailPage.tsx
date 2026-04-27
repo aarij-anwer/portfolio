@@ -1,10 +1,9 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeftIcon, CheckCircleIcon, SymbolIcon } from '@/components/icons';
+import { ArrowLeftIcon, CheckCircleIcon } from '@/components/icons';
 import ProjectActionButtons from '@/components/ProjectActionButtons';
-import ProjectLinks from '@/components/ProjectLinks';
+import ProjectGallery from '@/components/ProjectGallery';
 import SiteShell from '@/components/SiteShell';
-import { PageContainer, SurfaceCard, Tag } from '@/components/ui';
+import { PageContainer, Tag } from '@/components/ui';
 import type { ProjectDetail } from '@/lib/types';
 
 interface ProjectDetailPageProps {
@@ -14,119 +13,99 @@ interface ProjectDetailPageProps {
 export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
   return (
     <SiteShell>
-      <PageContainer className="space-y-16 md:space-y-24">
-        <header className="space-y-6">
+      <PageContainer className="space-y-14 md:space-y-20">
+        <header className="max-w-4xl space-y-8">
           <Link
             href="/projects"
             className="inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-primary-fixed-dim"
           >
             <ArrowLeftIcon className="h-4 w-4" />
-            {project.eyebrow}
+            Back to projects
           </Link>
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold tracking-[-0.04em] text-on-surface md:text-5xl">
+
+          <div className="space-y-5">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+              {project.eyebrow}
+            </p>
+
+            <h1 className="text-4xl font-bold tracking-[-0.05em] text-on-surface md:text-6xl">
               {project.title}
             </h1>
-            <p className="max-w-2xl text-lg leading-8 text-on-surface-variant">
+
+            <p className="max-w-3xl text-lg leading-8 text-on-surface-variant">
               {project.summary}
             </p>
           </div>
         </header>
 
-        <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-low md:col-span-3 md:aspect-[21/9]">
-            <Image
-              src={project.heroImage.src}
-              alt={project.heroImage.alt}
-              fill
-              className="object-cover transition-all duration-700"
-              sizes="100vw"
-            />
-          </div>
-          {project.gallery.map((image) => (
-            <div
-              key={image.src}
-              className="relative aspect-video overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-low"
-            >
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                className="object-cover transition-all duration-700"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-            </div>
-          ))}
-        </section>
+        <ProjectGallery images={[project.heroImage, ...project.gallery]} />
 
-        <section className="grid grid-cols-1 gap-8 md:grid-cols-12">
-          <div className="space-y-8 md:col-span-8">
-            <SurfaceCard className="p-8">
-              <h2 className="mb-6 flex items-center gap-3 text-2xl font-semibold tracking-[-0.02em] text-on-surface">
-                <SymbolIcon
-                  name="architecture"
-                  className="h-6 w-6 text-primary"
-                />
-                Technical Overview
+        <main className="grid gap-14 border-t border-outline-variant pt-12 md:grid-cols-[minmax(0,1fr)_320px] md:gap-16">
+          <article className="max-w-3xl space-y-12">
+            <section className="space-y-5">
+              <h2 className="text-2xl font-semibold tracking-[-0.03em] text-on-surface">
+                Overview
               </h2>
-              <div className="space-y-6 text-base leading-7 text-on-surface-variant">
+
+              <div className="space-y-5 text-base leading-8 text-on-surface-variant">
                 {project.overview.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
-            </SurfaceCard>
+            </section>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {project.features.map((feature) => (
-                <SurfaceCard
-                  key={feature.title}
-                  className="bg-surface-container-low p-6"
-                >
-                  <SymbolIcon
-                    name={feature.icon}
-                    className="mb-4 h-8 w-8 text-primary"
-                  />
-                  <h3 className="mb-2 text-xl font-semibold tracking-[-0.02em] text-on-surface">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm leading-7 text-on-surface-variant">
-                    {feature.description}
-                  </p>
-                </SurfaceCard>
-              ))}
-            </div>
-
-            <SurfaceCard className="p-8">
-              <h2 className="mb-6 flex items-center gap-3 text-2xl font-semibold tracking-[-0.02em] text-on-surface">
-                <SymbolIcon
-                  name="monitoring"
-                  className="h-6 w-6 text-primary"
-                />
-                Performance &amp; Impact
+            <section className="space-y-6">
+              <h2 className="text-2xl font-semibold tracking-[-0.03em] text-on-surface">
+                What I built
               </h2>
+
+              <div className="space-y-6">
+                {project.features.map((feature) => (
+                  <div
+                    key={feature.title}
+                    className="border-l border-outline-variant pl-5"
+                  >
+                    <h3 className="text-lg font-semibold text-on-surface">
+                      {feature.title}
+                    </h3>
+
+                    <p className="mt-2 text-base leading-7 text-on-surface-variant">
+                      {feature.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-semibold tracking-[-0.03em] text-on-surface">
+                Results
+              </h2>
+
               <ul className="space-y-4 text-base leading-7 text-on-surface-variant">
                 {project.metrics.map((metric) => (
-                  <li key={metric} className="flex items-start gap-3">
+                  <li key={metric} className="flex gap-3">
                     <CheckCircleIcon className="mt-1 h-5 w-5 flex-none text-primary" />
                     <span>{metric}</span>
                   </li>
                 ))}
               </ul>
-            </SurfaceCard>
-          </div>
+            </section>
+          </article>
 
-          <aside className="space-y-8 md:col-span-4">
-            <SurfaceCard className="p-8 md:sticky md:top-24">
-              <h2 className="mb-6 flex items-center gap-3 text-2xl font-semibold tracking-[-0.02em] text-on-surface">
-                <SymbolIcon name="terminal" className="h-6 w-6 text-primary" />
+          <aside className="space-y-10 md:sticky md:top-24 md:self-start">
+            <section className="space-y-5">
+              <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
                 Tech Stack
               </h2>
+
               <div className="space-y-6">
                 {project.techStack.map((group) => (
-                  <div key={group.label}>
-                    <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-on-surface-variant">
+                  <div key={group.label} className="space-y-3">
+                    <h3 className="text-base font-semibold text-on-surface">
                       {group.label}
                     </h3>
+
                     <div className="flex flex-wrap gap-2">
                       {group.items.map((item) => (
                         <Tag key={item}>{item}</Tag>
@@ -135,13 +114,14 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
                   </div>
                 ))}
               </div>
-              <ProjectActionButtons
-                actions={project.actions}
-                projectSlug={project.slug}
-              />
-            </SurfaceCard>
+            </section>
+
+            <ProjectActionButtons
+              actions={project.actions}
+              projectSlug={project.slug}
+            />
           </aside>
-        </section>
+        </main>
       </PageContainer>
     </SiteShell>
   );

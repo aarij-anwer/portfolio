@@ -1,68 +1,67 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
-import Lightbox from 'yet-another-react-lightbox';
+import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 type GalleryImage = {
   src: string;
   alt: string;
 };
 
-export default function ProjectGallery({ images }: { images: GalleryImage[] }) {
-  const [index, setIndex] = useState(-1);
+interface ProjectGalleryProps {
+  images: GalleryImage[];
+}
+
+export default function ProjectGallery({ images }: ProjectGalleryProps) {
+  const hasMultipleImages = images.length > 1;
+
+  if (images.length === 0) {
+    return null;
+  }
 
   return (
-    <section aria-labelledby="project-gallery" className="space-y-5">
-      <div>
-        <h2
-          id="project-gallery"
-          className="text-2xl font-semibold tracking-[-0.03em] text-on-surface"
+    <section className="space-y-4">
+      <div className="overflow-hidden rounded-3xl border border-outline-variant bg-surface-container-low">
+        <Swiper
+          modules={[Navigation, Pagination, Keyboard, A11y]}
+          slidesPerView={1}
+          navigation={hasMultipleImages}
+          pagination={
+            hasMultipleImages
+              ? {
+                  clickable: true,
+                }
+              : false
+          }
+          keyboard={{
+            enabled: true,
+          }}
+          loop={hasMultipleImages}
+          className="project-gallery-swiper"
         >
-          Gallery
-        </h2>
+          {images.map((image, index) => (
+            <SwiperSlide key={image.src}>
+              <div className="relative aspect-[16/10] w-full md:aspect-[21/9]">
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  priority={index === 0}
+                  className="object-cover"
+                  sizes="100vw"
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
 
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-on-surface-variant">
-          A look at the core product experience, including challenge tracking,
-          progress views, and leaderboard interactions.
+      {hasMultipleImages && (
+        <p className="text-center text-sm text-on-surface-variant">
+          Swipe or use the arrows to view more images.
         </p>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-        {images.map((image, imageIndex) => (
-          <button
-            key={image.src}
-            type="button"
-            onClick={() => setIndex(imageIndex)}
-            className={
-              imageIndex === 0
-                ? 'group relative aspect-[16/10] overflow-hidden rounded-3xl border border-outline-variant bg-surface-container-low md:col-span-12 md:aspect-[21/9]'
-                : 'group relative aspect-[16/10] overflow-hidden rounded-3xl border border-outline-variant bg-surface-container-low md:col-span-4'
-            }
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              priority={imageIndex === 0}
-              className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-              sizes={
-                imageIndex === 0 ? '100vw' : '(max-width: 768px) 100vw, 33vw'
-              }
-            />
-          </button>
-        ))}
-      </div>
-
-      <Lightbox
-        open={index >= 0}
-        index={index}
-        close={() => setIndex(-1)}
-        slides={images.map((image) => ({
-          src: image.src,
-          alt: image.alt,
-        }))}
-      />
+      )}
     </section>
   );
 }

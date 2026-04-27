@@ -1,3 +1,7 @@
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -29,18 +33,31 @@
   --color-inverse-surface: 30 41 59;
   --color-inverse-on-surface: 241 245 249;
   --background-page:
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.1), transparent 22%),
-    radial-gradient(circle at top left, rgba(15, 23, 42, 0.04), transparent 18%),
+    radial-gradient(
+      circle at top right,
+      rgba(37, 99, 235, 0.1),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at top left,
+      rgba(15, 23, 42, 0.04),
+      transparent 18%
+    ),
     rgb(var(--color-background));
   --background-page-radial:
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 25%),
+    radial-gradient(
+      circle at top right,
+      rgba(37, 99, 235, 0.12),
+      transparent 25%
+    ),
     radial-gradient(circle at top left, rgba(15, 23, 42, 0.04), transparent 18%);
-  --shadow-glow: 0 0 0 1px rgba(100, 116, 139, 0.12), 0 16px 48px rgba(15, 23, 42, 0.08);
+  --shadow-glow:
+    0 0 0 1px rgba(100, 116, 139, 0.12), 0 16px 48px rgba(15, 23, 42, 0.08);
   --selection-background: rgba(37, 99, 235, 0.9);
   --selection-color: #ffffff;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   color-scheme: dark;
   --color-background: 17 20 21;
   --color-surface: 17 20 21;
@@ -67,18 +84,35 @@
   --color-inverse-surface: 226 226 228;
   --color-inverse-on-surface: 47 49 50;
   --background-page:
-    radial-gradient(circle at top right, rgba(75, 142, 255, 0.1), transparent 22%),
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 18%),
+    radial-gradient(
+      circle at top right,
+      rgba(75, 142, 255, 0.1),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.03),
+      transparent 18%
+    ),
     rgb(var(--color-background));
   --background-page-radial:
-    radial-gradient(circle at top right, rgba(75, 142, 255, 0.12), transparent 25%),
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 18%);
-  --shadow-glow: 0 0 0 1px rgba(139, 144, 160, 0.12), 0 16px 48px rgba(0, 0, 0, 0.2);
+    radial-gradient(
+      circle at top right,
+      rgba(75, 142, 255, 0.12),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.03),
+      transparent 18%
+    );
+  --shadow-glow:
+    0 0 0 1px rgba(139, 144, 160, 0.12), 0 16px 48px rgba(0, 0, 0, 0.2);
   --selection-background: rgba(75, 142, 255, 0.9);
   --selection-color: #00285c;
 }
 
-[data-theme="light"] {
+[data-theme='light'] {
   color-scheme: light;
 }
 
@@ -115,4 +149,69 @@ select {
 ::selection {
   background: var(--selection-background);
   color: var(--selection-color);
+}
+
+.project-gallery-swiper {
+  --swiper-navigation-color: #ffffff;
+  --swiper-pagination-color: rgb(var(--color-primary));
+  --swiper-pagination-bullet-inactive-color: rgb(
+    var(--color-on-surface-variant)
+  );
+  --swiper-pagination-bullet-inactive-opacity: 0.35;
+}
+
+.project-gallery-swiper .swiper-button-prev,
+.project-gallery-swiper .swiper-button-next {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  color: white;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.project-gallery-swiper .swiper-button-prev {
+  left: 0.75rem;
+}
+
+.project-gallery-swiper .swiper-button-next {
+  right: 0.75rem;
+}
+
+.project-gallery-swiper .swiper-button-prev:hover,
+.project-gallery-swiper .swiper-button-next:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: scale(1.04);
+}
+
+.project-gallery-swiper .swiper-button-prev::after,
+.project-gallery-swiper .swiper-button-next::after {
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.project-gallery-swiper .swiper-button-disabled {
+  opacity: 0.25;
+}
+
+.project-gallery-swiper .swiper-pagination {
+  bottom: 0.9rem !important;
+}
+
+.project-gallery-swiper .swiper-pagination-bullet {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: rgb(var(--color-on-surface-variant));
+  opacity: 0.4;
+}
+
+.project-gallery-swiper .swiper-pagination-bullet-active {
+  background: rgb(var(--color-primary));
+  opacity: 1;
 }
