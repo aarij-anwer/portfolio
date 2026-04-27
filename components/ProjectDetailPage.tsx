@@ -142,7 +142,6 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
             </SurfaceCard>
           </aside>
         </section>
-        <ProjectLinks currentSlug={project.slug} />
       </PageContainer>
     </SiteShell>
   );
