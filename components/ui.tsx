@@ -109,7 +109,7 @@ export function SectionTitle({
         {title}
       </h1>
       {description ? (
-        <p className="max-w-2xl text-base leading-7 text-on-surface-variant md:text-lg">
+        <p className="text-base leading-7 text-on-surface-variant md:text-lg">
           {description}
         </p>
       ) : null}

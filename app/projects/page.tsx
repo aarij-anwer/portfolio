@@ -9,7 +9,7 @@ export default function ProjectsPage() {
       <PageContainer className="space-y-16 md:space-y-24">
         <SectionTitle
           title="Projects"
-          description="A collection of projects that I've worked on, showcasing my skills and experience in various domains. Each project highlights the challenges I faced, the solutions I implemented, and the impact it had."
+          description="A selection of products I’ve built highlighting the problems tackled, the systems designed, and the impact delivered."
         />
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-2">

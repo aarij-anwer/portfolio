@@ -5,10 +5,10 @@ import { ProjectActionButtons } from '@/components/ProjectActionButtons';
 import { ProjectLinks } from '@/components/ProjectLinks';
 import { SiteShell } from '@/components/SiteShell';
 import { PageContainer, SurfaceCard, Tag } from '@/components/ui';
-import { getBetterTogetherProject } from '@/data/site';
+import { esgProject } from '@/data/site';
 
 export default function GetBetterTogetherPage() {
-  const project = getBetterTogetherProject;
+  const project = esgProject;
 
   return (
     <SiteShell>
