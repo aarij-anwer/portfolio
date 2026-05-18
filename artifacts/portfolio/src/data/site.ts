@@ -54,11 +54,11 @@ export const homeContent = {
       href: '/projects/esg-financed-emissions',
     },
     {
-      stat: '0 → adopted',
-      title: 'Proactive on-call tooling',
+      stat: '0 → 1',
+      title: 'Get Better Together',
       description:
-        'Built Retool dashboards (donor lookup, scheduled-giving KPIs) — now used daily by ops and on-call.',
-      href: '/projects/launchgood',
+        'Designed and shipped a social fitness app end-to-end, with an anonymous guest mode that lets users join challenges in seconds.',
+      href: '/projects/get-better-together',
     },
   ],
   portrait: {
