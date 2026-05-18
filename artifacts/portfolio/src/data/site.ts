@@ -43,21 +43,21 @@ export const homeContent = {
       stat: '1 week',
       title: 'Guest checkout, shipped',
       description:
-        'Delivered an end-to-end subscription guest checkout in one week at LaunchGood. >50% of new subscribers adopted it, lifting conversions ~40%.',
+        'End-to-end at LaunchGood. >50% of new subscribers adopted it, lifting conversions ~40%.',
       href: '/projects/launchgood',
     },
     {
       stat: '<4 weeks',
       title: 'AI-driven MVP → pilot',
       description:
-        'Led full AI-driven development of an emissions platform MVP from prototype to production, winning a competitive vendor demo with Desjardins.',
+        'Led an emissions platform from prototype to production, winning a competitive Desjardins demo.',
       href: '/projects/esg-financed-emissions',
     },
     {
       stat: '0 → adopted',
       title: 'Proactive on-call tooling',
       description:
-        'Built Retool dashboards (donor lookup, scheduled-giving KPIs) without a formal request — now used daily across operations and on-call.',
+        'Built Retool dashboards (donor lookup, scheduled-giving KPIs) — now used daily by ops and on-call.',
       href: '/projects/launchgood',
     },
   ],
