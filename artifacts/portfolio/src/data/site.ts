@@ -74,8 +74,8 @@ export const getBetterTogetherProject: ProjectDetail = {
   summary:
     'A social fitness app that helps you stay accountable with friends through shared challenges, streak tracking, and friendly competition.',
   heroImage: {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDaZh5lxqv_iUtpWys2baqsFeQlssLEYuzFICVaLZjw-RxcGioaiDYjlMC6yvqXsWutyfZUM385qczhovGtTVi3OwKKbvGngY74de5cX8h-wg4JQtpWaTLzSThrQq_g2f0_M4_fTXz4RhdJw51kb6QSv0LSrrjE6tuH6P0IfuEpiA7Tq0wGzbkuXsU4SXLet_o-7moG_1E9RieA2Nho-AK8QPw5ollCu7tldo--uyD1Wltm-XqLrwIvRKmxuqaW8LAG_8bFlVb2tHw7',
-    alt: 'Get Better Together dashboard showing challenges and progress tracking.',
+    src: '/projects/get-better-together.png',
+    alt: 'Get Better Together landing page showing the create-a-challenge flow and live leaderboard.',
   },
   gallery: [
     {
@@ -302,8 +302,8 @@ export const portfolioProject: ProjectDetail = {
   summary:
     'An intelligent allocation tool designed for Canadian investors to maximize every dollar of their monthly budget for DCA and ETF portfolio building.',
   heroImage: {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCE7QTsKlHPEz5svlMjHPSJTl70K5mx29DZHwjhfVJJf97rXaV-UHCX9Vj9ClJsbW0OUmbs2u5rhU6F8AWNbbb148am6RnmIOdrKsBY3SO9XSKzWJ5xsusS_lJImwQCECuq7eCJ1j8msh5NwCyA_iaOnnEiIAWapxbTYfe4C7vUm2j_bIfLdPMS7G20RXnMU9W7kP56uhDhRvN40LrFnbBaJcbFi8x70V8203wV8O3DNzDoviqMW8y_9iIRbLC4geYHXIEUcMCJi8pE',
-    alt: 'Portfolio allocation interface.',
+    src: '/projects/smart-portfolio-allocator.png',
+    alt: 'Smart Portfolio Allocator interface showing strategy selection and share allocation breakdown.',
   },
   gallery: [],
   overview: [
@@ -433,8 +433,8 @@ export const projects: ProjectSummary[] = [
     ],
     href: '/projects/get-better-together',
     image: {
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBrc_jCzWD-CVrnV9EGeafSQWkxgZxq-uptsHJwWayF4_Cof7qXD9k-1NCQokKpsfn97svZMOzeF_wMcvT9Pyd-hIQ1tVPEdoVemich8YZ2yxdbG303CGVGgmRByAUAlpoy71eAiVaesc-Qwv0GUKZxFA6R5amjdEyz0UdgZCvPtI5MxtPSxvfYmU4D-0I069f424ii9WinM66F9iGGbEPnWWeBTrtB2uaQr3E01l6pYDaLOFrrPaeamOPUL8ej0vPovZwZfMaWH3Cx',
-      alt: 'Get Better Together dashboard showing challenges and progress tracking.',
+      src: '/projects/get-better-together.png',
+      alt: 'Get Better Together landing page showing the create-a-challenge flow and live leaderboard.',
     },
   },
   {
@@ -452,8 +452,8 @@ export const projects: ProjectSummary[] = [
     ],
     href: '/projects/smart-portfolio-allocator',
     image: {
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCE7QTsKlHPEz5svlMjHPSJTl70K5mx29DZHwjhfVJJf97rXaV-UHCX9Vj9ClJsbW0OUmbs2u5rhU6F8AWNbbb148am6RnmIOdrKsBY3SO9XSKzWJ5xsusS_lJImwQCECuq7eCJ1j8msh5NwCyA_iaOnnEiIAWapxbTYfe4C7vUm2j_bIfLdPMS7G20RXnMU9W7kP56uhDhRvN40LrFnbBaJcbFi8x70V8203wV8O3DNzDoviqMW8y_9iIRbLC4geYHXIEUcMCJi8pE',
-      alt: 'Portfolio allocation interface.',
+      src: '/projects/smart-portfolio-allocator.png',
+      alt: 'Smart Portfolio Allocator interface showing strategy selection and share allocation breakdown.',
     },
   },
 ];
