@@ -102,16 +102,18 @@ export default function HomePage() {
             />
             Core Competencies
           </h2>
-          <div className="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2 lg:grid-cols-3">
             {resumeData.competencies.map((item) => (
-              <SurfaceCard key={item.label} className="h-full min-h-72 p-8">
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-surface-container-highest text-outline">
-                  <SymbolIcon name={item.icon} className="h-6 w-6" />
+              <SurfaceCard key={item.label} className="flex flex-col gap-3 p-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <SymbolIcon name={item.icon} className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-semibold tracking-[-0.01em] text-on-surface">
+                    {item.label}
+                  </h3>
                 </div>
-                <h3 className="mb-3 text-2xl font-semibold tracking-[-0.02em] text-on-surface">
-                  {item.label}
-                </h3>
-                <p className="text-base leading-7 text-on-surface-variant">
+                <p className="text-sm leading-6 text-on-surface-variant">
                   <RichText text={item.value} />
                 </p>
               </SurfaceCard>
