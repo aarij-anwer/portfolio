@@ -36,40 +36,35 @@ export const homeContent = {
   accent: 'Anwer',
   description:
     'Full-stack engineer focused on building high-impact products: from rapid 0→1 MVPs to scalable, production systems. I combine product thinking, strong systems design, and execution speed to deliver meaningful results.',
+  howIWork:
+    'I start every problem from the user and the system at the same time — write the RFC, ship the smallest correct slice, instrument it, then harden what survives contact with production. AI is part of that loop end-to-end, from scoping to code review to incident triage.',
+  recentWins: [
+    {
+      stat: '1 week',
+      title: 'Guest checkout, shipped',
+      description:
+        'Delivered an end-to-end subscription guest checkout in one week at LaunchGood. >50% of new subscribers adopted it, lifting conversions ~40%.',
+      href: '/projects/launchgood',
+    },
+    {
+      stat: '<4 weeks',
+      title: 'AI-driven MVP → pilot',
+      description:
+        'Led full AI-driven development of an emissions platform MVP from prototype to production, winning a competitive vendor demo with Desjardins.',
+      href: '/projects/esg-financed-emissions',
+    },
+    {
+      stat: '0 → adopted',
+      title: 'Proactive on-call tooling',
+      description:
+        'Built Retool dashboards (donor lookup, scheduled-giving KPIs) without a formal request — now used daily across operations and on-call.',
+      href: '/projects/launchgood',
+    },
+  ],
   portrait: {
     src: '/C1F0A34C-22D0-425C-9909-2A768B9C1864_1_105_c.jpeg',
     alt: 'Muhammad Anwer',
   },
-  competencies: [
-    {
-      title: 'Engineering Leadership',
-      description:
-        'Mentoring teams, establishing best practices, and driving technical vision from conception to deployment.',
-      icon: 'psychology',
-    },
-    {
-      title: 'Languages',
-      icon: 'code_blocks',
-      tags: ['TypeScript', 'Python', 'Go'],
-    },
-    {
-      title: 'Frameworks & Libraries',
-      icon: 'layers',
-      tags: ['React', 'Next.js', 'Tailwind CSS'],
-    },
-    {
-      title: 'Architecture & Systems',
-      description:
-        'Designing resilient, microservices-based architectures and scalable data pipelines for high-traffic applications.',
-      icon: 'architecture',
-      wide: true,
-    },
-    {
-      title: 'Cloud & DevOps',
-      icon: 'cloud',
-      tags: ['AWS', 'Docker', 'CI/CD'],
-    },
-  ] satisfies Competency[],
 };
 
 export const getBetterTogetherProject: ProjectDetail = {

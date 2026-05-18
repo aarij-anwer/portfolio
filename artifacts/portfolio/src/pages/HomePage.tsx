@@ -1,5 +1,6 @@
+import { Link } from 'wouter';
 import HomeCtas from '@/components/HomeCtas';
-import { SymbolIcon } from '@/components/icons';
+import { ArrowUpRightIcon, SymbolIcon } from '@/components/icons';
 import RichText from '@/components/RichText';
 import SiteShell from '@/components/SiteShell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
@@ -23,6 +24,9 @@ export default function HomePage() {
             <p className="max-w-xl text-lg leading-8 text-on-surface-variant">
               {homeContent.description}
             </p>
+            <p className="max-w-xl border-l-2 border-primary/60 pl-4 text-base italic leading-7 text-on-surface-variant">
+              {homeContent.howIWork}
+            </p>
             <HomeCtas />
           </div>
 
@@ -35,6 +39,58 @@ export default function HomePage() {
                 className="absolute inset-0 h-full w-full object-cover transition-all duration-500"
               />
             </div>
+          </div>
+        </PageSection>
+
+        <PageSection className="space-y-8">
+          <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-[-0.02em] text-on-surface md:text-4xl">
+            <SymbolIcon
+              name="bolt"
+              className="h-7 w-7 text-primary md:h-8 md:w-8"
+            />
+            Recent Wins
+          </h2>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {homeContent.recentWins.map((win) => {
+              const card = (
+                <SurfaceCard
+                  className={`flex h-full flex-col gap-4 p-7 transition-all duration-300 ${
+                    win.href ? 'group-hover:-translate-y-1 group-hover:border-primary' : ''
+                  }`}
+                >
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-4xl font-bold tracking-[-0.04em] text-primary md:text-5xl">
+                      {win.stat}
+                    </span>
+                    {win.href ? (
+                      <span className="text-on-surface-variant transition-colors group-hover:text-primary">
+                        <ArrowUpRightIcon className="h-5 w-5" />
+                      </span>
+                    ) : null}
+                  </div>
+                  <h3 className="text-xl font-semibold tracking-[-0.02em] text-on-surface">
+                    {win.title}
+                  </h3>
+                  <p className="text-sm leading-7 text-on-surface-variant">
+                    {win.description}
+                  </p>
+                </SurfaceCard>
+              );
+
+              return win.href ? (
+                <Link
+                  key={win.title}
+                  href={win.href}
+                  className="group block h-full"
+                >
+                  {card}
+                </Link>
+              ) : (
+                <div key={win.title} className="h-full">
+                  {card}
+                </div>
+              );
+            })}
           </div>
         </PageSection>
 
