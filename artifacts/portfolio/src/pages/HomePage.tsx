@@ -6,6 +6,7 @@ import SiteShell from '@/components/SiteShell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
 import { homeContent } from '@/data/site';
 import { defaultResume } from '@/lib/default-resume';
+import { cn } from '@/lib/utils';
 
 export default function HomePage() {
   const resumeData = defaultResume;
@@ -102,21 +103,28 @@ export default function HomePage() {
             />
             Core Competencies
           </h2>
-          <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {resumeData.competencies.map((item) => (
-              <SurfaceCard key={item.label} className="flex flex-col gap-3 p-6">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <SymbolIcon name={item.icon} className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-lg font-semibold tracking-[-0.01em] text-on-surface">
+          <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
+            {resumeData.competencies.map((item, index) => (
+              <div
+                key={item.label}
+                className={cn(
+                  'flex gap-4 pt-6',
+                  index > 0 && 'border-t border-outline-variant/60',
+                  index === 1 && 'md:border-t-0 md:pt-6',
+                )}
+              >
+                <div className="flex h-9 w-9 flex-none items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <SymbolIcon name={item.icon} className="h-5 w-5" />
+                </div>
+                <div className="flex-1 space-y-1.5">
+                  <h3 className="text-base font-semibold tracking-[-0.01em] text-on-surface">
                     {item.label}
                   </h3>
+                  <p className="text-sm leading-6 text-on-surface-variant">
+                    <RichText text={item.value} />
+                  </p>
                 </div>
-                <p className="text-sm leading-6 text-on-surface-variant">
-                  <RichText text={item.value} />
-                </p>
-              </SurfaceCard>
+              </div>
             ))}
           </div>
         </PageSection>
