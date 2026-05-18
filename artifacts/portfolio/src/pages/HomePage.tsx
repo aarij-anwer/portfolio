@@ -25,7 +25,7 @@ export default function HomePage() {
             <p className="max-w-xl text-lg leading-8 text-on-surface-variant">
               {homeContent.description}
             </p>
-            <p className="max-w-xl border-l-2 border-primary/60 pl-4 text-base italic leading-7 text-on-surface-variant">
+            <p className="max-w-xl text-base leading-7 text-on-surface-variant">
               {homeContent.howIWork}
             </p>
             <HomeCtas />
