@@ -12,6 +12,16 @@ import ProjectDetailRoute from "@/pages/ProjectDetailRoute";
 
 const queryClient = new QueryClient();
 
+declare global {
+  interface Window {
+    gtag?: (
+      command: "config" | "event" | "js",
+      targetId: string | Date,
+      config?: Record<string, unknown>,
+    ) => void;
+  }
+}
+
 function ScrollToTop() {
   const [pathname] = useLocation();
 
@@ -23,10 +33,25 @@ function ScrollToTop() {
   return null;
 }
 
+function AnalyticsPageViews() {
+  const [pathname] = useLocation();
+
+  useEffect(() => {
+    window.gtag?.("config", "G-JWBTSJX7CH", {
+      page_path: `${pathname}${window.location.search}${window.location.hash}`,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  }, [pathname]);
+
+  return null;
+}
+
 function Router() {
   return (
     <>
       <ScrollToTop />
+      <AnalyticsPageViews />
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/projects" component={ProjectsPage} />
