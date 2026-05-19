@@ -5,11 +5,11 @@ import RichText from '@/components/RichText';
 import SiteShell from '@/components/SiteShell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
 import { homeContent } from '@/data/site';
-import { defaultResume } from '@/lib/default-resume';
+import { parsedResume } from '@/lib/resume';
 import { cn } from '@/lib/utils';
 
 export default function HomePage() {
-  const resumeData = defaultResume;
+  const resumeData = parsedResume;
   const titleParts = homeContent.title.split(homeContent.accent);
 
   return (
@@ -25,7 +25,7 @@ export default function HomePage() {
             <p className="max-w-xl text-lg leading-8 text-on-surface-variant">
               {homeContent.description}
             </p>
-            <p className="max-w-xl text-base leading-7 text-on-surface-variant">
+            <p className="max-w-xl text-lg leading-7 text-on-surface-variant">
               {homeContent.howIWork}
             </p>
             <HomeCtas />
@@ -56,7 +56,9 @@ export default function HomePage() {
               const card = (
                 <SurfaceCard
                   className={`flex h-full flex-col gap-4 p-7 transition-all duration-300 ${
-                    win.href ? 'group-hover:-translate-y-1 group-hover:border-primary' : ''
+                    win.href
+                      ? 'group-hover:-translate-y-1 group-hover:border-primary'
+                      : ''
                   }`}
                 >
                   <div className="flex items-baseline justify-between gap-3">
@@ -110,7 +112,7 @@ export default function HomePage() {
                 className={cn(
                   'flex gap-4 pt-6',
                   index > 0 && 'border-t border-outline-variant/60',
-                  index === 1 && 'md:border-t-0 md:pt-6',
+                  index === 1 && 'md:border-t-0 md:pt-6'
                 )}
               >
                 <div className="flex h-9 w-9 flex-none items-center justify-center rounded-md bg-primary/10 text-primary">

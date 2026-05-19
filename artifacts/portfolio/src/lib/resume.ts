@@ -6,7 +6,10 @@ import type {
   ResumeEducation,
   ParsedResume,
 } from '@/lib/types';
-import { defaultResume } from '@/lib/default-resume';
+import { parseResumeTex } from '@/lib/parse-resume-tex';
+import resumeTexSource from '../../public/resume.tex?raw';
+
+declare const __RESUME_PDF_AVAILABLE__: boolean;
 
 export type {
   ResumeContact,
@@ -17,12 +20,13 @@ export type {
   ParsedResume,
 };
 
-// @ts-ignore - simplified for client-side migration; LaTeX parsing removed
+export const parsedResume: ParsedResume = parseResumeTex(resumeTexSource);
+export const resumePdfAvailable = __RESUME_PDF_AVAILABLE__;
+
 export async function getResumeFromTex(): Promise<ParsedResume> {
-  return defaultResume;
+  return parsedResume;
 }
 
-// @ts-ignore - PDF is always shipped in /public for the migrated app
 export async function hasResumePdf(): Promise<boolean> {
-  return true;
+  return resumePdfAvailable;
 }

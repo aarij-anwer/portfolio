@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import fs from "fs";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
 const rawPort = process.env.PORT;
@@ -11,9 +12,17 @@ if (rawPort && (Number.isNaN(port) || port <= 0)) {
 }
 
 const basePath = process.env.BASE_PATH ?? "/";
+const resumePdfPath = path.resolve(
+  import.meta.dirname,
+  "public",
+  "Muhammad_Anwer_Resume.pdf",
+);
 
 export default defineConfig({
   base: basePath,
+  define: {
+    __RESUME_PDF_AVAILABLE__: JSON.stringify(fs.existsSync(resumePdfPath)),
+  },
   plugins: [
     react(),
     runtimeErrorOverlay(),

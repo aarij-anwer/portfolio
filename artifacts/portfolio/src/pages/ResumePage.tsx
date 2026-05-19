@@ -2,11 +2,10 @@ import { SymbolIcon } from '@/components/icons';
 import RichText from '@/components/RichText';
 import SiteShell from '@/components/SiteShell';
 import { PageContainer, SurfaceCard } from '@/components/ui';
-import { defaultResume } from '@/lib/default-resume';
+import { parsedResume, resumePdfAvailable } from '@/lib/resume';
 
 export default function ResumePage() {
-  const resumeData = defaultResume;
-  const showResumePdfDownload = true;
+  const resumeData = parsedResume;
 
   return (
     <SiteShell>
@@ -16,7 +15,7 @@ export default function ResumePage() {
             <h1 className="text-4xl font-bold tracking-[-0.04em] text-on-surface md:text-5xl">
               Muhammad Anwer
             </h1>
-            {showResumePdfDownload ? (
+            {resumePdfAvailable ? (
               <a
                 className="inline-flex w-fit items-center justify-center rounded-lg border border-primary bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-colors duration-200 hover:bg-primary-fixed"
                 href={`${import.meta.env.BASE_URL}Muhammad_Anwer_Resume.pdf`}

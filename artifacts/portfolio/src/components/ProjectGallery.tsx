@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 // @ts-ignore
-import { A11y, Keyboard, Navigation, Pagination } from 'swiper/modules';
+import { A11y, Keyboard, Pagination } from 'swiper/modules';
 // @ts-ignore
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -15,8 +15,7 @@ interface ProjectGalleryProps {
 
 export default function ProjectGallery({ images }: ProjectGalleryProps) {
   const hasMultipleImages = images.length > 1;
-  const prevButtonRef = useRef<HTMLButtonElement | null>(null);
-  const nextButtonRef = useRef<HTMLButtonElement | null>(null);
+  const swiperRef = useRef<any>(null);
 
   if (images.length === 0) {
     return null;
@@ -26,23 +25,10 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
     <section className="space-y-4">
       <div className="relative overflow-hidden rounded-3xl border border-outline-variant bg-surface-container-low">
         <Swiper
-          modules={[Navigation, Pagination, Keyboard, A11y]}
+          modules={[Pagination, Keyboard, A11y]}
           slidesPerView={1}
-          navigation={
-            hasMultipleImages
-              ? {
-                  prevEl: prevButtonRef.current,
-                  nextEl: nextButtonRef.current,
-                }
-              : false
-          }
-          onBeforeInit={(swiper: any) => {
-            if (!hasMultipleImages) return;
-            const navigation = swiper.params.navigation;
-            if (navigation && typeof navigation !== 'boolean') {
-              navigation.prevEl = prevButtonRef.current;
-              navigation.nextEl = nextButtonRef.current;
-            }
+          onSwiper={(swiper: any) => {
+            swiperRef.current = swiper;
           }}
           pagination={hasMultipleImages ? { clickable: true } : false}
           keyboard={{ enabled: true }}
@@ -65,18 +51,18 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
         {hasMultipleImages ? (
           <>
             <button
-              ref={prevButtonRef}
               type="button"
               aria-label="Previous image"
               className="project-gallery-arrow project-gallery-arrow-prev"
+              onClick={() => swiperRef.current?.slidePrev()}
             >
               &lt;
             </button>
             <button
-              ref={nextButtonRef}
               type="button"
               aria-label="Next image"
               className="project-gallery-arrow project-gallery-arrow-next"
+              onClick={() => swiperRef.current?.slideNext()}
             >
               &gt;
             </button>

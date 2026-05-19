@@ -66,6 +66,7 @@
 \begin{center}
     {\Huge \scshape Muhammad Anwer}\\[4pt]
     \small
+    \faMapMarker*~Milton, ON $\mid$\;
     \faPhone~647-779-0703 $\mid$\;
     \href{mailto:maanwer0@gmail.com}{\faEnvelope~maanwer0@gmail.com} $\mid$\;
     \href{https://www.linkedin.com/in/m-a-anwer}{\faLinkedin~m-a-anwer} $\mid$\;
@@ -75,20 +76,25 @@
 % -------- CORE COMPETENCIES --------
 \section{Core Competencies}
 \resumeItemListStart
-  \resumeItem{\textbf{Engineering Leadership}: System design (RFCs), design reviews, product/engineering collaboration, analytics instrumentation (Heap), roadmap input, code reviews, mentoring distributed teams}
-  
   \resumeItem{\textbf{Languages}: TypeScript, JavaScript, Python, SQL}
   
   \resumeItem{\textbf{Frameworks \& Libraries}: React, Redux, NestJS, Next.js, Vite, Prisma, Tailwind CSS, Jest, React Testing Library, Scikit-learn}
   
   \resumeItem{\textbf{Architecture \& Systems}: Microservices, event-driven systems, RabbitMQ, REST/OpenAPI (contract-first APIs), type-safe clients, cross-service integration}
   
+  \resumeItem{\textbf{Reliability \& Operations}: Incident management, production triage and mitigation, root cause analysis (RCA), runbooks, post-incident hardening, on-call rotations, Datadog (logs, monitors)}
+  
   \resumeItem{\textbf{Cloud \& DevOps}: AWS, Docker, Git, GitHub Actions, CI/CD, monitoring and alerting}
   
-  \resumeItem{\textbf{ML \& AI}: TensorFlow, PyTorch, Langbase, Agentic workflows (OpenAI, Cursor, Cleric, Mendral)}
-  \resumeItemListEnd
+  \resumeItem{\textbf{Engineering Leadership}: System design (RFCs), design reviews, product/engineering collaboration, analytics instrumentation (Heap), roadmap input, code reviews, mentoring distributed teams}
   
-  \resumeItem{\textbf{Reliability \& Operations}: Incident management, production triage and mitigation, root cause analysis (RCA), runbooks, post-incident hardening, on-call rotations, Datadog (logs, monitors)}
+  \resumeItem{\textbf{Stakeholder \& Delivery}: Align non-technical stakeholders, manage upwards, and partner closely with product and design. Translate ambiguous requirements into scoped deliverables, surface tradeoffs early, and communicate risk before it becomes urgent. Comfortable in \textbf{agile} (sprints, standups, planning, retros); have led pilots, vendor demos, and post-incident reviews directly with customers and executives.}
+  
+  \resumeItem{\textbf{AI in Practice}: Force multiplier across the full SDLC, used every day. \textbf{Cursor + agentic coding} for feature scaffolding, refactors, and codebase navigation; \textbf{AI-assisted code review} to catch regressions before PR; \textbf{debugging triage} of incidents and stack traces; Production experience with OpenAI, Cursor, Cleric, Mendral, and Langbase; ML foundations in TensorFlow, PyTorch, Scikit-learn.}
+  
+  
+  
+  \resumeItemListEnd
   
 
 % -------- PROFESSIONAL EXPERIENCE --------
@@ -96,46 +102,67 @@
 \resumeSubHeadingListStart
 
 % --- ESGTree ---
-\resumeSubheading{Senior Software Engineer (Contract)}{Aug 2025 – Present}{ESGTree}{Remote}
+\resumeSubheading{Senior Software Engineer (Contract)}{Aug 2025 -- Present}{ESGTree}{Remote}
 \resumeItemListStart
-  \resumeItem{Ship full-stack features and lead product engineering for emissions calculations software for banks, portfolio managers and their clients. Stack: \textbf{Vite (React)}, \textbf{Tailwind CSS}, \textbf{NestJS} and \textbf{Drizzle/PostgreSQL}.}
-  \resumeItem{\textbf{0 → 1 MVP and pilot win}: led full AI-driven development of a full-stack MVP from prototype to production in under 4 weeks, guiding a team of 2 engineers and owning architecture and delivery. Made deliberate tradeoffs to prioritize speed and validation. The product won a competitive vendor demo with Desjardins, securing a paid pilot with onboarding in progress.}
+  \resumeItem{Lead product engineering and full-stack development for a multi-tenant SaaS platform that helps financial institutions onboard SME portfolio companies, collect emissions data, and generate PCAF-aligned financed emissions reports. Stack: \textbf{Vite}, \textbf{React}, \textbf{TypeScript}, \textbf{Tailwind CSS}, \textbf{NestJS}, \textbf{Drizzle ORM}, and \textbf{PostgreSQL}.}
 
-  \resumeItem{\textbf{End-to-end system ownership}: designed backend services, data models, and APIs while contributing across the stack. Coordinated execution, reviewed PRs, and unblocked engineers to maintain velocity under tight timelines. Partnered closely with stakeholders to iterate quickly on product requirements.}
+  \resumeItem{\textbf{0$\to$1 MVP and pilot win:} led AI-assisted development of a full-stack MVP from prototype to production in under 4 weeks, guiding a team of 2 engineers while owning architecture, delivery, and key product tradeoffs. The product won a competitive vendor demo with Desjardins, securing a paid pilot with onboarding in progress.}
 
-  \resumeItem{\textbf{Refactor for scale and long-term maintainability}: after validating product-market fit, led a backend refactor (migration to NestJS) to introduce modular architecture, enforce clear boundaries, and improve reliability and data integrity — transitioning the system from rapid prototype to production-grade platform.}
+  \resumeItem{\textbf{AI-powered document parsing:} developed data ingestion workflows allowing SME users to upload CSV, Excel, and PDF files to auto-populate emissions forms through header matching, OpenAI-assisted extraction, post-AI validation, and human-in-the-loop review.}
+
+  \resumeItem{\textbf{Dual-interface product design:} contributed across a data-dense financial firm dashboard for portfolio analysts and a guided step-by-step SME wizard, designing workflows around two distinct user personas while sharing a single backend architecture.}
+
+  \resumeItem{\textbf{Production-grade backend refactor:} led a migration to modular \textbf{NestJS} architecture with clearer service boundaries, tenant-aware data access, session-based dual authentication, invitation flows, bulk import workflows, and stronger data integrity.}
+
+  \resumeItem{\textbf{Scalable emissions data model:} established a database-driven activity model and hash-gated Excel seed system supporting 13 countries and bilingual English/French data entry, allowing emissions factors and sector data to be updated without code changes.}
+
+  \resumeItem{\textbf{Testing and reliability:} built and maintained a 400+ test suite across 15 files covering unit, integration, and E2E flows, improving confidence as the system transitioned from rapid prototype to production-grade platform.}
 \resumeItemListEnd
 
 % --- LaunchGood ---
-\resumeSubheading{Full Stack Software Engineer}{Jul 2022 – Present}{LaunchGood}{Remote}
+\resumeSubheading{Full Stack Software Engineer}{Jul 2022 -- Present}{LaunchGood}{Remote}
 \resumeItemListStart
-  \resumeItem{Ship full-stack features for a fundraising marketplace connecting fundraisers and donors. Stack: \textbf{Next.js (React)}, \textbf{Redux}, \textbf{Tailwind CSS}, \textbf{NestJS}, \textbf{Prisma/PostgreSQL}, and \textbf{RabbitMQ}.}
+  \resumeItem{Ship full-stack features for a global fundraising marketplace powering one-time donations and recurring giving across 150+ countries. Work across an \textbf{Nx monorepo} of 23 services and 17 shared libraries using \textbf{Next.js}, \textbf{React}, \textbf{TypeScript}, \textbf{Redux}, \textbf{Tailwind CSS}, \textbf{NestJS}, \textbf{Prisma}, \textbf{PostgreSQL}, and \textbf{RabbitMQ}.}
 
-  \resumeItem{\textbf{Guest checkout for subscriptions}: delivered end-to-end in one week (leadership priority). Built with Next.js, Redux, Tailwind, and NestJS to support subscription creation and one-click account completion. Identified security vulnerabilities in the initial proposal and implemented safer alternatives. After launch, over 50\% of new subscribers used guest checkout, improving conversions by \textasciitilde{}40\%.}
-  
-  \resumeItem{\textbf{Multi-step subscription onboarding funnels}: implemented across all subscription programs in Next.js with Redux. Set technical direction with product, reviewed PRs, refactored legacy flows, and shipped reusable UI components with test coverage (Jest, React Testing Library). Improved performance using an app-shell pattern combining a client-side interactive shell with server-side layouts for fast initial loads.}
-  
-  \resumeItem{\textbf{Public profiles for partners and influencers}: built a social media–style, follower-facing experience in Next.js with a companion admin dashboard for engagement and audience insights. Led end-to-end delivery, including a NestJS backend, database schema, and REST APIs, with automated tests covering critical paths.}
-  
-  \resumeItem{\textbf{Recurring fundraising for charities}: improved information architecture and navigation so organizers can manage recurring programs with clarity and minimal friction. Built reusable Next.js components and dashboard-style views surfacing status, configuration, and key metrics at a glance, backed by automated tests.}
-  
-  \resumeItem{\textbf{Incident management and on-call troubleshooting}: led production incident response using Datadog and AWS to triage, reproduce, and isolate root causes. Resolved unstable behavior, runtime errors, redirect loops, fragile API handling, and weak user-facing error paths; validated fixes in staging and monitored post-release. Authored runbooks and led retrospectives to standardize mitigation and improve processes.}
-  
-  \resumeItem{\textbf{Retool dashboards for operations and on-call}: built and adopted without a formal request. Delivered a donor lookup console aggregating transactions, subscriptions, and failed charges with recharge actions across multiple data sources. Shipped a scheduled-giving dashboard with daily KPIs and hourly breakdowns (scheduled/processing/succeeded/failed, USD impact) to quickly identify spikes and triage billing issues.}
-  
-  \resumeItem{\textbf{Product analytics instrumentation (Heap)}: defined and implemented end-to-end tracking for funnels, key actions, and failure points under a consistent event model. Partnered with product on measurement strategy, implemented tracking in code, and used data to validate launches and feature performance.}
-  
-  \resumeItem{\textbf{RFCs, design reviews, and monorepo releases}: contributed to system design, upheld a high bar in code reviews, and coordinated CI-gated releases via GitHub Actions. Mitigated regression risk by driving risk-aware decisions (including reverts) to restore stability while planning safer follow-ups.}
+  \resumeItem{\textbf{Guest checkout and conversion lift:} delivered subscription guest checkout end-to-end in 1 week as a leadership priority, building the Next.js, Redux, Tailwind, and NestJS flow for subscription creation and one-click account completion. Identified security risks in the initial proposal and implemented safer alternatives; after launch, over 50\% of new subscribers used guest checkout, improving conversions by \textasciitilde{}40\%.}
+
+  \resumeItem{\textbf{Multi-step subscription onboarding funnels:} led technical direction for recurring-giving funnels across subscription programs, partnering with product to translate ambiguous requirements into shipped flows. Refactored legacy funnel logic, reviewed PRs, shipped reusable UI components, and added test coverage with \textbf{Jest} and \textbf{React Testing Library}.}
+
+  \resumeItem{\textbf{Performance-oriented frontend architecture:} improved funnel performance using an app-shell pattern that combined server-side layouts with a client-side interactive shell, enabling faster initial loads while preserving complex multi-step subscription state in Redux.}
+
+  \resumeItem{\textbf{Public profiles and partner dashboards:} built social-media-style public profile pages for partners and influencers, along with companion admin dashboards for engagement and audience insights. Owned end-to-end delivery across Next.js, NestJS services, database schema design, REST APIs, and automated tests covering critical paths.}
+
+  \resumeItem{\textbf{Recurring fundraising management:} improved information architecture and dashboard workflows for charities managing recurring giving programs. Built reusable Next.js components and status-driven dashboard views surfacing configuration, subscription health, and key metrics at a glance.}
+
+  \resumeItem{\textbf{Event-driven microservices:} implemented and maintained RabbitMQ producers and consumers across donation, charge, payout, settlement, and notification domains, helping keep async service boundaries explicit through publisher-owned exchanges and consumer-owned queues.}
+
+  \resumeItem{\textbf{Incident response and production reliability:} led production triage using \textbf{Datadog}, \textbf{AWS}, and staging validation to isolate and resolve runtime errors, redirect loops, unstable API behavior, fragile error handling, and user-facing failure paths. Authored runbooks and led retrospectives to standardize mitigation and improve release safety.}
+
+  \resumeItem{\textbf{Proactive Retool operations tooling:} built internal tools without a formal request, including a donor lookup console aggregating transactions, subscriptions, failed charges, and recharge actions across multiple data sources. Shipped scheduled-giving KPI dashboards with hourly breakdowns for scheduled, processing, succeeded, and failed donations, reducing on-call billing triage from hours to minutes.}
+
+  \resumeItem{\textbf{Product analytics and experimentation:} defined and implemented end-to-end \textbf{Heap} instrumentation for checkout flows, subscription funnels, key user actions, A/B experiments, and failure points under a consistent event model. Partnered with product and growth teams to validate launches, measure funnel performance, and convert insights into roadmap priorities.}
+
+  \resumeItem{\textbf{System design, RFCs, and safe releases:} authored and contributed to RFCs for recurring-giving, subscription billing, settlement workflows, and event-driven messaging. Coordinated CI-gated monorepo releases through \textbf{GitHub Actions}, upheld a high bar in code reviews, and mitigated regression risk through risk-aware decisions including reverts and safer follow-up plans.}
+
+  \resumeItem{\textbf{Service contract standardization:} contributed to a client-library pattern centralizing per-service RPC contracts, DTOs, and Prisma schemas, reducing cross-service coupling and improving maintainability across the platform.}
 \resumeItemListEnd
 
 % --- E-Commerce ---
 \resumeSubheading{Owner, E-Commerce Ventures}{Jan 2010 -- Dec 2019}{Self-employed}{Remote}
 \resumeItemListStart
-  \resumeItem{Bootstrapped and scaled two online ventures: an e-learning platform and an Amazon FBA storefront.}
+  \resumeItem{Bootstrapped and scaled two online ventures over a decade: an e-learning platform and an Amazon FBA storefront, ultimately exiting with ongoing royalty income.}
   
-  \resumeItem{\textbf{Product and growth}: built and marketed digital products and physical goods, acquiring and retaining a global customer base.}
+  \resumeItem{\textbf{Product design and merchandising}: defined the catalog, designed packaging and listing imagery, and shaped the customer-facing brand end-to-end - acting as solo product manager, designer, and copywriter to ship a coherent line of digital and physical goods.}
   
-  \resumeItem{\textbf{Operations and ownership}: managed suppliers, inventory, content, and P\&L across both ventures, leading to a successful exit with ongoing royalty income.}
+  \resumeItem{\textbf{Supplier sourcing and negotiation}: qualified overseas manufacturers, negotiated unit economics and MOQs, and coordinated quality control and logistics to keep margins healthy as volume scaled.}
+  
+  \resumeItem{\textbf{Customer acquisition and retention}: ran SEO, paid acquisition, email funnels, and Amazon listing optimization to grow a global customer base; iterated on copy and creative based on conversion data to lift repeat purchase rates.}
+  
+  \resumeItem{\textbf{Content production}: authored and produced the full course library for the e-learning venture (video, written lessons, assessments), then maintained it through multiple revisions as the curriculum matured.}
+  
+  \resumeItem{\textbf{Operations and P\&L}: owned inventory planning, cash flow, taxes, returns, and customer support across both ventures; turned operating discipline into a profitable steady-state that supported a successful exit.}
+  
+  \resumeItem{\textbf{Outcomes}: grew both ventures to sustainable profitability, sold the e-learning platform to a strategic acquirer with continuing royalty income, and built the systems thinking and product instincts I bring to engineering work today.}
 \resumeItemListEnd
 
 \resumeSubHeadingListEnd
@@ -145,14 +172,14 @@
 \resumeSubHeadingListStart
   \resumeSubheading{Honours Bachelor of Computer Science}{ }{University of Waterloo}{Waterloo ON}
   \resumeSubheading{Graduate Certificate in AI \& Machine Learning}{ }{Fanshawe College}{London ON}
-  \resumeSubheading{Full‑Stack Web Development Diploma}{ }{Lighthouse Labs}{Online }
+  \resumeSubheading{Full-Stack Web Development Diploma}{ }{Lighthouse Labs}{Online}
 \resumeSubHeadingListEnd
 
 % -------- INTERESTS & AFFILIATIONS --------
 \section{Interests \& Affiliations}
 \resumeItemListStart
   \resumeItem{Personal interests: badminton, basketball, swimming, strength training, parenting, finance, history}
-  \resumeItem{Founder \& President, London Badminton Club \textit{(2022–Present)} — organize weekly sessions and local tournaments}
+  \resumeItem{Founder \& President, London Badminton Club \textit{(2022-2026)} - organize weekly sessions and local tournaments}
 \resumeItemListEnd
 
 % -------------------------------------------
