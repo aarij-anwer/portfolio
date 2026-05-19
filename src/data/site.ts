@@ -249,25 +249,25 @@ export const launchgoodProject: ProjectDetail = {
   summary:
     'A global fundraising marketplace connecting fundraisers and donors, powering one-time donations and recurring giving at scale across 150+ countries.',
   heroImage: {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDvori9QWZo3Lv_pX8Sj8MaOpAsgu8Vvu5MoFYn-eJ6oD_Tk5WblYL8Of_SZtviuP0r-qbZLM71GlvouPnT4Y5ViH7f2WsncS1C67VMqU4LQD3mTw2y9G9AKi_7650zAh2r0Xi0M3oF_IJ3ORk6-luZsQTHDcxNapPBDCImbIPgqrJZM8N3fDaEEt3YAwYNe4-PutaGtgmRek-EpTXorXlqjzdDWzt7bPt3hhvHFYaHPnJNh6zxKux8qoGIJFVAnyUn8eHcVLX_MikO',
+    src: '/projects/lg.jpg',
     alt: 'LaunchGood dashboard showing campaign analytics and recurring donation metrics.',
   },
   gallery: [
     {
-      src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
+      src: '/gallery/lg/lg-1.png',
       alt: 'Guest checkout flow with multi-step subscription funnel.',
     },
     {
-      src: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1600&q=80',
+      src: '/gallery/lg/lg-2.png',
+      alt: 'Settings page for managing recurring donation preferences and payment methods.',
+    },
+    {
+      src: '/gallery/lg/lg-3.png',
       alt: 'Recurring giving admin dashboard with subscription health KPIs.',
     },
     {
-      src: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Public follower profile page with active campaigns and giving history.',
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Internal Retool console for on-call donor lookup and billing triage.',
+      src: '/gallery/lg/lg-4.png',
+      alt: 'Influencer profile dashboard with stats on followers, donations, and impact.',
     },
   ],
   overview: [
@@ -567,7 +567,7 @@ export const projects: ProjectSummary[] = [
     ],
     href: '/projects/launchgood',
     image: {
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDvori9QWZo3Lv_pX8Sj8MaOpAsgu8Vvu5MoFYn-eJ6oD_Tk5WblYL8Of_SZtviuP0r-qbZLM71GlvouPnT4Y5ViH7f2WsncS1C67VMqU4LQD3mTw2y9G9AKi_7650zAh2r0Xi0M3oF_IJ3ORk6-luZsQTHDcxNapPBDCImbIPgqrJZM8N3fDaEEt3YAwYNe4-PutaGtgmRek-EpTXorXlqjzdDWzt7bPt3hhvHFYaHPnJNh6zxKux8qoGIJFVAnyUn8eHcVLX_MikO',
+      src: '/projects/lg.jpg',
       alt: 'LaunchGood dashboard.',
     },
   },
