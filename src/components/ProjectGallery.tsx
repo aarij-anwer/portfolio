@@ -55,6 +55,8 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
                   <img
                     src={image.src}
                     alt={image.alt}
+                    loading={imageIndex === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
                     className="absolute inset-0 h-full w-full object-cover"
                   />
                 </button>
