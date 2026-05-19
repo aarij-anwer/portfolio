@@ -377,10 +377,39 @@ export const esgProject: ProjectDetail = {
   summary:
     'An enterprise platform for calculating and reporting financed emissions for banks, portfolio managers and their SME portfolio companies.',
   heroImage: {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDX_uaOUYZfFUhxfRN5WjwGCj5p8uW58Ng9YdPjxaGPWQogP2AJR-ZWPBo1CMD0lQLDeUtu5ksAKiCuYQe6m9k-W7PenIghBrDOX8dKNfKIphvOWcsTJh4dslbOisA1l5T7fJtGvJLz2AipPYkiw9Boj4UmqilwtoVvHYuWXTrYsCGLWUrfvRx1754BV3NUK0GsZz9vueJYh8m9027kEzDGcRDC3x_Wi5qipp9xOq7DdEOHhl0E3tqfi9MFrhQBzEHdZlJV7se7S73-',
+    src: '/projects/esg.png',
     alt: 'Enterprise analytics dashboard for financed emissions reporting.',
   },
-  gallery: [],
+  gallery: [
+    {
+      src: '/gallery/esg/esg-1.png',
+      alt: 'Invite SMEs and portfolio companies via secure invitation codes.',
+    },
+    {
+      src: '/gallery/esg/esg-2.png',
+      alt: 'Activity log feature.',
+    },
+    {
+      src: '/gallery/esg/esg-3.png',
+      alt: 'SME and portfolio company view.',
+    },
+    {
+      src: '/gallery/esg/esg-4.png',
+      alt: 'SME and portfolio company wizard for guided data entry with AI parsing of documents.',
+    },
+    {
+      src: '/gallery/esg/esg-5.png',
+      alt: 'Emissions estimation',
+    },
+    {
+      src: '/gallery/esg/esg-6.png',
+      alt: 'File and bull uploads, powered by AI parsing and human-in-the-loop verification.',
+    },
+    {
+      src: '/gallery/esg/esg-7.png',
+      alt: 'Summary of completed data entered by SME users, showing calculated emissions and data quality scores.',
+    },
+  ],
   overview: [
     'ESGTree is a multi-tenant SaaS platform that helps financial firms onboard SME portfolio companies, collect emissions data, and generate PCAF-aligned financed emissions reports. It serves two distinct personas through separate interfaces: a data-dense firm dashboard for analysts and a guided step-by-step wizard for SME users entering their own emissions data.',
     'I led full AI-driven development of a full-stack MVP from prototype to production in under 4 weeks, guiding a team of 2 engineers and owning architecture and delivery. I made deliberate tradeoffs to prioritize speed and validation. The product won a competitive vendor demo with Desjardins, securing a paid pilot with onboarding in progress.',
@@ -590,7 +619,7 @@ export const projects: ProjectSummary[] = [
     ],
     href: '/projects/esg-financed-emissions',
     image: {
-      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDX_uaOUYZfFUhxfRN5WjwGCj5p8uW58Ng9YdPjxaGPWQogP2AJR-ZWPBo1CMD0lQLDeUtu5ksAKiCuYQe6m9k-W7PenIghBrDOX8dKNfKIphvOWcsTJh4dslbOisA1l5T7fJtGvJLz2AipPYkiw9Boj4UmqilwtoVvHYuWXTrYsCGLWUrfvRx1754BV3NUK0GsZz9vueJYh8m9027kEzDGcRDC3x_Wi5qipp9xOq7DdEOHhl0E3tqfi9MFrhQBzEHdZlJV7se7S73-',
+      src: '/projects/esg.png',
       alt: 'Enterprise analytics dashboard for financed emissions reporting.',
     },
   },
