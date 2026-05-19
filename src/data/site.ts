@@ -85,7 +85,24 @@ export const getBetterTogetherProject: ProjectDetail = {
     src: '/projects/get-better-together.png',
     alt: 'Get Better Together landing page showing the create-a-challenge flow and live leaderboard.',
   },
-  gallery: [],
+  gallery: [
+    {
+      src: '/public/gallery/get-better-together/gbt-1.png',
+      alt: 'Pushup challenge leaderboard showing user rankings, streaks, and progress.',
+    },
+    {
+      src: '/public/gallery/get-better-together/gbt-2.png',
+      alt: 'Dynamic schedule of activities with variable routines and rest days.',
+    },
+    {
+      src: '/public/gallery/get-better-together/gbt-3.png',
+      alt: 'User profile showing joined challenges, progress, and stats.',
+    },
+    {
+      src: '/public/gallery/get-better-together/gbt-4.png',
+      alt: 'Create a challenge flow with customizable settings and friend invitations.',
+    },
+  ],
   overview: [
     'Get Better Together is built around one core idea: consistency is easier when you’re not doing it alone. Instead of tracking habits in isolation, users join private, time-bound challenges with friends, where progress is visible and everyone moves forward together.',
     'The app features a clean, mobile-first interface optimized for daily use. It supports joining multiple customizable challenges at once, utilizing smart progress tracking with quick logging, adaptive inputs, and automatic backfill for missed days. Optional variable routines and rest days are also supported to prevent plateaus and ensure sustainability.',
