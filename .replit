@@ -12,12 +12,8 @@ env = { "CI" = "true" }
 runButton = "Project"
 
 [agent]
-stack = "PNPM_WORKSPACE"
+stack = "NODE_JS"
 expertMode = true
-
-[postMerge]
-path = "scripts/post-merge.sh"
-timeoutMs = 20000
 
 [[ports]]
 localPort = 8080

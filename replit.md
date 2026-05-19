@@ -4,17 +4,18 @@ Static portfolio site for Muhammad Anwer.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/portfolio run dev` — run the portfolio locally
-- `pnpm --filter @workspace/portfolio run build` — build the portfolio
-- `pnpm --filter @workspace/portfolio run serve` — preview the production build
-- `pnpm run typecheck` — full typecheck across workspace packages
+- `pnpm run dev` — run the portfolio locally
+- `pnpm run build` — typecheck and build the portfolio
+- `pnpm run serve` — preview the production build
+- `pnpm run typecheck` — typecheck the portfolio
 
 ## Stack
 
-- pnpm workspaces, TypeScript, React, Vite, Tailwind CSS
-- Portfolio source: `artifacts/portfolio`
-- Resume source of truth: `artifacts/portfolio/public/resume.tex`
-- Resume parser: `artifacts/portfolio/src/lib/parse-resume-tex.ts`
+- TypeScript, React, Vite, Tailwind CSS
+- Portfolio source: `src`
+- Static assets: `public`
+- Resume source of truth: `public/resume.tex`
+- Resume parser: `src/lib/parse-resume-tex.ts`
 
 ## Notes
 
