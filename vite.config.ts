@@ -12,11 +12,62 @@ if (rawPort && (Number.isNaN(port) || port <= 0)) {
 }
 
 const basePath = process.env.BASE_PATH ?? "/";
+const siteUrl = (process.env.VITE_SITE_URL ?? "https://muhammadanwer.com")
+  .replace(/\/$/, "");
 const resumePdfPath = path.resolve(
   import.meta.dirname,
   "public",
   "Muhammad_Anwer_Resume.pdf",
 );
+const seoRoutes = [
+  "/",
+  "/projects",
+  "/projects/launchgood",
+  "/projects/esg-financed-emissions",
+  "/projects/get-better-together",
+  "/projects/smart-portfolio-allocator",
+  "/resume",
+];
+
+function routeUrl(route: string) {
+  const normalizedBase = basePath === "/" ? "" : basePath.replace(/\/$/, "");
+  const normalizedRoute = route === "/" ? "" : route;
+
+  return `${siteUrl}${normalizedBase}${normalizedRoute}`;
+}
+
+function seoFilesPlugin() {
+  return {
+    name: "portfolio-seo-files",
+    transformIndexHtml(html: string) {
+      return html.replaceAll("%SEO_SITE_URL%", siteUrl);
+    },
+    closeBundle() {
+      const distDir = path.resolve(import.meta.dirname, "dist");
+      const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${seoRoutes
+  .map(
+    (route) => `  <url>
+    <loc>${routeUrl(route)}</loc>
+    <changefreq>${route === "/" ? "monthly" : "yearly"}</changefreq>
+    <priority>${route === "/" ? "1.0" : route === "/projects" ? "0.9" : "0.7"}</priority>
+  </url>`,
+  )
+  .join("\n")}
+</urlset>
+`;
+      const robots = `User-agent: *
+Allow: /
+
+Sitemap: ${routeUrl("/sitemap.xml")}
+`;
+
+      fs.writeFileSync(path.join(distDir, "sitemap.xml"), sitemap);
+      fs.writeFileSync(path.join(distDir, "robots.txt"), robots);
+    },
+  };
+}
 
 export default defineConfig({
   base: basePath,
@@ -25,6 +76,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    seoFilesPlugin(),
     runtimeErrorOverlay(),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined

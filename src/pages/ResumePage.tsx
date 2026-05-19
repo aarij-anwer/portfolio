@@ -2,13 +2,23 @@ import { SymbolIcon } from '@/components/icons';
 import RichText from '@/components/RichText';
 import SiteShell from '@/components/SiteShell';
 import { PageContainer, SurfaceCard } from '@/components/ui';
+import { siteMeta } from '@/data/site';
 import { parsedResume, resumePdfAvailable } from '@/lib/resume';
+import Seo, { personJsonLd } from '@/lib/seo';
 
 export default function ResumePage() {
   const resumeData = parsedResume;
+  const description =
+    'Resume for Muhammad Anwer, full-stack software engineer with experience in React, TypeScript, NestJS, PostgreSQL, product engineering, and AI-assisted delivery.';
 
   return (
     <SiteShell>
+      <Seo
+        title={`Resume | ${siteMeta.name}`}
+        description={description}
+        path="/resume"
+        jsonLd={personJsonLd()}
+      />
       <PageContainer className="max-w-[900px] space-y-16">
         <header className="space-y-6 border-b border-surface-variant pb-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">

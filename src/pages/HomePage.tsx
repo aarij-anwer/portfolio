@@ -4,8 +4,9 @@ import { ArrowUpRightIcon, SymbolIcon } from '@/components/icons';
 import RichText from '@/components/RichText';
 import SiteShell from '@/components/SiteShell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
-import { homeContent } from '@/data/site';
+import { homeContent, siteMeta } from '@/data/site';
 import { parsedResume } from '@/lib/resume';
+import Seo, { personJsonLd, websiteJsonLd } from '@/lib/seo';
 import { cn } from '@/lib/utils';
 
 export default function HomePage() {
@@ -14,6 +15,13 @@ export default function HomePage() {
 
   return (
     <SiteShell>
+      <Seo
+        title={siteMeta.title}
+        description={siteMeta.description}
+        path="/"
+        type="profile"
+        jsonLd={[personJsonLd(), websiteJsonLd()]}
+      />
       <PageContainer className="space-y-24 md:space-y-32">
         <PageSection className="flex flex-col items-center justify-between gap-12 md:flex-row">
           <div className="max-w-2xl flex-1 space-y-6">

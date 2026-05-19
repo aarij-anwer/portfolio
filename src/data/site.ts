@@ -21,6 +21,14 @@ export type {
 
 export const siteMeta = {
   name: 'Muhammad Anwer',
+  title: 'Muhammad Anwer | Full-Stack Software Engineer',
+  description:
+    'Portfolio of Muhammad Anwer, a full-stack software engineer building high-impact React, TypeScript, NestJS, and product engineering systems.',
+  url: 'https://muhammadanwer.com',
+  image: '/opengraph.jpg',
+  email: 'maanwer0@gmail.com',
+  jobTitle: 'Full-Stack Software Engineer',
+  location: 'Toronto, Canada',
   navLinks: [
     { label: 'Projects', href: '/projects' },
     { label: 'Resume', href: '/resume' },
