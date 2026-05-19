@@ -87,19 +87,19 @@ export const getBetterTogetherProject: ProjectDetail = {
   },
   gallery: [
     {
-      src: '/public/gallery/get-better-together/gbt-1.png',
+      src: '/gallery/get-better-together/gbt-1.png',
       alt: 'Pushup challenge leaderboard showing user rankings, streaks, and progress.',
     },
     {
-      src: '/public/gallery/get-better-together/gbt-2.png',
+      src: '/gallery/get-better-together/gbt-2.png',
       alt: 'Dynamic schedule of activities with variable routines and rest days.',
     },
     {
-      src: '/public/gallery/get-better-together/gbt-3.png',
+      src: '/gallery/get-better-together/gbt-3.png',
       alt: 'User profile showing joined challenges, progress, and stats.',
     },
     {
-      src: '/public/gallery/get-better-together/gbt-4.png',
+      src: '/gallery/get-better-together/gbt-4.png',
       alt: 'Create a challenge flow with customizable settings and friend invitations.',
     },
   ],
