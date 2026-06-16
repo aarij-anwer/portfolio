@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { siteMeta } from '@/data/site';
 
 type JsonLd = Record<string, unknown>;
@@ -12,6 +12,27 @@ type SeoProps = {
   noindex?: boolean;
   jsonLd?: JsonLd | JsonLd[];
 };
+
+// Resolved, render-independent representation of a page's head metadata.
+// Shared by the client-side DOM updater and the server-side tag renderer so
+// the two never drift apart.
+export type SeoData = {
+  title: string;
+  description: string;
+  canonical: string;
+  imageUrl: string;
+  robots: string;
+  type: string;
+  jsonLd?: JsonLd | JsonLd[];
+};
+
+// During server-side pre-rendering the App is wrapped in this provider with a
+// collector callback. <Seo> reports its resolved data so the prerender step can
+// emit the matching <head> tags. On the client the context is absent (null) and
+// only the DOM-updating effect runs.
+export const SeoCollectorContext = createContext<
+  ((data: SeoData) => void) | null
+>(null);
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const envSiteUrl = import.meta.env.VITE_SITE_URL?.replace(/\/$/, '');
@@ -130,7 +151,8 @@ export function projectJsonLd(project: {
   };
 }
 
-export default function Seo({
+// Resolve raw <Seo> props into the final, render-independent SeoData.
+function buildSeoData({
   title = siteMeta.title,
   description = siteMeta.description,
   path = '/',
@@ -138,79 +160,164 @@ export default function Seo({
   type = 'website',
   noindex = false,
   jsonLd,
-}: SeoProps) {
+}: SeoProps): SeoData {
+  return {
+    title,
+    description,
+    canonical: absoluteUrl(path),
+    imageUrl: absoluteUrl(image),
+    robots: noindex ? 'noindex, nofollow' : 'index, follow',
+    type,
+    jsonLd,
+  };
+}
+
+// SeoData for a page that renders no <Seo> (used as a server-side fallback).
+export function defaultSeo(): SeoData {
+  return buildSeoData({});
+}
+
+// Apply SeoData to the live document head (client only).
+function applySeoData(data: SeoData) {
+  document.title = data.title;
+  upsertMeta('meta[name="description"]', {
+    name: 'description',
+    content: data.description,
+  });
+  upsertMeta('meta[name="robots"]', { name: 'robots', content: data.robots });
+  upsertMeta('meta[name="author"]', { name: 'author', content: siteMeta.name });
+  upsertMeta('meta[name="theme-color"]', {
+    name: 'theme-color',
+    content: '#0b57d0',
+  });
+
+  upsertLink('canonical', data.canonical);
+
+  upsertMeta('meta[property="og:site_name"]', {
+    property: 'og:site_name',
+    content: siteMeta.name,
+  });
+  upsertMeta('meta[property="og:title"]', {
+    property: 'og:title',
+    content: data.title,
+  });
+  upsertMeta('meta[property="og:description"]', {
+    property: 'og:description',
+    content: data.description,
+  });
+  upsertMeta('meta[property="og:type"]', {
+    property: 'og:type',
+    content: data.type,
+  });
+  upsertMeta('meta[property="og:url"]', {
+    property: 'og:url',
+    content: data.canonical,
+  });
+  upsertMeta('meta[property="og:image"]', {
+    property: 'og:image',
+    content: data.imageUrl,
+  });
+  upsertMeta('meta[property="og:image:alt"]', {
+    property: 'og:image:alt',
+    content: `${siteMeta.name} portfolio preview`,
+  });
+
+  upsertMeta('meta[name="twitter:card"]', {
+    name: 'twitter:card',
+    content: 'summary_large_image',
+  });
+  upsertMeta('meta[name="twitter:title"]', {
+    name: 'twitter:title',
+    content: data.title,
+  });
+  upsertMeta('meta[name="twitter:description"]', {
+    name: 'twitter:description',
+    content: data.description,
+  });
+  upsertMeta('meta[name="twitter:image"]', {
+    name: 'twitter:image',
+    content: data.imageUrl,
+  });
+
+  if (data.jsonLd) {
+    upsertJsonLd('page-json-ld', data.jsonLd);
+  }
+}
+
+function escapeAttr(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Render SeoData to a string of <head> tags for static pre-rendering. Produces
+// the same set of elements (and selectors) that applySeoData maintains, so the
+// client-side effect reuses them in place after hydration instead of appending
+// duplicates.
+export function renderSeoTags(data: SeoData): string {
+  const meta = (
+    keyName: 'name' | 'property',
+    key: string,
+    content: string,
+  ) =>
+    `<meta ${keyName}="${key}" content="${escapeAttr(content)}" />`;
+
+  const tags = [
+    `<title>${escapeAttr(data.title)}</title>`,
+    meta('name', 'description', data.description),
+    meta('name', 'robots', data.robots),
+    meta('name', 'author', siteMeta.name),
+    meta('name', 'theme-color', '#0b57d0'),
+    `<link rel="canonical" href="${escapeAttr(data.canonical)}" />`,
+    meta('property', 'og:site_name', siteMeta.name),
+    meta('property', 'og:title', data.title),
+    meta('property', 'og:description', data.description),
+    meta('property', 'og:type', data.type),
+    meta('property', 'og:url', data.canonical),
+    meta('property', 'og:image', data.imageUrl),
+    meta('property', 'og:image:alt', `${siteMeta.name} portfolio preview`),
+    meta('name', 'twitter:card', 'summary_large_image'),
+    meta('name', 'twitter:title', data.title),
+    meta('name', 'twitter:description', data.description),
+    meta('name', 'twitter:image', data.imageUrl),
+  ];
+
+  if (data.jsonLd) {
+    // Escape "<" so the payload can't terminate the script element early.
+    const json = JSON.stringify(data.jsonLd).replace(/</g, '\\u003c');
+    tags.push(
+      `<script id="page-json-ld" type="application/ld+json">${json}</script>`,
+    );
+  }
+
+  return tags.join('\n    ');
+}
+
+export default function Seo(props: SeoProps) {
+  const data = buildSeoData(props);
+
+  // Server-side: report resolved metadata to the prerender collector. Safe as a
+  // render-time side effect because SSR renders in a single synchronous pass and
+  // the collector is only present during pre-rendering.
+  const collect = useContext(SeoCollectorContext);
+  if (collect) {
+    collect(data);
+  }
+
+  const { title, description, canonical, imageUrl, robots, type, jsonLd } = data;
   useEffect(() => {
-    const canonical = absoluteUrl(path);
-    const imageUrl = absoluteUrl(image);
-    const robots = noindex ? 'noindex, nofollow' : 'index, follow';
-
-    document.title = title;
-    upsertMeta('meta[name="description"]', {
-      name: 'description',
-      content: description,
+    applySeoData({
+      title,
+      description,
+      canonical,
+      imageUrl,
+      robots,
+      type,
+      jsonLd,
     });
-    upsertMeta('meta[name="robots"]', { name: 'robots', content: robots });
-    upsertMeta('meta[name="author"]', {
-      name: 'author',
-      content: siteMeta.name,
-    });
-    upsertMeta('meta[name="theme-color"]', {
-      name: 'theme-color',
-      content: '#0b57d0',
-    });
-
-    upsertLink('canonical', canonical);
-
-    upsertMeta('meta[property="og:site_name"]', {
-      property: 'og:site_name',
-      content: siteMeta.name,
-    });
-    upsertMeta('meta[property="og:title"]', {
-      property: 'og:title',
-      content: title,
-    });
-    upsertMeta('meta[property="og:description"]', {
-      property: 'og:description',
-      content: description,
-    });
-    upsertMeta('meta[property="og:type"]', {
-      property: 'og:type',
-      content: type,
-    });
-    upsertMeta('meta[property="og:url"]', {
-      property: 'og:url',
-      content: canonical,
-    });
-    upsertMeta('meta[property="og:image"]', {
-      property: 'og:image',
-      content: imageUrl,
-    });
-    upsertMeta('meta[property="og:image:alt"]', {
-      property: 'og:image:alt',
-      content: `${siteMeta.name} portfolio preview`,
-    });
-
-    upsertMeta('meta[name="twitter:card"]', {
-      name: 'twitter:card',
-      content: 'summary_large_image',
-    });
-    upsertMeta('meta[name="twitter:title"]', {
-      name: 'twitter:title',
-      content: title,
-    });
-    upsertMeta('meta[name="twitter:description"]', {
-      name: 'twitter:description',
-      content: description,
-    });
-    upsertMeta('meta[name="twitter:image"]', {
-      name: 'twitter:image',
-      content: imageUrl,
-    });
-
-    if (jsonLd) {
-      upsertJsonLd('page-json-ld', jsonLd);
-    }
-  }, [description, image, jsonLd, noindex, path, title, type]);
+  }, [title, description, canonical, imageUrl, robots, type, jsonLd]);
 
   return null;
 }

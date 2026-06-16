@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import fs from "fs";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+import { staticRoutes } from "./src/lib/staticRoutes";
 
 const rawPort = process.env.PORT;
 const port = rawPort ? Number(rawPort) : 5173;
@@ -19,15 +20,7 @@ const resumePdfPath = path.resolve(
   "public",
   "Muhammad_Anwer_Resume.pdf",
 );
-const seoRoutes = [
-  "/",
-  "/projects",
-  "/projects/launchgood",
-  "/projects/esg-financed-emissions",
-  "/projects/get-better-together",
-  "/projects/smart-portfolio-allocator",
-  "/resume",
-];
+const seoRoutes = staticRoutes;
 
 function routeUrl(route: string) {
   const normalizedBase = basePath === "/" ? "" : basePath.replace(/\/$/, "");

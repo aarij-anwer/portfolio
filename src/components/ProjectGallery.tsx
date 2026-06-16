@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 // @ts-ignore
@@ -19,6 +19,13 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
   const hasMultipleImages = images.length > 1;
   const swiperRef = useRef<any>(null);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
+  // Swiper and the lightbox are browser-only. Render a plain, crawlable image
+  // list during SSR and the first client paint (so the markup matches and
+  // hydration is clean), then upgrade to the interactive carousel after mount.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (images.length === 0) {
     return null;
@@ -28,6 +35,29 @@ export default function ProjectGallery({ images }: ProjectGalleryProps) {
     src: image.src,
     alt: image.alt,
   }));
+
+  if (!mounted) {
+    return (
+      <section className="space-y-4">
+        <div className="overflow-hidden rounded-3xl border border-outline-variant bg-surface-container-low">
+          {images.map((image, imageIndex) => (
+            <div
+              key={image.src}
+              className="relative aspect-[16/10] w-full md:aspect-[21/9]"
+            >
+              <img
+                src={image.src}
+                alt={image.alt}
+                loading={imageIndex === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>
