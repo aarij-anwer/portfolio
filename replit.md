@@ -19,5 +19,13 @@ Static portfolio site for Muhammad Anwer.
 
 ## Notes
 
-- `/resume` parses `public/resume.tex` at build time via Vite `?raw`.
+- `public/resume.tex` is parsed at build time (Vite `?raw`) and drives: the home hero
+  (from the `% web:headline` / `% web:summary` comment lines, which don't print in the PDF),
+  `/resume`, site name/title/description, Person/ProfilePage JSON-LD, and the AI-engine
+  files `llms.txt`, `llms-full.txt`, `resume.md`. The web summary lines and the
+  `Professional Experience` section are required; the build fails if they are missing.
+- Every route is pre-rendered to static HTML by `scripts/prerender.mjs` (plus `404.html`).
+  Netlify has no SPA catch-all, so unknown URLs return a real 404.
+- `robots.txt` and `sitemap.xml` are generated in `vite.config.ts` (AI crawlers allowed,
+  `<lastmod>` from git history).
 - `public/Muhammad_Anwer_Resume.pdf` is still hand-uploaded and served as a static asset.

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect } from 'react';
 import { siteMeta } from '@/data/site';
+import { parsedResume, summaryParagraphs } from '@/lib/resume';
 
 type JsonLd = Record<string, unknown>;
 
@@ -92,31 +93,76 @@ function upsertJsonLd(id: string, value: JsonLd | JsonLd[]) {
   element.textContent = JSON.stringify(value);
 }
 
+const PERSON_ID = '/#person';
+const WEBSITE_ID = '/#website';
+
+const personRef = () => ({ '@id': absoluteUrl('/') + PERSON_ID });
+const websiteRef = () => ({ '@id': absoluteUrl('/') + WEBSITE_ID });
+
+// Competency groups whose comma-separated values are concrete skills worth
+// listing in `knowsAbout` (prose groups like "Stakeholder & Delivery" are skipped).
+const SKILL_GROUPS = new Set([
+  'Languages',
+  'Frameworks & Libraries',
+  'Architecture & Systems',
+  'Cloud & DevOps',
+]);
+
+function resumeSkills(): string[] {
+  const skills = parsedResume.competencies
+    .filter((item) => SKILL_GROUPS.has(item.label))
+    .flatMap((item) =>
+      item.value
+        .map((segment) => segment.text)
+        .join('')
+        .split(/,\s*/),
+    )
+    .map((skill) => skill.replace(/\s*\(.*?\)\s*/g, '').trim())
+    .filter(Boolean);
+  return [...new Set(skills)];
+}
+
+// Person entity built entirely from public/resume.tex.
 export function personJsonLd(): JsonLd {
+  const sameAs = parsedResume.contact
+    .filter((item) => item.kind === 'linkedin' || item.kind === 'github')
+    .map((item) => item.href!);
+  const [locality, region] = parsedResume.location.split(/,\s*/);
+  const current = parsedResume.experience.filter((job) => job.endDate === 'Present');
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: siteMeta.name,
+    ...personRef(),
+    name: parsedResume.name,
     url: absoluteUrl('/'),
     image: absoluteUrl(siteMeta.image),
-    email: siteMeta.email,
-    jobTitle: siteMeta.jobTitle,
+    email: `mailto:${parsedResume.email}`,
+    jobTitle: parsedResume.summary.headline,
+    description: summaryParagraphs[0],
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Toronto',
+      addressLocality: locality,
+      ...(region ? { addressRegion: region } : {}),
       addressCountry: 'CA',
     },
-    sameAs: [siteMeta.socialLinks.github, siteMeta.socialLinks.linkedin],
-    knowsAbout: [
-      'Full-stack software engineering',
-      'React',
-      'TypeScript',
-      'Node.js',
-      'NestJS',
-      'PostgreSQL',
-      'Product engineering',
-      'AI-assisted software development',
-    ],
+    sameAs,
+    knowsAbout: resumeSkills(),
+    worksFor: current.map((job) => ({ '@type': 'Organization', name: job.company })),
+    hasOccupation: current.map((job) => ({
+      '@type': 'Occupation',
+      name: job.role,
+      occupationLocation: { '@type': 'Country', name: 'Canada' },
+    })),
+    alumniOf: parsedResume.education.map((item) => ({
+      '@type': 'EducationalOrganization',
+      name: item.school,
+    })),
+    hasCredential: parsedResume.education.map((item) => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: item.credential,
+      recognizedBy: { '@type': 'EducationalOrganization', name: item.school },
+    })),
   };
 }
 
@@ -124,10 +170,37 @@ export function websiteJsonLd(): JsonLd {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    ...websiteRef(),
     name: siteMeta.name,
     url: absoluteUrl('/'),
     description: siteMeta.description,
-    publisher: personJsonLd(),
+    inLanguage: 'en',
+    publisher: personRef(),
+  };
+}
+
+// A profile page (home, resume) whose main subject is the Person.
+export function profilePageJsonLd(path: string, name: string): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    name,
+    url: absoluteUrl(path),
+    isPartOf: websiteRef(),
+    mainEntity: personJsonLd(),
+  };
+}
+
+export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    })),
   };
 }
 
@@ -147,7 +220,8 @@ export function projectJsonLd(project: {
     url: absoluteUrl(`/projects/${project.slug}`),
     image: absoluteUrl(project.image),
     keywords: project.tags.join(', '),
-    author: personJsonLd(),
+    author: personRef(),
+    isPartOf: websiteRef(),
   };
 }
 

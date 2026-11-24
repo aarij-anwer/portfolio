@@ -62,6 +62,13 @@
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%
 \begin{document}
 
+% -------- WEBSITE SUMMARY (comments: not printed in the PDF) --------
+% muhammadanwer.com reads these lines for the home page hero, meta description,
+% llms.txt and structured data. One "web:summary" line per hero paragraph.
+% web:headline Full-Stack Software Engineer
+% web:summary Full-stack engineer focused on building high-impact products: from rapid 0$\to$1 MVPs to scalable, production systems. I combine product thinking, strong systems design, and execution speed to deliver meaningful results.
+% web:summary I strongly believe in iterative approaches: identify a problem, prototype a solution, test it with real users, build/pivot accordingly. AI is part of that loop end-to-end, from scoping to development and beyond.
+
 % -------- HEADING --------
 \begin{center}
     {\Huge \scshape Muhammad Anwer}\\[4pt]
@@ -93,7 +100,6 @@
   \resumeItem{\textbf{AI in Practice}: Force multiplier across the full SDLC, used every day. \textbf{Cursor + agentic coding} for feature scaffolding, refactors, and codebase navigation; \textbf{AI-assisted code review} to catch regressions before PR; \textbf{debugging triage} of incidents and stack traces; Production experience with OpenAI, Cursor, Cleric, Mendral, and Langbase; ML foundations in TensorFlow, PyTorch, Scikit-learn.}
   
   
-  
   \resumeItemListEnd
   
 
@@ -106,45 +112,41 @@
 \resumeItemListStart
   \resumeItem{Lead product engineering and full-stack development for a multi-tenant SaaS platform that helps financial institutions onboard SME portfolio companies, collect emissions data, and generate PCAF-aligned financed emissions reports. Stack: \textbf{Vite}, \textbf{React}, \textbf{TypeScript}, \textbf{Tailwind CSS}, \textbf{NestJS}, \textbf{Drizzle ORM}, and \textbf{PostgreSQL}.}
 
-  \resumeItem{\textbf{0$\to$1 MVP and pilot win:} led AI-assisted development of a full-stack MVP from prototype to production in under 4 weeks, guiding a team of 2 engineers while owning architecture, delivery, and key product tradeoffs. The product won a competitive vendor demo with Desjardins, securing a paid pilot with onboarding in progress.}
+  \resumeItem{\textbf{Tech leadership:} built the engineering team and set how it works. I direct architecture and delivery, and I set the working standard the team follows: how a change is scoped, reviewed, and tested before it ships. The same standard applies to the engineers and to the AI-assisted workflow.}
 
-  \resumeItem{\textbf{AI-powered document parsing:} developed data ingestion workflows allowing SME users to upload CSV, Excel, and PDF files to auto-populate emissions forms through header matching, OpenAI-assisted extraction, post-AI validation, and human-in-the-loop review.}
+  \resumeItem{\textbf{Idea to pilot to full-scale rollout:} took the product from an idea to production in under 4 weeks with a team of 2. Won a competitive vendor demo with Desjardins, secured the paid pilot, and led the full-scale rollout. Led both a data-dense firm dashboard for portfolio analysts and a guided SME wizard on one backend, and built ingestion that fills emissions forms from CSV, Excel, and PDF through header matching, OpenAI extraction, validation, and human review.}
 
-  \resumeItem{\textbf{Dual-interface product design:} contributed across a data-dense financial firm dashboard for portfolio analysts and a guided step-by-step SME wizard, designing workflows around two distinct user personas while sharing a single backend architecture.}
+  \resumeItem{\textbf{Platform architecture and data model:} led the move to modular \textbf{NestJS} with tenant-aware data access, session-based dual authentication, invitation flows, and bulk import. Established a database-driven activity model and hash-gated Excel seed system for 13 countries and bilingual English/French entry, so emissions factors and sector data update without code changes.}
 
-  \resumeItem{\textbf{Production-grade backend refactor:} led a migration to modular \textbf{NestJS} architecture with clearer service boundaries, tenant-aware data access, session-based dual authentication, invitation flows, bulk import workflows, and stronger data integrity.}
+  \resumeItem{\textbf{CI and automated review:} split GitHub Actions into typecheck/build, client unit, backend unit, backend e2e on \textbf{Postgres 16}, and \textbf{Playwright}. Draft PRs skip CI, path filters drop irrelevant runs, and a new push cancels the in-progress run. A lockfile check blocks Replit's internal npm proxy. E2E uses a fake email transport and dummy secrets, with the feature-flag-off path as its own step. PRs stay draft until ready: a Claude code review runs once, a security review re-runs on every push, and cheaper backend and frontend agents review only new commits against \texttt{REVIEW.md}.}
 
-  \resumeItem{\textbf{Scalable emissions data model:} established a database-driven activity model and hash-gated Excel seed system supporting 13 countries and bilingual English/French data entry, allowing emissions factors and sector data to be updated without code changes.}
-
-  \resumeItem{\textbf{Testing and reliability:} built and maintained a 400+ test suite across 15 files covering unit, integration, and E2E flows, improving confidence as the system transitioned from rapid prototype to production-grade platform.}
+  \resumeItem{\textbf{Ephemeral previews and reliability:} every pull request gets a throwaway \textbf{Railway} app and Postgres, destroyed on close and isolated from production on Replit. Pre-deploy migrates, seeds 13 countries, then nine logins covering lender, fund-manager, SME, and agriculture flows. Seeding is identity-gated so the protected base environment is skipped, and a misconfigured target fails the deploy. Grew the suite to 300+ test files across unit, integration, backend e2e, and Playwright. Shipped client-facing work behind \textbf{PostHog} feature flags, with \textbf{Sentry} and PostHog error tracking, and a startup path that binds the port before migrations so a bad deploy serves 503 while the database catches up.}
 \resumeItemListEnd
 
 % --- LaunchGood ---
-\resumeSubheading{Full Stack Software Engineer}{Jul 2022 -- Present}{LaunchGood}{Remote}
+\resumeSubheading{Full Stack Software Engineer}{Mar 2022 -- Sep 2026}{LaunchGood}{Remote}
 \resumeItemListStart
   \resumeItem{Ship full-stack features for a global fundraising marketplace powering one-time donations and recurring giving across 150+ countries. Work across an \textbf{Nx monorepo} of 23 services and 17 shared libraries using \textbf{Next.js}, \textbf{React}, \textbf{TypeScript}, \textbf{Redux}, \textbf{Tailwind CSS}, \textbf{NestJS}, \textbf{Prisma}, \textbf{PostgreSQL}, and \textbf{RabbitMQ}.}
 
-  \resumeItem{\textbf{Guest checkout and conversion lift:} delivered subscription guest checkout end-to-end in 1 week as a leadership priority, building the Next.js, Redux, Tailwind, and NestJS flow for subscription creation and one-click account completion. Identified security risks in the initial proposal and implemented safer alternatives; after launch, over 50\% of new subscribers used guest checkout, improving conversions by \textasciitilde{}40\%.}
+  \resumeItem{\textbf{Subscription guest checkout:} delivered subscription guest checkout end-to-end in 1 week as a leadership priority, building the Next.js, Redux, Tailwind, and NestJS flow for subscription creation and one-click account completion. Identified security risks in the initial proposal and implemented safer alternatives. After launch, over 50\% of new subscribers used guest checkout, improving conversions by \textasciitilde{}40\%.}
 
-  \resumeItem{\textbf{Multi-step subscription onboarding funnels:} led technical direction for recurring-giving funnels across subscription programs, partnering with product to translate ambiguous requirements into shipped flows. Refactored legacy funnel logic, reviewed PRs, shipped reusable UI components, and added test coverage with \textbf{Jest} and \textbf{React Testing Library}.}
+  \resumeItem{\textbf{Recurring-giving enrollment funnels:} led the donor enrollment flow for scheduled giving programs, replacing the legacy experience with shared amount, review, and giving-grid screens and a mobile currency drawer. Added program-specific state and impact widgets, fixed guest-checkout and referral routing, and moved shared enrollment cards out of React context so new programs could reuse the same route pattern. Kept multi-step subscription state in \textbf{Redux} behind a server-rendered app shell for faster initial loads.}
 
-  \resumeItem{\textbf{Performance-oriented frontend architecture:} improved funnel performance using an app-shell pattern that combined server-side layouts with a client-side interactive shell, enabling faster initial loads while preserving complex multi-step subscription state in Redux.}
+  \resumeItem{\textbf{Heart \& Soul design system:} took the shared component library from an idea to a published private package, \textbf{@launchgood/heart-and-soul}, through an RFC, a component-by-component plan, and implementation. The RFC set Figma as the source of truth, plain \textbf{Tailwind CSS}, and a Button pilot before a wider rewrite. Shipped Button, Chip, Campaign Card, Counter, Skeleton, Progress, Switch, Checkbox, Radio, Tabs, and Dropdown with \textbf{Storybook}, \textbf{Vitest}, \textbf{Playwright}, and CI. The product app installs the package, and Button is live on the campaign report drawer.}
+
+  \resumeItem{\textbf{Server-rendered campaign pages:} found that campaign routes returned about 160 bytes of HTML until JavaScript ran, so search and answer-engine crawlers indexed empty pages. Removed the client-only gate so campaign stories render in the first response, and fixed hydration mismatches that showed goals as 0 USD and raised amounts about 100 below the true figure.}
+
+  \resumeItem{\textbf{Campaign profiling engine:} turned an ambiguous request for pageview and time-on-route metrics into a v1 plan covering session-to-user identity, which pageviews count, \textbf{BigQuery} fact tables, and the read API contract. Moved the \textbf{PostHog} BigQuery export from a daily snapshot to hourly, and carried the metrics API through campaign-service queries, RPC DTOs, and a REST facade into review.}
+
+  \resumeItem{\textbf{Product analytics:} restored production \textbf{PostHog} on the marketing site after autocapture fell to about 0.05 events per pageview, fixing capture so traffic reported again through the first-party proxy. Integrated the \textbf{Customer.io} web SDK behind \textbf{CookieYes} consent. Earlier, defined the \textbf{Heap} event model for checkout, subscription funnels, A/B experiments, and failure points used to validate launches.}
+
+  \resumeItem{\textbf{On-call and incident management:} turned website support from one-off Slack threads into a repeatable triage practice, including a Cursor workflow that joins each request to its ticket and an investigation view for the next on-call. Carried product-caused incidents through to root-cause fixes: cut bulk-billing database load that was pushing CPU over 85\% on runs of about 6,800 subscriptions, traced a facade SLO burn to a \textbf{Redis} auth failure in payout-service after a deploy, and shipped a campaign-update delete API so support could remove an update without a one-off database change.}
 
   \resumeItem{\textbf{Public profiles and partner dashboards:} built social-media-style public profile pages for partners and influencers, along with companion admin dashboards for engagement and audience insights. Owned end-to-end delivery across Next.js, NestJS services, database schema design, REST APIs, and automated tests covering critical paths.}
 
-  \resumeItem{\textbf{Recurring fundraising management:} improved information architecture and dashboard workflows for charities managing recurring giving programs. Built reusable Next.js components and status-driven dashboard views surfacing configuration, subscription health, and key metrics at a glance.}
-
-  \resumeItem{\textbf{Event-driven microservices:} implemented and maintained RabbitMQ producers and consumers across donation, charge, payout, settlement, and notification domains, helping keep async service boundaries explicit through publisher-owned exchanges and consumer-owned queues.}
-
-  \resumeItem{\textbf{Incident response and production reliability:} led production triage using \textbf{Datadog}, \textbf{AWS}, and staging validation to isolate and resolve runtime errors, redirect loops, unstable API behavior, fragile error handling, and user-facing failure paths. Authored runbooks and led retrospectives to standardize mitigation and improve release safety.}
-
   \resumeItem{\textbf{Proactive Retool operations tooling:} built internal tools without a formal request, including a donor lookup console aggregating transactions, subscriptions, failed charges, and recharge actions across multiple data sources. Shipped scheduled-giving KPI dashboards with hourly breakdowns for scheduled, processing, succeeded, and failed donations, reducing on-call billing triage from hours to minutes.}
 
-  \resumeItem{\textbf{Product analytics and experimentation:} defined and implemented end-to-end \textbf{Heap} instrumentation for checkout flows, subscription funnels, key user actions, A/B experiments, and failure points under a consistent event model. Partnered with product and growth teams to validate launches, measure funnel performance, and convert insights into roadmap priorities.}
-
-  \resumeItem{\textbf{System design, RFCs, and safe releases:} authored and contributed to RFCs for recurring-giving, subscription billing, settlement workflows, and event-driven messaging. Coordinated CI-gated monorepo releases through \textbf{GitHub Actions}, upheld a high bar in code reviews, and mitigated regression risk through risk-aware decisions including reverts and safer follow-up plans.}
-
-  \resumeItem{\textbf{Service contract standardization:} contributed to a client-library pattern centralizing per-service RPC contracts, DTOs, and Prisma schemas, reducing cross-service coupling and improving maintainability across the platform.}
+  \resumeItem{\textbf{Event-driven microservices:} implemented and maintained \textbf{RabbitMQ} producers and consumers across donation, charge, payout, settlement, and notification domains, keeping async service boundaries explicit through publisher-owned exchanges and consumer-owned queues.}
 \resumeItemListEnd
 
 % --- E-Commerce ---

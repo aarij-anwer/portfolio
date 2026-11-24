@@ -57,7 +57,10 @@ export type ProjectDetail = {
   }>;
 };
 
+export type ResumeContactKind = 'location' | 'phone' | 'email' | 'linkedin' | 'github' | 'link';
+
 export type ResumeContact = {
+  kind: ResumeContactKind;
   label: string;
   href?: string;
   icon: string;
@@ -77,20 +80,34 @@ export type ResumeCompetency = {
 
 export type ResumeExperience = {
   role: string;
+  company: string;
+  location: string;
+  startDate: string;
+  endDate: string;
   companyLine: string;
   bullets: ResumeTextSegment[][];
   current?: boolean;
 };
 
 export type ResumeEducation = {
-  school: string;
+  /** Degree / diploma name. */
   credential: string;
-  details: string;
+  /** Institution name. */
+  school: string;
+  location: string;
+};
+
+export type ResumeSummary = {
+  headline: string;
+  paragraphs: ResumeTextSegment[][];
 };
 
 export type ParsedResume = {
   name: string;
+  location: string;
+  email: string;
   contact: ResumeContact[];
+  summary: ResumeSummary;
   competencies: ResumeCompetency[];
   experience: ResumeExperience[];
   education: ResumeEducation[];
