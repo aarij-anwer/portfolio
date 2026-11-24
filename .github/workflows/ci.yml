@@ -29,8 +29,15 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # typecheck + client build + SSR build + prerender (parses resume.tex)
+      - run: pnpm test
+
+      # typecheck + client build + SSR build + prerender (parses resume.tex).
+      # Strict: a broken resume.tex fails CI instead of falling back to the
+      # snapshot, and the snapshot must match resume.tex (Netlify builds are
+      # not strict, so a bad resume.tex still deploys from the snapshot).
       - run: pnpm run build
+        env:
+          RESUME_STRICT: "1"
 
       - name: Check generated output
         run: |

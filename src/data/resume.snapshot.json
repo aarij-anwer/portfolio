@@ -1,0 +1,689 @@
+{
+  "name": "Muhammad Anwer",
+  "location": "Milton, ON",
+  "email": "maanwer0@gmail.com",
+  "contact": [
+    {
+      "kind": "location",
+      "label": "Milton, ON",
+      "icon": "location_on"
+    },
+    {
+      "kind": "phone",
+      "label": "647-779-0703",
+      "icon": "phone"
+    },
+    {
+      "kind": "email",
+      "label": "maanwer0@gmail.com",
+      "href": "mailto:maanwer0@gmail.com",
+      "icon": "mail"
+    },
+    {
+      "kind": "linkedin",
+      "label": "m-a-anwer",
+      "href": "https://www.linkedin.com/in/m-a-anwer",
+      "icon": "open_in_new"
+    },
+    {
+      "kind": "github",
+      "label": "aarij-anwer",
+      "href": "https://github.com/aarij-anwer",
+      "icon": "open_in_new"
+    }
+  ],
+  "summary": {
+    "headline": "Full-Stack Software Engineer",
+    "paragraphs": [
+      [
+        {
+          "text": "Full-stack engineer focused on building high-impact products: from rapid 0→1 MVPs to scalable, production systems. I combine product thinking, strong systems design, and execution speed to deliver meaningful results."
+        }
+      ],
+      [
+        {
+          "text": "I strongly believe in iterative approaches: identify a problem, prototype a solution, test it with real users, build/pivot accordingly. AI is part of that loop end-to-end, from scoping to development and beyond."
+        }
+      ]
+    ]
+  },
+  "wins": [
+    {
+      "stat": "4 weeks",
+      "title": "Idea to paid pilot",
+      "description": "Took ESGTree's financed-emissions platform from idea to production with a team of 2, won a competitive vendor demo with Desjardins, then led the full-scale rollout.",
+      "href": "/projects/esg-financed-emissions"
+    },
+    {
+      "stat": "~40%",
+      "title": "Conversion lift from guest checkout",
+      "description": "Shipped subscription guest checkout end-to-end in 1 week at LaunchGood, fixing security risks in the original proposal. Over 50% of new subscribers chose it.",
+      "href": "/projects/launchgood"
+    },
+    {
+      "stat": "100% AI",
+      "title": "Get Better Together",
+      "description": "Designed and shipped a social fitness app end-to-end with AI agents: leaderboards, user auth, and a guest mode that lets people join a challenge in seconds.",
+      "href": "/projects/get-better-together"
+    }
+  ],
+  "competencies": [
+    {
+      "label": "Languages",
+      "value": [
+        {
+          "text": "TypeScript, JavaScript, Python, SQL"
+        }
+      ],
+      "icon": "code"
+    },
+    {
+      "label": "Frameworks & Libraries",
+      "value": [
+        {
+          "text": "React, Redux, NestJS, Next.js, Vite, Prisma, Tailwind CSS, Jest, React Testing Library, Scikit-learn"
+        }
+      ],
+      "icon": "layers"
+    },
+    {
+      "label": "Architecture & Systems",
+      "value": [
+        {
+          "text": "Microservices, event-driven systems, RabbitMQ, REST/OpenAPI (contract-first APIs), type-safe clients, cross-service integration"
+        }
+      ],
+      "icon": "architecture"
+    },
+    {
+      "label": "Reliability & Operations",
+      "value": [
+        {
+          "text": "Incident management, production triage and mitigation, root cause analysis (RCA), runbooks, post-incident hardening, on-call rotations, Datadog (logs, monitors)"
+        }
+      ],
+      "icon": "monitoring"
+    },
+    {
+      "label": "Cloud & DevOps",
+      "value": [
+        {
+          "text": "AWS, Docker, Git, GitHub Actions, CI/CD, monitoring and alerting"
+        }
+      ],
+      "icon": "cloud"
+    },
+    {
+      "label": "Engineering Leadership",
+      "value": [
+        {
+          "text": "System design (RFCs), design reviews, product/engineering collaboration, analytics instrumentation (Heap), roadmap input, code reviews, mentoring distributed teams"
+        }
+      ],
+      "icon": "psychology"
+    },
+    {
+      "label": "Stakeholder & Delivery",
+      "value": [
+        {
+          "text": "Align non-technical stakeholders, manage upwards, and partner closely with product and design. Translate ambiguous requirements into scoped deliverables, surface tradeoffs early, and communicate risk before it becomes urgent. Comfortable in "
+        },
+        {
+          "text": "agile",
+          "bold": true
+        },
+        {
+          "text": " (sprints, standups, planning, retros); have led pilots, vendor demos, and post-incident reviews directly with customers and executives."
+        }
+      ],
+      "icon": "psychology"
+    },
+    {
+      "label": "AI in Practice",
+      "value": [
+        {
+          "text": "Force multiplier across the full SDLC, used every day. "
+        },
+        {
+          "text": "Cursor + agentic coding",
+          "bold": true
+        },
+        {
+          "text": " for feature scaffolding, refactors, and codebase navigation; "
+        },
+        {
+          "text": "AI-assisted code review",
+          "bold": true
+        },
+        {
+          "text": " to catch regressions before PR; "
+        },
+        {
+          "text": "debugging triage",
+          "bold": true
+        },
+        {
+          "text": " of incidents and stack traces; Production experience with OpenAI, Cursor, Cleric, Mendral, and Langbase; ML foundations in TensorFlow, PyTorch, Scikit-learn."
+        }
+      ],
+      "icon": "generative_ai"
+    }
+  ],
+  "experience": [
+    {
+      "role": "Senior Software Engineer (Contract)",
+      "company": "ESGTree",
+      "location": "Remote",
+      "startDate": "Aug 2025",
+      "endDate": "Present",
+      "current": true,
+      "bullets": [
+        [
+          {
+            "text": "Lead product engineering and full-stack development for a multi-tenant SaaS platform that helps financial institutions onboard SME portfolio companies, collect emissions data, and generate PCAF-aligned financed emissions reports. Stack: "
+          },
+          {
+            "text": "Vite",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "React",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "TypeScript",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Tailwind CSS",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "NestJS",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Drizzle ORM",
+            "bold": true
+          },
+          {
+            "text": ", and "
+          },
+          {
+            "text": "PostgreSQL",
+            "bold": true
+          },
+          {
+            "text": "."
+          }
+        ],
+        [
+          {
+            "text": "Tech leadership:",
+            "bold": true
+          },
+          {
+            "text": " built the engineering team and set how it works. I direct architecture and delivery, and I set the working standard the team follows: how a change is scoped, reviewed, and tested before it ships. The same standard applies to the engineers and to the AI-assisted workflow."
+          }
+        ],
+        [
+          {
+            "text": "Idea to pilot to full-scale rollout:",
+            "bold": true
+          },
+          {
+            "text": " took the product from an idea to production in under 4 weeks with a team of 2. Won a competitive vendor demo with Desjardins, secured the paid pilot, and led the full-scale rollout. Led both a data-dense firm dashboard for portfolio analysts and a guided SME wizard on one backend, and built ingestion that fills emissions forms from CSV, Excel, and PDF through header matching, OpenAI extraction, validation, and human review."
+          }
+        ],
+        [
+          {
+            "text": "Platform architecture and data model:",
+            "bold": true
+          },
+          {
+            "text": " led the move to modular "
+          },
+          {
+            "text": "NestJS",
+            "bold": true
+          },
+          {
+            "text": " with tenant-aware data access, session-based dual authentication, invitation flows, and bulk import. Established a database-driven activity model and hash-gated Excel seed system for 13 countries and bilingual English/French entry, so emissions factors and sector data update without code changes."
+          }
+        ],
+        [
+          {
+            "text": "CI and automated review:",
+            "bold": true
+          },
+          {
+            "text": " split GitHub Actions into typecheck/build, client unit, backend unit, backend e2e on "
+          },
+          {
+            "text": "Postgres 16",
+            "bold": true
+          },
+          {
+            "text": ", and "
+          },
+          {
+            "text": "Playwright",
+            "bold": true
+          },
+          {
+            "text": ". Draft PRs skip CI, path filters drop irrelevant runs, and a new push cancels the in-progress run. A lockfile check blocks Replit's internal npm proxy. E2E uses a fake email transport and dummy secrets, with the feature-flag-off path as its own step. PRs stay draft until ready: a Claude code review runs once, a security review re-runs on every push, and cheaper backend and frontend agents review only new commits against "
+          },
+          {
+            "text": "REVIEW.md."
+          }
+        ],
+        [
+          {
+            "text": "Ephemeral previews and reliability:",
+            "bold": true
+          },
+          {
+            "text": " every pull request gets a throwaway "
+          },
+          {
+            "text": "Railway",
+            "bold": true
+          },
+          {
+            "text": " app and Postgres, destroyed on close and isolated from production on Replit. Pre-deploy migrates, seeds 13 countries, then nine logins covering lender, fund-manager, SME, and agriculture flows. Seeding is identity-gated so the protected base environment is skipped, and a misconfigured target fails the deploy. Grew the suite to 300+ test files across unit, integration, backend e2e, and Playwright. Shipped client-facing work behind "
+          },
+          {
+            "text": "PostHog",
+            "bold": true
+          },
+          {
+            "text": " feature flags, with "
+          },
+          {
+            "text": "Sentry",
+            "bold": true
+          },
+          {
+            "text": " and PostHog error tracking, and a startup path that binds the port before migrations so a bad deploy serves 503 while the database catches up."
+          }
+        ]
+      ]
+    },
+    {
+      "role": "Full Stack Software Engineer",
+      "company": "LaunchGood",
+      "location": "Remote",
+      "startDate": "Mar 2022",
+      "endDate": "Sep 2026",
+      "bullets": [
+        [
+          {
+            "text": "Ship full-stack features for a global fundraising marketplace powering one-time donations and recurring giving across 150+ countries. Work across an "
+          },
+          {
+            "text": "Nx monorepo",
+            "bold": true
+          },
+          {
+            "text": " of 23 services and 17 shared libraries using "
+          },
+          {
+            "text": "Next.js",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "React",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "TypeScript",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Redux",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Tailwind CSS",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "NestJS",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Prisma",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "PostgreSQL",
+            "bold": true
+          },
+          {
+            "text": ", and "
+          },
+          {
+            "text": "RabbitMQ",
+            "bold": true
+          },
+          {
+            "text": "."
+          }
+        ],
+        [
+          {
+            "text": "Subscription guest checkout:",
+            "bold": true
+          },
+          {
+            "text": " delivered subscription guest checkout end-to-end in 1 week as a leadership priority, building the Next.js, Redux, Tailwind, and NestJS flow for subscription creation and one-click account completion. Identified security risks in the initial proposal and implemented safer alternatives. After launch, over 50% of new subscribers used guest checkout, improving conversions by ~40%."
+          }
+        ],
+        [
+          {
+            "text": "Recurring-giving enrollment funnels:",
+            "bold": true
+          },
+          {
+            "text": " led the donor enrollment flow for scheduled giving programs, replacing the legacy experience with shared amount, review, and giving-grid screens and a mobile currency drawer. Added program-specific state and impact widgets, fixed guest-checkout and referral routing, and moved shared enrollment cards out of React context so new programs could reuse the same route pattern. Kept multi-step subscription state in "
+          },
+          {
+            "text": "Redux",
+            "bold": true
+          },
+          {
+            "text": " behind a server-rendered app shell for faster initial loads."
+          }
+        ],
+        [
+          {
+            "text": "Heart & Soul design system:",
+            "bold": true
+          },
+          {
+            "text": " took the shared component library from an idea to a published private package, "
+          },
+          {
+            "text": "@launchgood/heart-and-soul",
+            "bold": true
+          },
+          {
+            "text": ", through an RFC, a component-by-component plan, and implementation. The RFC set Figma as the source of truth, plain "
+          },
+          {
+            "text": "Tailwind CSS",
+            "bold": true
+          },
+          {
+            "text": ", and a Button pilot before a wider rewrite. Shipped Button, Chip, Campaign Card, Counter, Skeleton, Progress, Switch, Checkbox, Radio, Tabs, and Dropdown with "
+          },
+          {
+            "text": "Storybook",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Vitest",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Playwright",
+            "bold": true
+          },
+          {
+            "text": ", and CI. The product app installs the package, and Button is live on the campaign report drawer."
+          }
+        ],
+        [
+          {
+            "text": "Server-rendered campaign pages:",
+            "bold": true
+          },
+          {
+            "text": " found that campaign routes returned about 160 bytes of HTML until JavaScript ran, so search and answer-engine crawlers indexed empty pages. Removed the client-only gate so campaign stories render in the first response, and fixed hydration mismatches that showed goals as 0 USD and raised amounts about 100 below the true figure."
+          }
+        ],
+        [
+          {
+            "text": "Campaign profiling engine:",
+            "bold": true
+          },
+          {
+            "text": " turned an ambiguous request for pageview and time-on-route metrics into a v1 plan covering session-to-user identity, which pageviews count, "
+          },
+          {
+            "text": "BigQuery",
+            "bold": true
+          },
+          {
+            "text": " fact tables, and the read API contract. Moved the "
+          },
+          {
+            "text": "PostHog",
+            "bold": true
+          },
+          {
+            "text": " BigQuery export from a daily snapshot to hourly, and carried the metrics API through campaign-service queries, RPC DTOs, and a REST facade into review."
+          }
+        ],
+        [
+          {
+            "text": "Product analytics:",
+            "bold": true
+          },
+          {
+            "text": " restored production "
+          },
+          {
+            "text": "PostHog",
+            "bold": true
+          },
+          {
+            "text": " on the marketing site after autocapture fell to about 0.05 events per pageview, fixing capture so traffic reported again through the first-party proxy. Integrated the "
+          },
+          {
+            "text": "Customer.io",
+            "bold": true
+          },
+          {
+            "text": " web SDK behind "
+          },
+          {
+            "text": "CookieYes",
+            "bold": true
+          },
+          {
+            "text": " consent. Earlier, defined the "
+          },
+          {
+            "text": "Heap",
+            "bold": true
+          },
+          {
+            "text": " event model for checkout, subscription funnels, A/B experiments, and failure points used to validate launches."
+          }
+        ],
+        [
+          {
+            "text": "On-call and incident management:",
+            "bold": true
+          },
+          {
+            "text": " turned website support from one-off Slack threads into a repeatable triage practice, including a Cursor workflow that joins each request to its ticket and an investigation view for the next on-call. Carried product-caused incidents through to root-cause fixes: cut bulk-billing database load that was pushing CPU over 85% on runs of about 6,800 subscriptions, traced a facade SLO burn to a "
+          },
+          {
+            "text": "Redis",
+            "bold": true
+          },
+          {
+            "text": " auth failure in payout-service after a deploy, and shipped a campaign-update delete API so support could remove an update without a one-off database change."
+          }
+        ],
+        [
+          {
+            "text": "Public profiles and partner dashboards:",
+            "bold": true
+          },
+          {
+            "text": " built social-media-style public profile pages for partners and influencers, along with companion admin dashboards for engagement and audience insights. Owned end-to-end delivery across Next.js, NestJS services, database schema design, REST APIs, and automated tests covering critical paths."
+          }
+        ],
+        [
+          {
+            "text": "Proactive Retool operations tooling:",
+            "bold": true
+          },
+          {
+            "text": " built internal tools without a formal request, including a donor lookup console aggregating transactions, subscriptions, failed charges, and recharge actions across multiple data sources. Shipped scheduled-giving KPI dashboards with hourly breakdowns for scheduled, processing, succeeded, and failed donations, reducing on-call billing triage from hours to minutes."
+          }
+        ],
+        [
+          {
+            "text": "Event-driven microservices:",
+            "bold": true
+          },
+          {
+            "text": " implemented and maintained "
+          },
+          {
+            "text": "RabbitMQ",
+            "bold": true
+          },
+          {
+            "text": " producers and consumers across donation, charge, payout, settlement, and notification domains, keeping async service boundaries explicit through publisher-owned exchanges and consumer-owned queues."
+          }
+        ]
+      ]
+    },
+    {
+      "role": "Owner, E-Commerce Ventures",
+      "company": "Self-employed",
+      "location": "Remote",
+      "startDate": "Jan 2010",
+      "endDate": "Dec 2019",
+      "bullets": [
+        [
+          {
+            "text": "Bootstrapped and scaled two online ventures over a decade: an e-learning platform and an Amazon FBA storefront, ultimately exiting with ongoing royalty income."
+          }
+        ],
+        [
+          {
+            "text": "Product design and merchandising",
+            "bold": true
+          },
+          {
+            "text": ": defined the catalog, designed packaging and listing imagery, and shaped the customer-facing brand end-to-end - acting as solo product manager, designer, and copywriter to ship a coherent line of digital and physical goods."
+          }
+        ],
+        [
+          {
+            "text": "Supplier sourcing and negotiation",
+            "bold": true
+          },
+          {
+            "text": ": qualified overseas manufacturers, negotiated unit economics and MOQs, and coordinated quality control and logistics to keep margins healthy as volume scaled."
+          }
+        ],
+        [
+          {
+            "text": "Customer acquisition and retention",
+            "bold": true
+          },
+          {
+            "text": ": ran SEO, paid acquisition, email funnels, and Amazon listing optimization to grow a global customer base; iterated on copy and creative based on conversion data to lift repeat purchase rates."
+          }
+        ],
+        [
+          {
+            "text": "Content production",
+            "bold": true
+          },
+          {
+            "text": ": authored and produced the full course library for the e-learning venture (video, written lessons, assessments), then maintained it through multiple revisions as the curriculum matured."
+          }
+        ],
+        [
+          {
+            "text": "Operations and P&L",
+            "bold": true
+          },
+          {
+            "text": ": owned inventory planning, cash flow, taxes, returns, and customer support across both ventures; turned operating discipline into a profitable steady-state that supported a successful exit."
+          }
+        ],
+        [
+          {
+            "text": "Outcomes",
+            "bold": true
+          },
+          {
+            "text": ": grew both ventures to sustainable profitability, sold the e-learning platform to a strategic acquirer with continuing royalty income, and built the systems thinking and product instincts I bring to engineering work today."
+          }
+        ]
+      ]
+    }
+  ],
+  "education": [
+    {
+      "credential": "Honours Bachelor of Computer Science",
+      "school": "University of Waterloo",
+      "location": "Waterloo ON"
+    },
+    {
+      "credential": "Graduate Certificate in AI & Machine Learning",
+      "school": "Fanshawe College",
+      "location": "London ON"
+    },
+    {
+      "credential": "Full-Stack Web Development Diploma",
+      "school": "Lighthouse Labs",
+      "location": "Online"
+    }
+  ],
+  "interests": [
+    "Personal interests: badminton, basketball, swimming, strength training, parenting, finance, history",
+    "Founder & President, London Badminton Club (2022-2026) - organize weekly sessions and local tournaments"
+  ]
+}

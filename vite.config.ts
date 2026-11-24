@@ -21,6 +21,45 @@ const resumePdfPath = path.resolve(
   "Muhammad_Anwer_Resume.pdf",
 );
 const seoRoutes = staticRoutes;
+const resumeTexPath = path.resolve(import.meta.dirname, "public", "resume.tex");
+const resumeSnapshotPath = path.resolve(
+  import.meta.dirname,
+  "src",
+  "data",
+  "resume.snapshot.json",
+);
+
+// `virtual:resume-source` exports resume.tex as text and the last-known-good
+// snapshot (src/data/resume.snapshot.json), each null when the file is missing,
+// so a missing or broken resume can fall back instead of failing the import.
+function resumeSourcePlugin() {
+  const id = "virtual:resume-source";
+  const resolvedId = `\0${id}`;
+  const readIfExists = (file: string) =>
+    fs.existsSync(file) ? fs.readFileSync(file, "utf-8") : null;
+  return {
+    name: "portfolio-resume-source",
+    resolveId(source: string) {
+      return source === id ? resolvedId : undefined;
+    },
+    load(this: { addWatchFile(file: string): void; warn(message: string): void }, loadId: string) {
+      if (loadId !== resolvedId) return undefined;
+      this.addWatchFile(resumeTexPath);
+      this.addWatchFile(resumeSnapshotPath);
+      const source = readIfExists(resumeTexPath);
+      let snapshot: unknown = null;
+      const snapshotText = readIfExists(resumeSnapshotPath);
+      if (snapshotText) {
+        try {
+          snapshot = JSON.parse(snapshotText);
+        } catch (error) {
+          this.warn(`ignoring unreadable ${resumeSnapshotPath}: ${String(error)}`);
+        }
+      }
+      return `export const source = ${JSON.stringify(source)};\nexport const snapshot = ${JSON.stringify(snapshot)};\n`;
+    },
+  };
+}
 
 // AI / answer-engine crawlers we explicitly welcome (in addition to "*").
 const aiCrawlers = [
@@ -107,9 +146,13 @@ export default defineConfig(({ isSsrBuild }) => ({
   base: basePath,
   define: {
     __RESUME_PDF_AVAILABLE__: JSON.stringify(fs.existsSync(resumePdfPath)),
+    // RESUME_STRICT=1 (CI) fails the build on a broken resume.tex instead of
+    // falling back to the snapshot.
+    __RESUME_STRICT__: JSON.stringify(process.env.RESUME_STRICT === "1"),
   },
   plugins: [
     react(),
+    resumeSourcePlugin(),
     seoFilesPlugin(),
   ],
   resolve: {

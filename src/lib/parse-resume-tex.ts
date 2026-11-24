@@ -1,4 +1,25 @@
-import type { ParsedResume, ResumeContact, ResumeSummary, ResumeTextSegment, ResumeWin } from '@/lib/types';
+import type {
+  ParsedResume,
+  ResumeContact,
+  ResumeIssue,
+  ResumeSummary,
+  ResumeTextSegment,
+  ResumeWin,
+} from '@/lib/types';
+
+/** A parse error that remembers a snippet of the source so it can be located by line. */
+export class ResumeTexError extends Error {
+  constructor(
+    message: string,
+    readonly snippet?: string,
+  ) {
+    super(message);
+    this.name = 'ResumeTexError';
+  }
+}
+
+/** 1-based line number of a character offset. */
+export const offsetToLine = (source: string, index: number) => source.slice(0, index).split('\n').length;
 
 const iconByCompetency: Record<string, string> = {
   'Engineering Leadership': 'psychology',
@@ -53,7 +74,7 @@ const readGroup = (source: string, openIndex: number) => {
       return { value: source.slice(openIndex + 1, index), end: index + 1 };
     }
   }
-  throw new Error('Unclosed LaTeX group');
+  throw new ResumeTexError('Unclosed LaTeX group (missing "}")', source.slice(openIndex, openIndex + 60));
 };
 
 const readMacroAt = (source: string, start: number, name: string, args: number) => {
@@ -61,7 +82,9 @@ const readMacroAt = (source: string, start: number, name: string, args: number) 
   const values: string[] = [];
   while (values.length < args) {
     while (/\s/.test(source[cursor])) cursor += 1;
-    if (source[cursor] !== '{') throw new Error(`Expected argument for ${name}`);
+    if (source[cursor] !== '{') {
+      throw new ResumeTexError(`Expected a {...} argument for \\${name}`, source.slice(start, start + 60));
+    }
     const group = readGroup(source, cursor);
     values.push(group.value);
     cursor = group.end;
@@ -212,8 +235,9 @@ const parseWebSummary = (source: string): ResumeSummary | null => {
 const parseWebWins = (source: string): ResumeWin[] =>
   [...source.matchAll(/^[ \t]*%[ \t]*web:win[ \t]+(.+)$/gm)].map(([line, value]) => {
     const malformed = (reason: string) =>
-      new Error(
-        `resume.tex: a "web:win" line needs "stat | title | description | optional link" (${reason}; write a literal "|" as $\\mid$), got:\n  ${line.trim()}`,
+      new ResumeTexError(
+        `a "web:win" line needs "stat | title | description | optional link" (${reason}; write a literal "|" as $\\mid$), got:\n  ${line.trim()}`,
+        line.trim(),
       );
     const raw = value.split('|').map((field) => field.trim());
     if (raw.length < 3 || raw.length > 4) throw malformed(`found ${raw.length} fields`);
@@ -294,38 +318,112 @@ const parseEducation = (source = '') =>
     location: decodeLatex(args[3]),
   }));
 
-const requireSection = (sections: Map<string, string>, name: string) => {
-  const section = sections.get(name);
-  if (!section) {
-    throw new Error(`resume.tex is missing the required \\section{${name}}`);
-  }
-  return section;
-};
+export type LenientParse = { resume: Partial<ParsedResume>; issues: ResumeIssue[] };
 
-export function parseResumeTex(source: string): ParsedResume {
-  const sections = splitSections(source);
-  const { name, location, email, contact } = parseContact(source);
-  const summarySection = sections.get('Summary');
-  const summary =
-    parseWebSummary(source) ?? (summarySection ? parseSummarySection(summarySection) : null);
-  if (!name) throw new Error('resume.tex: could not find the name in the heading');
-  if (!summary?.headline || !summary.paragraphs.length) {
-    throw new Error(
-      'resume.tex needs a website summary: a "% web:headline ..." comment line plus at least one "% web:summary ..." line',
-    );
-  }
-  return {
-    name,
-    location,
-    email,
-    contact,
-    summary,
-    wins: parseWebWins(source),
-    competencies: parseCompetencies(sections.get('Core Competencies')),
-    experience: parseExperience(requireSection(sections, 'Professional Experience')),
-    education: parseEducation(sections.get('Education')),
-    interests: collectMacro(sections.get('Interests & Affiliations') ?? '', 'resumeItem', 1).map(
-      ({ args }) => plainText(args[0]),
-    ),
+/**
+ * Parse each part of resume.tex independently. A part that fails to parse (or
+ * a required part that is missing) is left unset and reported as an `error`
+ * issue so the caller can fill it from the snapshot; a missing optional
+ * section is a `warning` and parses as empty (it may have been removed on
+ * purpose, so it must not come back from the snapshot).
+ */
+export function parseResumeTexLenient(source: string): LenientParse {
+  const issues: ResumeIssue[] = [];
+  const resume: Partial<ParsedResume> = {};
+
+  const report = (
+    fields: ResumeIssue['fields'],
+    severity: ResumeIssue['severity'],
+    error: unknown,
+  ) => {
+    const snippet = error instanceof ResumeTexError ? error.snippet : undefined;
+    const index = snippet ? source.indexOf(snippet) : -1;
+    const line = index === -1 ? undefined : offsetToLine(source, index);
+    const message = error instanceof Error ? error.message : String(error);
+    issues.push({ fields, severity, message, line });
   };
+
+  const attempt = <T>(fields: ResumeIssue['fields'], parse: () => T): T | undefined => {
+    try {
+      return parse();
+    } catch (error) {
+      report(fields, 'error', error);
+      return undefined;
+    }
+  };
+
+  const contact = attempt(['name', 'location', 'email', 'contact'], () => {
+    const parsed = parseContact(source);
+    if (!parsed.name) throw new ResumeTexError('could not find the name in the heading ({\\Huge \\scshape Name})');
+    return parsed;
+  });
+  if (contact) Object.assign(resume, contact);
+
+  const sections = attempt(['competencies', 'experience', 'education', 'interests'], () => splitSections(source));
+
+  const summary = attempt(['summary'], () => {
+    const summarySection = sections?.get('Summary');
+    const parsed = parseWebSummary(source) ?? (summarySection ? parseSummarySection(summarySection) : null);
+    if (!parsed?.headline || !parsed.paragraphs.length) {
+      throw new ResumeTexError(
+        'needs a website summary: a "% web:headline ..." comment line plus at least one "% web:summary ..." line',
+      );
+    }
+    return parsed;
+  });
+  if (summary) resume.summary = summary;
+
+  const wins = attempt(['wins'], () => parseWebWins(source));
+  if (wins) {
+    resume.wins = wins;
+    if (!wins.length) report(['wins'], 'warning', new Error('no "% web:win" lines; the Recent Wins section will be empty'));
+  }
+
+  if (sections) {
+    const section = <K extends 'competencies' | 'education' | 'interests'>(
+      field: K,
+      name: string,
+      parse: (body: string) => ParsedResume[K],
+    ) => {
+      const body = sections.get(name);
+      if (body === undefined) {
+        report([field], 'warning', new Error(`no \\section{${name}}; it will be empty`));
+        resume[field] = [] as ParsedResume[K];
+        return;
+      }
+      const parsed = attempt([field], () => parse(body));
+      if (parsed) resume[field] = parsed;
+    };
+
+    section('competencies', 'Core Competencies', parseCompetencies);
+    section('education', 'Education', parseEducation);
+    section('interests', 'Interests & Affiliations', (body) =>
+      collectMacro(body, 'resumeItem', 1).map(({ args }) => plainText(args[0])),
+    );
+
+    const experience = attempt(['experience'], () => {
+      const body = sections.get('Professional Experience');
+      if (body === undefined) throw new ResumeTexError('missing the required \\section{Professional Experience}');
+      const parsed = parseExperience(body);
+      if (!parsed.length) throw new ResumeTexError('\\section{Professional Experience} has no \\resumeSubheading entries');
+      return parsed;
+    });
+    if (experience) resume.experience = experience;
+  }
+
+  return { resume, issues };
+}
+
+/** Format an issue as `resume.tex:<line>: <message>`. */
+export const formatResumeIssue = (issue: ResumeIssue) =>
+  `resume.tex${issue.line ? `:${issue.line}` : ''} [${issue.fields.join(', ')}]: ${issue.message}`;
+
+/** Strict parse: throws one error listing every problem. */
+export function parseResumeTex(source: string): ParsedResume {
+  const { resume, issues } = parseResumeTexLenient(source);
+  const errors = issues.filter((issue) => issue.severity === 'error');
+  if (errors.length) {
+    throw new Error(`resume.tex could not be parsed:\n${errors.map(formatResumeIssue).map((line) => `  - ${line}`).join('\n')}`);
+  }
+  return resume as ParsedResume;
 }

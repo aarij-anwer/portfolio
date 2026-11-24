@@ -4,14 +4,21 @@
 // produces dist-server/entry-server.js).
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, resolve, join } from "node:path";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
 const distDir = join(projectRoot, "dist");
 const serverEntry = join(projectRoot, "dist-server", "entry-server.js");
 
-const { render, renderTextFiles, staticRoutes } = await import(
+const {
+  render,
+  renderTextFiles,
+  staticRoutes,
+  parsedResume,
+  resumeLoadReport,
+  formatResumeIssue,
+} = await import(
   pathToFileURL(serverEntry).href,
 );
 
@@ -57,3 +64,44 @@ for (const [name, content] of Object.entries(renderTextFiles())) {
 }
 
 console.log(`\nPre-rendered ${staticRoutes.length} routes.`);
+
+// --- resume.tex health -------------------------------------------------------
+// Problems are printed as ::warning annotations (GitHub shows them inline;
+// Netlify just logs them). Strict builds (RESUME_STRICT=1) never get here with
+// errors: they fail while rendering.
+for (const issue of resumeLoadReport.issues) {
+  const where = issue.line ? `file=public/resume.tex,line=${issue.line}` : "file=public/resume.tex";
+  console.log(`::warning ${where}::${formatResumeIssue(issue).replace(/\n/g, " ")}`);
+}
+if (resumeLoadReport.usedFallback) {
+  const lines = [
+    "RESUME FALLBACK IN USE - site built from src/data/resume.snapshot.json",
+    `for: ${resumeLoadReport.fallbackFields.join(", ")}`,
+    "fix public/resume.tex (see warnings above)",
+  ];
+  const width = Math.max(...lines.map((line) => line.length));
+  const bar = "*".repeat(width + 4);
+  console.log(`\n${bar}\n${lines.map((line) => `* ${line.padEnd(width)} *`).join("\n")}\n${bar}`);
+}
+
+// --- last-known-good snapshot ------------------------------------------------
+// Clean local builds refresh it (commit it with the resume.tex change). Strict
+// builds (CI) check it is current. Netlify builds leave it alone.
+const snapshotFile = join(projectRoot, "src", "data", "resume.snapshot.json");
+const snapshot = `${JSON.stringify(parsedResume, null, 2)}\n`;
+const current = existsSync(snapshotFile) ? readFileSync(snapshotFile, "utf-8") : null;
+const hasErrors = resumeLoadReport.issues.some((issue) => issue.severity === "error");
+
+if (process.env.RESUME_STRICT === "1") {
+  if (current !== snapshot) {
+    console.error(
+      "::error file=src/data/resume.snapshot.json::resume snapshot is out of date with public/resume.tex; run `pnpm build` locally and commit src/data/resume.snapshot.json",
+    );
+    process.exit(1);
+  }
+} else if (!hasErrors && !process.env.CI && !process.env.NETLIFY) {
+  if (current !== snapshot) {
+    writeFileSync(snapshotFile, snapshot);
+    console.log("updated src/data/resume.snapshot.json - commit it with your resume.tex change");
+  }
+}

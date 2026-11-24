@@ -6,7 +6,8 @@ import {
   renderSeoTags,
   type SeoData,
 } from "@/lib/seo";
-import { parsedResume } from "@/lib/resume";
+import { parsedResume, resumeLoadReport } from "@/lib/resume";
+import { formatResumeIssue } from "@/lib/parse-resume-tex";
 import { projects, siteMeta } from "@/data/site";
 import {
   buildLlmsFullTxt,
@@ -15,6 +16,9 @@ import {
 } from "@/lib/resume-markdown";
 
 export { staticRoutes } from "@/lib/staticRoutes";
+
+// For the prerender step: report resume.tex problems and refresh the snapshot.
+export { parsedResume, resumeLoadReport, formatResumeIssue };
 
 // Render a single route to static HTML plus its <head> tags. Called once per
 // route by the prerender step.
