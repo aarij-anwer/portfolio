@@ -92,21 +92,6 @@ export default function ResumePage() {
           </ul>
         </header>
 
-        <section className="space-y-4" aria-labelledby="summary-heading">
-          <h2
-            id="summary-heading"
-            className="flex items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-primary"
-          >
-            <SymbolIcon name="psychology" className="h-5 w-5" />
-            Summary
-          </h2>
-          {resumeData.summary.paragraphs.map((paragraph, index) => (
-            <p key={index} className="text-base leading-7 text-on-surface-variant">
-              <RichText text={paragraph} />
-            </p>
-          ))}
-        </section>
-
         <section className="space-y-6">
           <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-primary">
             <SymbolIcon name="core_competencies" className="h-5 w-5" />
