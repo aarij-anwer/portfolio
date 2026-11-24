@@ -1,7 +1,3 @@
-@import 'swiper/css';
-@import 'swiper/css/navigation';
-@import 'swiper/css/pagination';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -119,68 +115,4 @@ select {
 ::selection {
   background: var(--selection-background);
   color: var(--selection-color);
-}
-
-.project-gallery-swiper {
-  --swiper-pagination-color: rgb(var(--color-primary));
-  --swiper-pagination-bullet-inactive-color: rgb(var(--color-on-surface-variant));
-  --swiper-pagination-bullet-inactive-opacity: 0.35;
-}
-
-.project-gallery-arrow {
-  position: absolute;
-  top: 50%;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: rgb(var(--color-on-surface-variant));
-  font-size: 1.6rem;
-  font-weight: 300;
-  line-height: 1;
-  transform: translateY(-50%);
-  transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
-}
-
-.project-gallery-arrow:hover {
-  color: #ffffff;
-  opacity: 1;
-  transform: translateY(-50%) scale(1.05);
-}
-
-.project-gallery-arrow:disabled {
-  opacity: 0.35;
-}
-
-.project-gallery-arrow-prev {
-  left: 1rem;
-}
-
-.project-gallery-arrow-next {
-  right: 1rem;
-}
-
-.project-gallery-swiper .swiper-button-disabled {
-  opacity: 0.25;
-}
-
-.project-gallery-swiper .swiper-pagination {
-  bottom: 0.9rem !important;
-}
-
-.project-gallery-swiper .swiper-pagination-bullet {
-  width: 0.45rem;
-  height: 0.45rem;
-  background: rgb(var(--color-on-surface-variant));
-  opacity: 0.4;
-}
-
-.project-gallery-swiper .swiper-pagination-bullet-active {
-  background: rgb(var(--color-primary));
-  opacity: 1;
 }

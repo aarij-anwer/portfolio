@@ -225,6 +225,10 @@ export function projectJsonLd(project: {
   };
 }
 
+const OG_LOCALE = 'en_CA';
+
+const isIndexable = (data: SeoData) => !data.robots.startsWith('noindex');
+
 // Resolve raw <Seo> props into the final, render-independent SeoData.
 function buildSeoData({
   title = siteMeta.title,
@@ -265,8 +269,17 @@ function applySeoData(data: SeoData) {
     content: '#0b57d0',
   });
 
-  upsertLink('canonical', data.canonical);
+  // A noindex page (404) must not declare a canonical URL.
+  if (isIndexable(data)) {
+    upsertLink('canonical', data.canonical);
+  } else {
+    document.head.querySelector('link[rel="canonical"]')?.remove();
+  }
 
+  upsertMeta('meta[property="og:locale"]', {
+    property: 'og:locale',
+    content: OG_LOCALE,
+  });
   upsertMeta('meta[property="og:site_name"]', {
     property: 'og:site_name',
     content: siteMeta.name,
@@ -315,6 +328,9 @@ function applySeoData(data: SeoData) {
 
   if (data.jsonLd) {
     upsertJsonLd('page-json-ld', data.jsonLd);
+  } else {
+    // Don't leave the previous page's structured data on a page without any (404).
+    document.getElementById('page-json-ld')?.remove();
   }
 }
 
@@ -344,8 +360,11 @@ export function renderSeoTags(data: SeoData): string {
     meta('name', 'robots', data.robots),
     meta('name', 'author', siteMeta.name),
     meta('name', 'theme-color', '#0b57d0'),
-    `<link rel="canonical" href="${escapeAttr(data.canonical)}" />`,
+    ...(isIndexable(data)
+      ? [`<link rel="canonical" href="${escapeAttr(data.canonical)}" />`]
+      : []),
     meta('property', 'og:site_name', siteMeta.name),
+    meta('property', 'og:locale', OG_LOCALE),
     meta('property', 'og:title', data.title),
     meta('property', 'og:description', data.description),
     meta('property', 'og:type', data.type),

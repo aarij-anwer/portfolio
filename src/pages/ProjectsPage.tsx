@@ -6,7 +6,7 @@ import Seo, { absoluteUrl } from '@/lib/seo';
 
 export default function ProjectsPage() {
   const description =
-    'Selected software engineering projects by Muhammad Anwer across full-stack product development, React, TypeScript, NestJS, PostgreSQL, fintech, and AI-assisted delivery.';
+    `Software projects by ${siteMeta.name}: fundraising checkout at LaunchGood, an emissions platform at ESGTree, and AI-built apps with React and NestJS.`;
 
   return (
     <SiteShell>
@@ -35,8 +35,8 @@ export default function ProjectsPage() {
         />
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-12 md:grid-cols-2">
-          {projects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+          {projects.map((project, index) => (
+            <ProjectCard key={project.slug} project={project} priority={index < 2} />
           ))}
         </div>
       </PageContainer>

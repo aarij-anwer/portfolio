@@ -44,3 +44,27 @@ jobs:
           if grep -nE '\\[a-zA-Z]+\{|\$\\' dist/index.html dist/resume.html dist/resume.md dist/llms.txt; then
             echo "::error::raw LaTeX found in generated output"; exit 1
           fi
+
+      - name: Check performance budgets
+        run: |
+          set -e
+          # Main JS entry (loaded on every page). Heavy, page-specific code such
+          # as the gallery carousel belongs in a lazily imported chunk.
+          entry=$(grep -oE '<script type="module"[^>]* src="[^"]+"' dist/index.html | head -n1 | sed -E 's/.* src="\/?([^"]+)"/\1/')
+          main_js="dist/$entry"
+          test -n "$entry" && test -f "$main_js" || { echo "::error::main JS entry not found in dist/index.html"; exit 1; }
+          size=$(wc -c < "$main_js")
+          echo "main JS: $size bytes"
+          if [ "$size" -gt 350000 ]; then
+            echo "::error::main JS bundle is $size bytes (budget 350000)"; exit 1
+          fi
+          # Every <img> needs width/height to avoid layout shift.
+          missing=$(grep -rhoE '<img [^>]*>' dist --include='*.html' | grep -vE ' width=.* height=| height=.* width=' || true)
+          if [ -n "$missing" ]; then
+            echo "::error::<img> without width/height:"; echo "$missing"; exit 1
+          fi
+          # Screenshots should be WebP (run scripts/optimize-images.sh).
+          large=$(find dist -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) ! -name 'opengraph.jpg' -size +200k)
+          if [ -n "$large" ]; then
+            echo "::error::unoptimized images (run scripts/optimize-images.sh):"; echo "$large"; exit 1
+          fi

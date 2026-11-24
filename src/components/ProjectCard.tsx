@@ -1,17 +1,27 @@
 import { Link } from 'wouter';
-import posthog from 'posthog-js';
 import { ArrowUpRightIcon } from '@/components/icons';
 import { Tag } from '@/components/ui';
 import type { ProjectSummary } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-export default function ProjectCard({ project }: { project: ProjectSummary }) {
+export default function ProjectCard({
+  project,
+  priority = false,
+}: {
+  project: ProjectSummary;
+  /** Above the fold: load the image eagerly (it's likely the LCP element). */
+  priority?: boolean;
+}) {
   const content = (
     <>
       <div className="relative aspect-[16/9] overflow-hidden bg-surface-container">
         <img
           src={project.image.src}
           alt={project.image.alt}
+          width={project.image.width}
+          height={project.image.height}
+          loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
         />
       </div>
@@ -43,13 +53,6 @@ export default function ProjectCard({ project }: { project: ProjectSummary }) {
       <Link
         href={project.href}
         className="group block overflow-hidden rounded-2xl border border-surface-variant bg-surface-container-low transition-all duration-300 hover:border-outline"
-        onClick={() =>
-          posthog.capture('project_card_clicked', {
-            slug: project.slug,
-            title: project.title,
-            href: project.href,
-          })
-        }
       >
         {content}
       </Link>
