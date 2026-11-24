@@ -158,17 +158,25 @@ const parseInline = (source: string, style: Style = {}): ResumeTextSegment[] => 
 
 const plainText = (source: string) => parseInline(source).map((part) => part.text).join('').trim();
 
+const stripComments = (source: string) => source.replace(/(^|[^\\])%.*$/gm, '$1');
+
+// Like stripComments, but blanks each comment with spaces so offsets (and so
+// line numbers) still match the original source.
+const blankComments = (source: string) =>
+  source.replace(/(^|[^\\])(%.*)$/gm, (_match, before: string, comment: string) => before + ' '.repeat(comment.length));
+
+// Section bodies have comments blanked out: LaTeX ignores a commented-out
+// \resumeItem or \section, so the site must too.
 const splitSections = (source: string) => {
-  const sections = collectMacro(source, 'section', 1);
+  const text = blankComments(source);
+  const sections = collectMacro(text, 'section', 1);
   return new Map(
     sections.map((section, index) => [
       decodeLatex(section.args[0]),
-      source.slice(section.end, sections[index + 1]?.start ?? source.length),
+      text.slice(section.end, sections[index + 1]?.start ?? text.length),
     ]),
   );
 };
-
-const stripComments = (source: string) => source.replace(/(^|[^\\])%.*$/gm, '$1');
 
 const contactKind = (href: string): ResumeContact['kind'] => {
   if (href.startsWith('mailto:')) return 'email';
@@ -187,7 +195,7 @@ const contactIcon: Record<ResumeContact['kind'], string> = {
 };
 
 const parseContact = (source: string) => {
-  const heading = stripComments(source.slice(0, source.indexOf('\\section{')));
+  const heading = blankComments(source.slice(0, source.indexOf('\\section{')));
   const name = decodeLatex(/\{\\Huge \\scshape ([^}]+)\}/.exec(heading)?.[1] ?? '');
   const location = decodeLatex(/\\faMapMarker\*?~([^$\\]+)/.exec(heading)?.[1] ?? '');
   const phone = decodeLatex(/\\faPhone~([^$]+)/.exec(heading)?.[1] ?? '');
@@ -248,14 +256,17 @@ const parseWebWins = (source: string): ResumeWin[] =>
       throw malformed(error instanceof Error ? error.message : String(error));
     }
     const [stat, title, description] = fields;
-    // Not LaTeX text, so don't decode ~ or -- (valid URL characters); only undo escapes.
-    const href = (raw[3] ?? '').replace(/\\([_%&#])/g, '$1');
+    // Not LaTeX text, so don't decode ~ or -- (valid URL characters); only undo
+    // escapes and LaTeX tildes, and reject anything that is still LaTeX.
+    const href = (raw[3] ?? '')
+      .replace(/\\textasciitilde\{\}|\\~\{\}|\\~/g, '~')
+      .replace(/\\([_%&#])/g, '$1');
     const looksLikeLink = (field: string) => /^(\/|https?:\/\/)\S*$/.test(field);
     if (!stat || !title || !description || looksLikeLink(title) || looksLikeLink(description)) {
       throw malformed('a field is empty or out of order');
     }
-    if (href && !looksLikeLink(href)) {
-      throw malformed(`the link must be a /path or http(s) URL, got "${href}"`);
+    if (href && (!looksLikeLink(href) || /[\\{}]/.test(href))) {
+      throw malformed(`the link must be a plain /path or http(s) URL, got "${href}"`);
     }
     return href ? { stat, title, description, href } : { stat, title, description };
   });
@@ -286,8 +297,11 @@ const parseSummarySection = (source: string): ResumeSummary => {
 };
 
 const parseCompetencies = (source = '') =>
-  collectMacro(source, 'resumeItem', 1).map(({ args }) => {
+  collectMacro(source, 'resumeItem', 1).map(({ args, start }) => {
     const [labelSegment, ...remaining] = parseInline(args[0]);
+    if (!labelSegment) {
+      throw new ResumeTexError('a \\resumeItem in Core Competencies is empty', source.slice(start, start + 60));
+    }
     const label = labelSegment.text;
     if (remaining[0]?.text.startsWith(': ')) remaining[0].text = remaining[0].text.slice(2);
     return { label, value: remaining, icon: iconByCompetency[label] ?? 'psychology' };
@@ -323,13 +337,20 @@ export type LenientParse = { resume: Partial<ParsedResume>; issues: ResumeIssue[
 /**
  * Parse each part of resume.tex independently. A part that fails to parse (or
  * a required part that is missing) is left unset and reported as an `error`
- * issue so the caller can fill it from the snapshot; a missing optional
- * section is a `warning` and parses as empty (it may have been removed on
- * purpose, so it must not come back from the snapshot).
+ * issue so the caller can fill it from the snapshot; in a complete file (one
+ * with \end{document}) a missing optional section is a `warning` and parses as
+ * empty (it may have been removed on purpose, so it must not come back from
+ * the snapshot).
  */
 export function parseResumeTexLenient(source: string): LenientParse {
   const issues: ResumeIssue[] = [];
   const resume: Partial<ParsedResume> = {};
+
+  // A file cut short (emptied, or truncated by a bad save or merge) has no
+  // \end{document}. Then a missing optional part is damage, not a deliberate
+  // removal, so it is an error (falls back to the snapshot), not a warning.
+  const complete = /^[ \t]*\\end\{document\}/m.test(source);
+  const cutShort = ', and the file has no \\end{document} (was it cut short?)';
 
   const report = (
     fields: ResumeIssue['fields'],
@@ -337,7 +358,9 @@ export function parseResumeTexLenient(source: string): LenientParse {
     error: unknown,
   ) => {
     const snippet = error instanceof ResumeTexError ? error.snippet : undefined;
-    const index = snippet ? source.indexOf(snippet) : -1;
+    // Snippets from section bodies and the heading come from comment-blanked text.
+    let index = snippet ? source.indexOf(snippet) : -1;
+    if (snippet && index === -1) index = blankComments(source).indexOf(snippet);
     const line = index === -1 ? undefined : offsetToLine(source, index);
     const message = error instanceof Error ? error.message : String(error);
     issues.push({ fields, severity, message, line });
@@ -355,6 +378,14 @@ export function parseResumeTexLenient(source: string): LenientParse {
   const contact = attempt(['name', 'location', 'email', 'contact'], () => {
     const parsed = parseContact(source);
     if (!parsed.name) throw new ResumeTexError('could not find the name in the heading ({\\Huge \\scshape Name})');
+    // An unclosed {\Huge \scshape Name group makes the name run on into the
+    // rest of the heading's LaTeX.
+    if (/[\\{}]/.test(parsed.name)) {
+      throw new ResumeTexError(
+        'the name in the heading contains LaTeX; is the {\\Huge \\scshape Name} group closed?',
+        '{\\Huge \\scshape',
+      );
+    }
     return parsed;
   });
   if (contact) Object.assign(resume, contact);
@@ -374,9 +405,13 @@ export function parseResumeTexLenient(source: string): LenientParse {
   if (summary) resume.summary = summary;
 
   const wins = attempt(['wins'], () => parseWebWins(source));
-  if (wins) {
+  if (wins?.length) {
     resume.wins = wins;
-    if (!wins.length) report(['wins'], 'warning', new Error('no "% web:win" lines; the Recent Wins section will be empty'));
+  } else if (wins && complete) {
+    resume.wins = wins;
+    report(['wins'], 'warning', new Error('no "% web:win" lines; the Recent Wins section will be empty'));
+  } else if (wins) {
+    report(['wins'], 'error', new Error(`no "% web:win" lines${cutShort}`));
   }
 
   if (sections) {
@@ -386,6 +421,10 @@ export function parseResumeTexLenient(source: string): LenientParse {
       parse: (body: string) => ParsedResume[K],
     ) => {
       const body = sections.get(name);
+      if (body === undefined && !complete) {
+        report([field], 'error', new Error(`no \\section{${name}}${cutShort}`));
+        return;
+      }
       if (body === undefined) {
         report([field], 'warning', new Error(`no \\section{${name}}; it will be empty`));
         resume[field] = [] as ParsedResume[K];
@@ -414,7 +453,7 @@ export function parseResumeTexLenient(source: string): LenientParse {
   return { resume, issues };
 }
 
-/** Format an issue as `resume.tex:<line>: <message>`. */
+/** Format an issue as `resume.tex:<line> [<fields>]: <message>`. */
 export const formatResumeIssue = (issue: ResumeIssue) =>
   `resume.tex${issue.line ? `:${issue.line}` : ''} [${issue.fields.join(', ')}]: ${issue.message}`;
 

@@ -18,6 +18,7 @@ const valid = String.raw`\begin{center}
 \resumeSubheading{BSc Mathematics}{2010}{University}{London}
 \section{Interests & Affiliations}
 \resumeItem{Chess}
+\end{document}
 `;
 
 const snapshot = parseResumeTex(valid.replace('Ada Lovelace', 'Snapshot Name').replace('Staff Engineer', 'Snapshot Role'));
@@ -85,6 +86,37 @@ describe('resume.tex fallback', () => {
 
   it('throws when there is nothing to fall back to', () => {
     expect(() => resolveResume(null, null)).toThrow(/no "name" to fall back to/);
+  });
+
+  it('falls back for every part when the file is empty or cut short', () => {
+    for (const source of ['', valid.slice(0, valid.indexOf('\\section{'))]) {
+      const { resume, report } = resolveResume(source, snapshot);
+      expect(report.fallbackFields).toEqual(expect.arrayContaining(['competencies', 'experience', 'education', 'interests']));
+      expect(resume.education).toEqual(snapshot.education);
+      expect(resume.wins).toEqual(snapshot.wins);
+    }
+  });
+
+  it('ignores commented-out LaTeX in section bodies', () => {
+    const commented = valid.replace('  \\resumeItem{Led', '  % \\resumeItem{Old draft\n  \\resumeItem{Led');
+    const { resume, report } = resolveResume(commented, snapshot);
+    expect(report.issues).toEqual([]);
+    expect(resume.experience[0].bullets).toHaveLength(1);
+  });
+
+  it('falls back for the heading when the name group is unclosed', () => {
+    const broken = valid.replace('Ada Lovelace}', 'Ada Lovelace');
+    const { resume, report } = resolveResume(broken, snapshot);
+    expect(report.fallbackFields).toContain('name');
+    expect(resume.name).toBe('Snapshot Name');
+    expect(report.issues[0].line).toBe(2);
+  });
+
+  it('decodes LaTeX tildes in a web:win link and rejects other LaTeX there', () => {
+    const tilde = valid.replace('| /projects', '| https://example.com/\\textasciitilde{}ada');
+    expect(resolveResume(tilde, snapshot).resume.wins[0].href).toBe('https://example.com/~ada');
+    const latex = valid.replace('| /projects', '| https://example.com/\\textbf{x}');
+    expect(resolveResume(latex, snapshot).report.fallbackFields).toEqual(['wins']);
   });
 
   it('keeps parseResumeTex strict', () => {

@@ -9,7 +9,8 @@ import type {
 import { resolveResume, type ResumeLoadReport } from '@/lib/resume-fallback';
 import { staticRoutes } from '@/lib/staticRoutes';
 // resume.tex text (null if the file is missing) and the last-known-good
-// snapshot (null if none), provided by the resume-source plugin in vite.config.ts.
+// snapshot (null if none, or if resume.tex has no errors so it isn't needed),
+// provided by the resume-source plugin in vite.config.ts.
 import { source as resumeTexSource, snapshot as resumeSnapshot } from 'virtual:resume-source';
 
 declare const __RESUME_PDF_AVAILABLE__: boolean;

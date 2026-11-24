@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
 import { staticRoutes } from "./src/lib/staticRoutes";
+import { parseResumeTexLenient } from "./src/lib/parse-resume-tex";
 
 const rawPort = process.env.PORT;
 const port = rawPort ? Number(rawPort) : 5173;
@@ -32,6 +33,8 @@ const resumeSnapshotPath = path.resolve(
 // `virtual:resume-source` exports resume.tex as text and the last-known-good
 // snapshot (src/data/resume.snapshot.json), each null when the file is missing,
 // so a missing or broken resume can fall back instead of failing the import.
+// The snapshot is only included when resume.tex has errors, so a healthy build
+// doesn't ship ~16 KB of unused JSON in the client bundle.
 function resumeSourcePlugin() {
   const id = "virtual:resume-source";
   const resolvedId = `\0${id}`;
@@ -47,8 +50,11 @@ function resumeSourcePlugin() {
       this.addWatchFile(resumeTexPath);
       this.addWatchFile(resumeSnapshotPath);
       const source = readIfExists(resumeTexPath);
+      const needsSnapshot =
+        source === null ||
+        parseResumeTexLenient(source).issues.some((issue) => issue.severity === "error");
       let snapshot: unknown = null;
-      const snapshotText = readIfExists(resumeSnapshotPath);
+      const snapshotText = needsSnapshot ? readIfExists(resumeSnapshotPath) : null;
       if (snapshotText) {
         try {
           snapshot = JSON.parse(snapshotText);

@@ -124,7 +124,11 @@ export type ParsedResume = {
 export type ResumeIssue = {
   /** The ParsedResume fields affected. */
   fields: (keyof ParsedResume)[];
-  /** `error`: the fields could not be read (they fall back to the snapshot). `warning`: informational. */
+  /**
+   * `error`: the fields could not be read (they fall back to the snapshot), or
+   * a Recent Wins link points to a missing page (the link is dropped).
+   * `warning`: informational.
+   */
   severity: 'error' | 'warning';
   message: string;
   /** 1-based line in resume.tex, when known. */

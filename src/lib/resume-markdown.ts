@@ -30,8 +30,9 @@ const contactLine = (resume: ParsedResume) =>
     })
     .join(' · ');
 
-// Square brackets in link text would end the Markdown link early.
-const linkText = (text: string) => text.replace(/[[\]]/g, '\\$&');
+// Square brackets (or a backslash that escapes the closing one) in link text
+// would break the Markdown link.
+const linkText = (text: string) => text.replace(/[[\]\\]/g, '\\$&');
 
 const winsSection = (resume: ParsedResume, siteUrl: string) =>
   resume.wins.length
