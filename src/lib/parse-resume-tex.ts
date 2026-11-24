@@ -1,6 +1,11 @@
 import type { ParsedResume, ResumeContact, ResumeSummary, ResumeTextSegment, ResumeWin } from '@/lib/types';
 
-const iconByCompetency: Record<string, string> = {
+export const iconByCompetency: Record<string, string> = {
+  'Product Engineering (0→1 to scale)': 'bolt',
+  'AI-Native Engineering': 'generative_ai',
+  'Full-Stack': 'layers',
+  'Architecture & Data': 'architecture',
+  'CI/CD & Security': 'build',
   'Engineering Leadership': 'psychology',
   Languages: 'code',
   'Frameworks & Libraries': 'layers',

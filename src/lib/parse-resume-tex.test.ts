@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseResumeTex } from './parse-resume-tex';
+import { iconByCompetency, parseResumeTex } from './parse-resume-tex';
 import type { ResumeTextSegment } from './types';
 
 const realSource = readFileSync(new URL('../../public/resume.tex', import.meta.url), 'utf8');
@@ -37,6 +37,11 @@ describe('parseResumeTex on the real resume.tex', () => {
     expect(resume.summary.paragraphs.length).toBeGreaterThan(0);
     expect(resume.competencies.length).toBeGreaterThan(0);
     expect(resume.education.length).toBeGreaterThan(0);
+  });
+
+  it('gives every competency an explicit icon instead of the fallback', () => {
+    const unmapped = resume.competencies.map((item) => item.label).filter((label) => !(label in iconByCompetency));
+    expect(unmapped, 'add these labels to iconByCompetency in parse-resume-tex.ts').toEqual([]);
   });
 
   it('has Recent Wins, which CI and llms.txt require', () => {
