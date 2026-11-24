@@ -29,11 +29,16 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Fast feedback: resume.tex parser unit tests, before the full build.
+      # Fast feedback: resume.tex parser and fallback unit tests, before the full build.
       - run: pnpm test
 
-      # typecheck + client build + SSR build + prerender (parses resume.tex)
+      # typecheck + client build + SSR build + prerender (parses resume.tex).
+      # Strict: a broken resume.tex fails CI instead of falling back to the
+      # snapshot, and the snapshot must match resume.tex (Netlify builds are
+      # not strict, so a bad resume.tex still deploys from the snapshot).
       - run: pnpm run build
+        env:
+          RESUME_STRICT: "1"
 
       - name: Check generated output
         run: |
@@ -47,7 +52,7 @@ jobs:
           # Recent Wins cards come from the "% web:win" lines in resume.tex
           grep -q 'Recent Wins' dist/index.html || { echo "::error::no Recent Wins on the home page (add % web:win lines to resume.tex)"; exit 1; }
           grep -q '## Recent wins' dist/llms.txt || { echo "::error::no Recent wins in llms.txt"; exit 1; }
-          if grep -nE '\\[a-zA-Z]+\{|\$\\' dist/index.html dist/resume.html dist/resume.md dist/llms.txt; then
+          if grep -nE '\\[a-zA-Z]+\{|\$\\' dist/index.html dist/resume.html dist/resume.md dist/llms.txt dist/llms-full.txt; then
             echo "::error::raw LaTeX found in generated output"; exit 1
           fi
 

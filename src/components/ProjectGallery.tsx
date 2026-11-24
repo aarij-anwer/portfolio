@@ -1,5 +1,6 @@
 import { useEffect, useState, type ComponentType } from 'react';
 import type { ImageAsset } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 export type GalleryProps = { images: ImageAsset[] };
 
@@ -33,8 +34,10 @@ export default function ProjectGallery({ images }: GalleryProps) {
   return (
     <section className="space-y-4">
       {Carousel ? <Carousel images={images} /> : <StaticStrip images={images} />}
+      {/* Space is reserved in both states (no layout shift), but the hint only
+          shows once the carousel's arrows and fullscreen view actually exist. */}
       {images.length > 1 && (
-        <p className="text-center text-sm text-on-surface-variant">
+        <p className={cn('text-center text-sm text-on-surface-variant', !Carousel && 'invisible')}>
           Swipe or use the arrows to view more images. Click any image to view it fullscreen.
         </p>
       )}

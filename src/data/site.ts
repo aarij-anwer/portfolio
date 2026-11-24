@@ -1,13 +1,8 @@
 import type { NavLink, ProjectDetail, ProjectSummary, SocialLinks } from '@/lib/types';
 import { contactHref, parsedResume, summaryParagraphs, truncateText } from '@/lib/resume';
-import { staticRoutes } from '@/lib/staticRoutes';
 
-// Fail the build if a Recent Wins card links to a page that doesn't exist.
-parsedResume.wins.forEach((win) => {
-  if (win.href?.startsWith('/') && !staticRoutes.includes(win.href)) {
-    throw new Error(`resume.tex: "web:win" card "${win.title}" links to ${win.href}, which is not a site route`);
-  }
-});
+// Recent Wins links are checked against the site routes in resolveResume
+// (src/lib/resume-fallback.ts): strict builds fail, others drop the link.
 
 // Identity, headline, summary and contact details come from public/resume.tex
 // (the single source of truth). Only curated, web-only content lives here.

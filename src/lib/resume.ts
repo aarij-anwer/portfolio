@@ -6,10 +6,15 @@ import type {
   ResumeEducation,
   ParsedResume,
 } from '@/lib/types';
-import { parseResumeTex } from '@/lib/parse-resume-tex';
-import resumeTexSource from '../../public/resume.tex?raw';
+import { resolveResume, type ResumeLoadReport } from '@/lib/resume-fallback';
+import { staticRoutes } from '@/lib/staticRoutes';
+// resume.tex text (null if the file is missing) and the last-known-good
+// snapshot (null if none, or if resume.tex has no errors so it isn't needed),
+// provided by the resume-source plugin in vite.config.ts.
+import { source as resumeTexSource, snapshot as resumeSnapshot } from 'virtual:resume-source';
 
 declare const __RESUME_PDF_AVAILABLE__: boolean;
+declare const __RESUME_STRICT__: boolean;
 
 export type {
   ResumeContact,
@@ -18,9 +23,21 @@ export type {
   ResumeExperience,
   ResumeEducation,
   ParsedResume,
+  ResumeLoadReport,
 };
 
-export const parsedResume: ParsedResume = parseResumeTex(resumeTexSource);
+const resolved = resolveResume(resumeTexSource, resumeSnapshot, {
+  strict: __RESUME_STRICT__,
+  routes: staticRoutes,
+});
+
+export const parsedResume: ParsedResume = resolved.resume;
+/** What went wrong reading resume.tex, and which parts came from the snapshot. */
+export const resumeLoadReport: ResumeLoadReport = resolved.report;
+
+if (import.meta.env.DEV && resumeLoadReport.issues.length) {
+  console.warn('[resume]', resumeLoadReport);
+}
 export const resumePdfAvailable = __RESUME_PDF_AVAILABLE__;
 
 export function segmentsToText(segments: ResumeTextSegment[]): string {

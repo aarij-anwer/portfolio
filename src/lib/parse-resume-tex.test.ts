@@ -21,6 +21,7 @@ ${extra}
     \resumeItemListStart
       \resumeItem{${bullet}}
     \resumeItemListEnd
+\end{document}
 `;
 
 const firstBullet = (bullet: string) =>
@@ -118,7 +119,7 @@ describe('unsupported LaTeX', () => {
     const source = minimalResume('plain text') + '\n';
     const bad = source.replace('plain text', 'before $\\leftarrow$ after');
     const line = bad.slice(0, bad.indexOf('$\\leftarrow$')).split('\n').length;
-    expect(() => parseResumeTex(bad)).toThrow(`line ${line}`);
+    expect(() => parseResumeTex(bad)).toThrow(`resume.tex:${line}`);
   });
 
   it('fails in web:win lines too', () => {

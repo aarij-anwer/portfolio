@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
 import { staticRoutes } from "./src/lib/staticRoutes";
+import { parseResumeTexLenient } from "./src/lib/parse-resume-tex";
 
 const rawPort = process.env.PORT;
 const port = rawPort ? Number(rawPort) : 5173;
@@ -21,6 +22,50 @@ const resumePdfPath = path.resolve(
   "Muhammad_Anwer_Resume.pdf",
 );
 const seoRoutes = staticRoutes;
+const resumeTexPath = path.resolve(import.meta.dirname, "public", "resume.tex");
+const resumeSnapshotPath = path.resolve(
+  import.meta.dirname,
+  "src",
+  "data",
+  "resume.snapshot.json",
+);
+
+// `virtual:resume-source` exports resume.tex as text and the last-known-good
+// snapshot (src/data/resume.snapshot.json), each null when the file is missing,
+// so a missing or broken resume can fall back instead of failing the import.
+// The snapshot is only included when resume.tex has errors, so a healthy build
+// doesn't ship ~16 KB of unused JSON in the client bundle.
+function resumeSourcePlugin() {
+  const id = "virtual:resume-source";
+  const resolvedId = `\0${id}`;
+  const readIfExists = (file: string) =>
+    fs.existsSync(file) ? fs.readFileSync(file, "utf-8") : null;
+  return {
+    name: "portfolio-resume-source",
+    resolveId(source: string) {
+      return source === id ? resolvedId : undefined;
+    },
+    load(this: { addWatchFile(file: string): void; warn(message: string): void }, loadId: string) {
+      if (loadId !== resolvedId) return undefined;
+      this.addWatchFile(resumeTexPath);
+      this.addWatchFile(resumeSnapshotPath);
+      const source = readIfExists(resumeTexPath);
+      const needsSnapshot =
+        source === null ||
+        parseResumeTexLenient(source).issues.some((issue) => issue.severity === "error");
+      let snapshot: unknown = null;
+      const snapshotText = needsSnapshot ? readIfExists(resumeSnapshotPath) : null;
+      if (snapshotText) {
+        try {
+          snapshot = JSON.parse(snapshotText);
+        } catch (error) {
+          this.warn(`ignoring unreadable ${resumeSnapshotPath}: ${String(error)}`);
+        }
+      }
+      return `export const source = ${JSON.stringify(source)};\nexport const snapshot = ${JSON.stringify(snapshot)};\n`;
+    },
+  };
+}
 
 // AI / answer-engine crawlers we explicitly welcome (in addition to "*").
 const aiCrawlers = [
@@ -107,9 +152,13 @@ export default defineConfig(({ isSsrBuild }) => ({
   base: basePath,
   define: {
     __RESUME_PDF_AVAILABLE__: JSON.stringify(fs.existsSync(resumePdfPath)),
+    // RESUME_STRICT=1 (CI) fails the build on a broken resume.tex instead of
+    // falling back to the snapshot.
+    __RESUME_STRICT__: JSON.stringify(process.env.RESUME_STRICT === "1"),
   },
   plugins: [
     react(),
+    resumeSourcePlugin(),
     seoFilesPlugin(),
   ],
   resolve: {
