@@ -11,14 +11,9 @@ export type SocialLinks = {
 export type ImageAsset = {
   src: string;
   alt: string;
-};
-
-export type Competency = {
-  title: string;
-  description?: string;
-  icon: string;
-  tags?: string[];
-  wide?: boolean;
+  /** Intrinsic pixel size; rendered as width/height attributes to prevent layout shift. */
+  width?: number;
+  height?: number;
 };
 
 export type ProjectSummary = {
@@ -39,6 +34,8 @@ export type ProjectFeature = {
 export type ProjectDetail = {
   slug: string;
   title: string;
+  /** Descriptive page title for search results (falls back to `title`). */
+  seoTitle?: string;
   eyebrow: string;
   summary: string;
   heroImage: ImageAsset;
@@ -84,7 +81,6 @@ export type ResumeExperience = {
   location: string;
   startDate: string;
   endDate: string;
-  companyLine: string;
   bullets: ResumeTextSegment[][];
   current?: boolean;
 };
@@ -113,8 +109,3 @@ export type ParsedResume = {
   education: ResumeEducation[];
   interests: string[];
 };
-
-export interface ProjectLinksProps {
-  currentSlug: string;
-  className?: string;
-}

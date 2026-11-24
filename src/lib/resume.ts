@@ -23,14 +23,6 @@ export type {
 export const parsedResume: ParsedResume = parseResumeTex(resumeTexSource);
 export const resumePdfAvailable = __RESUME_PDF_AVAILABLE__;
 
-export async function getResumeFromTex(): Promise<ParsedResume> {
-  return parsedResume;
-}
-
-export async function hasResumePdf(): Promise<boolean> {
-  return resumePdfAvailable;
-}
-
 export function segmentsToText(segments: ResumeTextSegment[]): string {
   return segments.map((segment) => segment.text).join('').trim();
 }

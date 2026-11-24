@@ -54,6 +54,9 @@ export default function HomePage() {
               <img
                 src={homeContent.portrait.src}
                 alt={homeContent.portrait.alt}
+                width={homeContent.portrait.width}
+                height={homeContent.portrait.height}
+                fetchPriority="high"
                 className="absolute inset-0 h-full w-full object-cover transition-all duration-500"
               />
             </div>

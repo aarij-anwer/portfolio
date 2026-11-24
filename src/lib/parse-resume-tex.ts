@@ -250,7 +250,6 @@ const parseExperience = (source = '') => {
       location,
       startDate,
       endDate,
-      companyLine: `${company} | ${location} | ${date}`,
       current: /Present$/.test(date) || undefined,
       bullets: collectMacro(body, 'resumeItem', 1).map((item) => parseInline(item.args[0])),
     };

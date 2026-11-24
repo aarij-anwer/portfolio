@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import posthog from 'posthog-js';
 import { GitHubIcon, LinkedInIcon, MenuIcon, XIcon } from '@/components/icons';
 import { siteMeta } from '@/data/site';
 import { cn } from '@/lib/utils';
@@ -68,12 +67,6 @@ export function TopNav() {
                   ? 'border-primary-container text-primary-container'
                   : 'border-transparent',
               )}
-              onClick={() =>
-                posthog.capture('nav_link_clicked', {
-                  label: item.label,
-                  href: item.href,
-                })
-              }
             >
               {item.label}
             </Link>
@@ -88,9 +81,6 @@ export function TopNav() {
             href={siteMeta.socialLinks.github}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() =>
-              posthog.capture('social_link_clicked', { platform: 'github' })
-            }
           >
             <GitHubIcon className="h-5 w-5" />
           </a>
@@ -100,9 +90,6 @@ export function TopNav() {
             href={siteMeta.socialLinks.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() =>
-              posthog.capture('social_link_clicked', { platform: 'linkedin' })
-            }
           >
             <LinkedInIcon className="h-5 w-5" />
           </a>
@@ -138,13 +125,7 @@ export function TopNav() {
                   isActive(pathname, item.href) &&
                     'bg-surface-container-high text-on-surface',
                 )}
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  posthog.capture('nav_link_clicked', {
-                    label: item.label,
-                    href: item.href,
-                  });
-                }}
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.label}
               </Link>

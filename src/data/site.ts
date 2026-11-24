@@ -1,24 +1,5 @@
-import {
-  NavLink,
-  SocialLinks,
-  ImageAsset,
-  Competency,
-  ProjectSummary,
-  ProjectFeature,
-  ProjectDetail,
-} from '@/lib/types';
+import type { NavLink, ProjectDetail, ProjectSummary, SocialLinks } from '@/lib/types';
 import { contactHref, parsedResume, summaryParagraphs, truncateText } from '@/lib/resume';
-
-// Re-export types for backward compatibility
-export type {
-  NavLink,
-  SocialLinks,
-  ImageAsset,
-  Competency,
-  ProjectSummary,
-  ProjectFeature,
-  ProjectDetail,
-};
 
 // Identity, headline, summary and contact details come from public/resume.tex
 // (the single source of truth). Only curated, web-only content lives here.
@@ -76,7 +57,9 @@ export const homeContent = {
     },
   ],
   portrait: {
-    src: '/C1F0A34C-22D0-425C-9909-2A768B9C1864_1_105_c.jpeg',
+    src: '/muhammad-anwer.webp',
+    width: 640,
+    height: 853,
     alt: 'Muhammad Anwer',
   },
 };
@@ -84,28 +67,39 @@ export const homeContent = {
 export const getBetterTogetherProject: ProjectDetail = {
   slug: 'get-better-together',
   title: 'Get Better Together',
+  seoTitle: 'Get Better Together: Social Fitness App',
   eyebrow: 'Back to Projects',
   summary:
     'A social fitness app that helps you stay accountable with friends through shared challenges, streak tracking, and friendly competition.',
   heroImage: {
-    src: '/projects/get-better-together.png',
+    src: '/projects/get-better-together.webp',
+    width: 1280,
+    height: 720,
     alt: 'Get Better Together landing page showing the create-a-challenge flow and live leaderboard.',
   },
   gallery: [
     {
-      src: '/gallery/get-better-together/gbt-1.png',
+      src: '/gallery/get-better-together/gbt-1.webp',
+      width: 1920,
+      height: 1435,
       alt: 'Pushup challenge leaderboard showing user rankings, streaks, and progress.',
     },
     {
-      src: '/gallery/get-better-together/gbt-2.png',
+      src: '/gallery/get-better-together/gbt-2.webp',
+      width: 1920,
+      height: 1080,
       alt: 'Dynamic schedule of activities with variable routines and rest days.',
     },
     {
-      src: '/gallery/get-better-together/gbt-3.png',
+      src: '/gallery/get-better-together/gbt-3.webp',
+      width: 1920,
+      height: 1080,
       alt: 'User profile showing joined challenges, progress, and stats.',
     },
     {
-      src: '/gallery/get-better-together/gbt-4.png',
+      src: '/gallery/get-better-together/gbt-4.webp',
+      width: 1920,
+      height: 1389,
       alt: 'Create a challenge flow with customizable settings and friend invitations.',
     },
   ],
@@ -177,102 +171,42 @@ export const getBetterTogetherProject: ProjectDetail = {
   ],
 };
 
-// export const launchgoodProject: ProjectDetail = {
-//   slug: 'launchgood',
-//   title: 'LaunchGood',
-//   eyebrow: 'Back to Projects',
-//   summary:
-//     'A global fundraising marketplace connecting fundraisers and donors, powering donations and recurring giving at scale.',
-//   heroImage: {
-//     src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDvori9QWZo3Lv_pX8Sj8MaOpAsgu8Vvu5MoFYn-eJ6oD_Tk5WblYL8Of_SZtviuP0r-qbZLM71GlvouPnT4Y5ViH7f2WsncS1C67VMqU4LQD3mTw2y9G9AKi_7650zAh2r0Xi0M3oF_IJ3ORk6-luZsQTHDcxNapPBDCImbIPgqrJZM8N3fDaEEt3YAwYNe4-PutaGtgmRek-EpTXorXlqjzdDWzt7bPt3hhvHFYaHPnJNh6zxKux8qoGIJFVAnyUn8eHcVLX_MikO',
-//     alt: 'LaunchGood dashboard.',
-//   },
-//   gallery: [],
-//   overview: [
-//     'At LaunchGood, I ship full-stack features for a global fundraising marketplace. A key leadership priority was delivering a guest checkout for subscriptions end-to-end in one week. During this, I identified security vulnerabilities in the initial proposal and implemented safer alternatives. After launch, over 50% of new subscribers used guest checkout, improving conversions by ~40%.',
-//     'I led the technical direction for multi-step subscription funnels, utilizing an app-shell pattern for performance, and built follower-facing public profiles with companion admin dashboards backed by NestJS and REST APIs.',
-//     'Beyond feature development, I drove operational improvements by proactively building custom Retool dashboards for on-call triage, defining end-to-end Heap product analytics, and leading incident response and system design reviews across the platform.',
-//   ],
-//   features: [
-//     {
-//       title: 'Guest Checkout & Onboarding Funnels',
-//       description:
-//         'Delivered guest checkout in one week, securing vulnerabilities. Implemented multi-step funnels with Next.js and Redux, improving load times via an app-shell pattern.',
-//       icon: 'credit-card',
-//     },
-//     {
-//       title: 'Public Profiles & Recurring Dashboards',
-//       description:
-//         'Built social media–style public profiles and dashboard views for charities to manage recurring programs, fully backed by automated tests and REST APIs.',
-//       icon: 'users',
-//     },
-//     {
-//       title: 'Proactive Operational Tooling (Retool)',
-//       description:
-//         'Built internal dashboards without formal request, delivering a donor lookup console and scheduled-giving KPIs to identify spikes and triage billing issues.',
-//       icon: 'layout',
-//     },
-//     {
-//       title: 'Incident Response & System Design',
-//       description:
-//         'Led production triage using Datadog and AWS, authored runbooks to standardize mitigation, and contributed to system design via RFCs.',
-//       icon: 'activity',
-//     },
-//   ],
-//   metrics: [
-//     'Delivered an end-to-end subscription guest checkout in 1 week (leadership priority).',
-//     'Improved subscription conversions by ~40%, with >50% of new subscribers utilizing guest checkout.',
-//     'Coordinated CI-gated monorepo releases and mitigated regression risks through rigorous design and code reviews.',
-//   ],
-//   techStack: [
-//     {
-//       label: 'Frontend',
-//       items: [
-//         'Next.js (React)',
-//         'Redux',
-//         'Tailwind CSS',
-//         'Jest',
-//         'React Testing Library',
-//       ],
-//     },
-//     {
-//       label: 'Backend',
-//       items: ['NestJS', 'Prisma', 'PostgreSQL', 'REST APIs'],
-//     },
-//     {
-//       label: 'Infrastructure & Ops',
-//       items: ['AWS', 'RabbitMQ', 'Datadog', 'GitHub Actions'],
-//     },
-//     { label: 'Tools', items: ['Heap Analytics', 'Retool'] },
-//   ],
-//   actions: [],
-// };
-
 export const launchgoodProject: ProjectDetail = {
   slug: 'launchgood',
   title: 'LaunchGood',
+  seoTitle: 'LaunchGood: Guest Checkout & Recurring Giving',
   eyebrow: 'Back to Projects',
   summary:
     'A global fundraising marketplace connecting fundraisers and donors, powering one-time donations and recurring giving at scale across 150+ countries.',
   heroImage: {
-    src: '/projects/lg.jpg',
+    src: '/projects/lg.webp',
+    width: 1280,
+    height: 720,
     alt: 'LaunchGood dashboard showing campaign analytics and recurring donation metrics.',
   },
   gallery: [
     {
-      src: '/gallery/lg/lg-1.png',
+      src: '/gallery/lg/lg-1.webp',
+      width: 1920,
+      height: 1635,
       alt: 'Guest checkout flow with multi-step subscription funnel.',
     },
     {
-      src: '/gallery/lg/lg-2.png',
+      src: '/gallery/lg/lg-2.webp',
+      width: 1920,
+      height: 1109,
       alt: 'Settings page for managing recurring donation preferences and payment methods.',
     },
     {
-      src: '/gallery/lg/lg-3.png',
+      src: '/gallery/lg/lg-3.webp',
+      width: 1920,
+      height: 2189,
       alt: 'Recurring giving admin dashboard with subscription health KPIs.',
     },
     {
-      src: '/gallery/lg/lg-4.png',
+      src: '/gallery/lg/lg-4.webp',
+      width: 1920,
+      height: 1570,
       alt: 'Influencer profile dashboard with stats on followers, donations, and impact.',
     },
   ],
@@ -379,40 +313,57 @@ export const launchgoodProject: ProjectDetail = {
 export const esgProject: ProjectDetail = {
   slug: 'esg-financed-emissions',
   title: 'ESGTree Financed Emissions',
+  seoTitle: 'ESGTree Financed Emissions Platform',
   eyebrow: 'Back to Projects',
   summary:
     'An enterprise platform for calculating and reporting financed emissions for banks, portfolio managers and their SME portfolio companies.',
   heroImage: {
-    src: '/projects/esg.png',
+    src: '/projects/esg.webp',
+    width: 1280,
+    height: 720,
     alt: 'Enterprise analytics dashboard for financed emissions reporting.',
   },
   gallery: [
     {
-      src: '/gallery/esg/esg-1.png',
+      src: '/gallery/esg/esg-1.webp',
+      width: 1920,
+      height: 1080,
       alt: 'Invite SMEs and portfolio companies via secure invitation codes.',
     },
     {
-      src: '/gallery/esg/esg-2.png',
+      src: '/gallery/esg/esg-2.webp',
+      width: 1920,
+      height: 1080,
       alt: 'Activity log feature.',
     },
     {
-      src: '/gallery/esg/esg-3.png',
+      src: '/gallery/esg/esg-3.webp',
+      width: 1920,
+      height: 1080,
       alt: 'SME and portfolio company view.',
     },
     {
-      src: '/gallery/esg/esg-4.png',
+      src: '/gallery/esg/esg-4.webp',
+      width: 1920,
+      height: 1080,
       alt: 'SME and portfolio company wizard for guided data entry with AI parsing of documents.',
     },
     {
-      src: '/gallery/esg/esg-5.png',
+      src: '/gallery/esg/esg-5.webp',
+      width: 1920,
+      height: 1191,
       alt: 'Emissions estimation',
     },
     {
-      src: '/gallery/esg/esg-6.png',
+      src: '/gallery/esg/esg-6.webp',
+      width: 1920,
+      height: 1191,
       alt: 'File and bull uploads, powered by AI parsing and human-in-the-loop verification.',
     },
     {
-      src: '/gallery/esg/esg-7.png',
+      src: '/gallery/esg/esg-7.webp',
+      width: 1920,
+      height: 1185,
       alt: 'Summary of completed data entered by SME users, showing calculated emissions and data quality scores.',
     },
   ],
@@ -514,11 +465,14 @@ export const esgProject: ProjectDetail = {
 export const portfolioProject: ProjectDetail = {
   slug: 'smart-portfolio-allocator',
   title: 'Smart Portfolio Allocator',
+  seoTitle: 'Smart Portfolio Allocator: DCA Investing Tool',
   eyebrow: 'Back to Projects',
   summary:
     'An intelligent allocation tool designed for Canadian investors to maximize every dollar of their monthly budget for DCA and ETF portfolio building.',
   heroImage: {
-    src: '/projects/smart-portfolio-allocator.png',
+    src: '/projects/smart-portfolio-allocator.webp',
+    width: 1280,
+    height: 720,
     alt: 'Smart Portfolio Allocator interface showing strategy selection and share allocation breakdown.',
   },
   gallery: [],
@@ -602,7 +556,9 @@ export const projects: ProjectSummary[] = [
     ],
     href: '/projects/launchgood',
     image: {
-      src: '/projects/lg.jpg',
+      src: '/projects/lg.webp',
+      width: 1280,
+      height: 720,
       alt: 'LaunchGood dashboard.',
     },
   },
@@ -625,7 +581,9 @@ export const projects: ProjectSummary[] = [
     ],
     href: '/projects/esg-financed-emissions',
     image: {
-      src: '/projects/esg.png',
+      src: '/projects/esg.webp',
+      width: 1280,
+      height: 720,
       alt: 'Enterprise analytics dashboard for financed emissions reporting.',
     },
   },
@@ -649,7 +607,9 @@ export const projects: ProjectSummary[] = [
     ],
     href: '/projects/get-better-together',
     image: {
-      src: '/projects/get-better-together.png',
+      src: '/projects/get-better-together.webp',
+      width: 1280,
+      height: 720,
       alt: 'Get Better Together landing page showing the create-a-challenge flow and live leaderboard.',
     },
   },
@@ -668,7 +628,9 @@ export const projects: ProjectSummary[] = [
     ],
     href: '/projects/smart-portfolio-allocator',
     image: {
-      src: '/projects/smart-portfolio-allocator.png',
+      src: '/projects/smart-portfolio-allocator.webp',
+      width: 1280,
+      height: 720,
       alt: 'Smart Portfolio Allocator interface showing strategy selection and share allocation breakdown.',
     },
   },

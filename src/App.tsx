@@ -1,16 +1,11 @@
 import { useEffect } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { useLocation } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import HomePage from "@/pages/HomePage";
 import ProjectsPage from "@/pages/ProjectsPage";
 import ResumePage from "@/pages/ResumePage";
 import ProjectDetailRoute from "@/pages/ProjectDetailRoute";
-
-const queryClient = new QueryClient();
 
 declare global {
   interface Window {
@@ -65,17 +60,12 @@ function Router() {
 
 function App({ ssrPath }: { ssrPath?: string } = {}) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter
-          ssrPath={ssrPath}
-          base={import.meta.env.BASE_URL.replace(/\/$/, "")}
-        >
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <WouterRouter
+      ssrPath={ssrPath}
+      base={import.meta.env.BASE_URL.replace(/\/$/, "")}
+    >
+      <Router />
+    </WouterRouter>
   );
 }
 

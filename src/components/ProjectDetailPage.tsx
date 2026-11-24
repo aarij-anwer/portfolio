@@ -36,7 +36,7 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
 
         <ProjectGallery images={[project.heroImage, ...project.gallery]} />
 
-        <main className="grid gap-14 border-t border-outline-variant pt-12 md:grid-cols-[minmax(0,1fr)_320px] md:gap-16">
+        <div className="grid gap-14 border-t border-outline-variant pt-12 md:grid-cols-[minmax(0,1fr)_320px] md:gap-16">
           <article className="max-w-3xl space-y-12">
             <section className="space-y-5">
               <h2 className="text-2xl font-semibold tracking-[-0.03em] text-on-surface">
@@ -112,12 +112,9 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
               </div>
             </section>
 
-            <ProjectActionButtons
-              actions={project.actions}
-              projectSlug={project.slug}
-            />
+            <ProjectActionButtons actions={project.actions} />
           </aside>
-        </main>
+        </div>
       </PageContainer>
     </SiteShell>
   );

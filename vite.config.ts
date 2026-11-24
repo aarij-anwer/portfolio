@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import fs from "fs";
 import { execSync } from "child_process";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { staticRoutes } from "./src/lib/staticRoutes";
 
 const rawPort = process.env.PORT;
@@ -104,7 +103,7 @@ Sitemap: ${routeUrl("/sitemap.xml")}
   };
 }
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   base: basePath,
   define: {
     __RESUME_PDF_AVAILABLE__: JSON.stringify(fs.existsSync(resumePdfPath)),
@@ -112,25 +111,10 @@ export default defineConfig({
   plugins: [
     react(),
     seoFilesPlugin(),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
-      ? [
-          await import("@replit/vite-plugin-cartographer").then((m) =>
-            m.cartographer({
-              root: import.meta.dirname,
-            }),
-          ),
-          await import("@replit/vite-plugin-dev-banner").then((m) =>
-            m.devBanner(),
-          ),
-        ]
-      : []),
   ],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
     },
     dedupe: ["react", "react-dom"],
   },
@@ -138,6 +122,8 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
+    // The SSR bundle only needs code; public/ is already copied into dist/.
+    copyPublicDir: !isSsrBuild,
   },
   server: {
     port,
@@ -153,4 +139,4 @@ export default defineConfig({
     host: "0.0.0.0",
     allowedHosts: true,
   },
-});
+}));

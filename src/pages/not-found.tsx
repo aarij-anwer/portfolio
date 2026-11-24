@@ -1,28 +1,37 @@
-import { Card, CardContent } from "@/components/ui/card";
-import Seo from "@/lib/seo";
-import { AlertCircle } from "lucide-react";
+import SiteShell from '@/components/SiteShell';
+import { ButtonLink, PageContainer, SurfaceCard } from '@/components/ui';
+import { siteMeta } from '@/data/site';
+import Seo from '@/lib/seo';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
+    <SiteShell>
       <Seo
-        title="Page Not Found | Muhammad Anwer"
-        description="The requested portfolio page could not be found."
+        title={`Page Not Found | ${siteMeta.name}`}
+        description="The page you were looking for doesn't exist. Browse projects or the resume instead."
         path="/404"
         noindex
       />
-      <Card className="w-full max-w-md mx-4">
-        <CardContent className="pt-6">
-          <div className="flex mb-4 gap-2">
-            <AlertCircle className="h-8 w-8 text-red-500" />
-            <h1 className="text-2xl font-bold text-gray-900">404 Page Not Found</h1>
-          </div>
-
-          <p className="mt-4 text-sm text-gray-600">
-            Did you forget to add the page to the router?
+      <PageContainer className="max-w-[720px]">
+        <SurfaceCard className="space-y-6 p-8 md:p-10">
+          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-primary">404</p>
+          <h1 className="text-3xl font-bold tracking-[-0.03em] text-on-surface md:text-4xl">
+            This page doesn&apos;t exist
+          </h1>
+          <p className="text-base leading-7 text-on-surface-variant">
+            The link may be out of date, or the page has moved. Try one of these instead:
           </p>
-        </CardContent>
-      </Card>
-    </div>
+          <div className="flex flex-wrap gap-3">
+            <ButtonLink href="/">Home</ButtonLink>
+            <ButtonLink href="/projects" variant="secondary">
+              Projects
+            </ButtonLink>
+            <ButtonLink href="/resume" variant="secondary">
+              Resume
+            </ButtonLink>
+          </div>
+        </SurfaceCard>
+      </PageContainer>
+    </SiteShell>
   );
 }

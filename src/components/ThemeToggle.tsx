@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import posthog from 'posthog-js';
 import { SunIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 
@@ -95,10 +94,6 @@ export default function ThemeToggle() {
     applyTheme(nextTheme);
     setMode(nextMode);
     setIsOpen(false);
-    posthog.capture('theme_selected', {
-      mode: nextMode,
-      resolvedTheme: nextTheme,
-    });
   }
 
   return (

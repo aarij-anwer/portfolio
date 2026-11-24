@@ -6,7 +6,7 @@ import Seo, { absoluteUrl } from '@/lib/seo';
 
 export default function ProjectsPage() {
   const description =
-    'Selected software engineering projects by Muhammad Anwer across full-stack product development, React, TypeScript, NestJS, PostgreSQL, fintech, and AI-assisted delivery.';
+    `Software projects by ${siteMeta.name}: fundraising checkout at LaunchGood, an emissions platform at ESGTree, and AI-built apps with React and NestJS.`;
 
   return (
     <SiteShell>
