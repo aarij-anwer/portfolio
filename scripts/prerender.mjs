@@ -11,7 +11,9 @@ const projectRoot = resolve(__dirname, "..");
 const distDir = join(projectRoot, "dist");
 const serverEntry = join(projectRoot, "dist-server", "entry-server.js");
 
-const { render, staticRoutes } = await import(pathToFileURL(serverEntry).href);
+const { render, renderTextFiles, staticRoutes } = await import(
+  pathToFileURL(serverEntry).href,
+);
 
 const template = readFileSync(join(distDir, "index.html"), "utf-8");
 
@@ -28,16 +30,28 @@ function outputFile(route) {
   return join(distDir, route.replace(/^\//, ""), "index.html");
 }
 
-for (const route of staticRoutes) {
+function renderPage(route) {
   const { html, head } = render(route);
-  const page = template
+  return template
     .replace("<!--app-head-->", head)
     .replace("<!--app-html-->", html);
+}
 
+for (const route of staticRoutes) {
   const file = outputFile(route);
   mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, page);
+  writeFileSync(file, renderPage(route));
   console.log(`prerendered ${route} -> ${file.replace(projectRoot + "/", "")}`);
+}
+
+// Netlify serves dist/404.html with a real 404 status for unknown paths.
+writeFileSync(join(distDir, "404.html"), renderPage("/404"));
+console.log("prerendered 404 -> dist/404.html");
+
+// llms.txt, llms-full.txt and resume.md for AI engines (from resume.tex).
+for (const [name, content] of Object.entries(renderTextFiles())) {
+  writeFileSync(join(distDir, name), content);
+  console.log(`wrote dist/${name}`);
 }
 
 console.log(`\nPre-rendered ${staticRoutes.length} routes.`);

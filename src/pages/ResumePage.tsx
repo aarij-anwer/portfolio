@@ -3,28 +3,59 @@ import RichText from '@/components/RichText';
 import SiteShell from '@/components/SiteShell';
 import { PageContainer, SurfaceCard } from '@/components/ui';
 import { siteMeta } from '@/data/site';
-import { parsedResume, resumePdfAvailable } from '@/lib/resume';
-import Seo, { personJsonLd } from '@/lib/seo';
+import { parsedResume, resumePdfAvailable, summaryParagraphs, truncateText } from '@/lib/resume';
+import Seo, { breadcrumbJsonLd, profilePageJsonLd } from '@/lib/seo';
+
+// Turn "Aug 2025" into "2025-08" for <time dateTime>. Returns undefined for
+// values like "Present" that have no machine-readable form.
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function isoMonth(value: string) {
+  const match = /^([A-Za-z]{3})\w*\s+(\d{4})$/.exec(value.trim());
+  if (!match) return undefined;
+  const month = MONTHS.indexOf(match[1]);
+  return month === -1 ? match[2] : `${match[2]}-${String(month + 1).padStart(2, '0')}`;
+}
+
+function DateText({ value }: { value: string }) {
+  const iso = isoMonth(value);
+  return iso ? <time dateTime={iso}>{value}</time> : <>{value}</>;
+}
 
 export default function ResumePage() {
   const resumeData = parsedResume;
-  const description =
-    'Resume for Muhammad Anwer, full-stack software engineer with experience in React, TypeScript, NestJS, PostgreSQL, product engineering, and AI-assisted delivery.';
+  const title = `Resume | ${resumeData.name}, ${resumeData.summary.headline}`;
+  const description = truncateText(
+    `Resume of ${resumeData.name}, ${resumeData.summary.headline} (${resumeData.location}): ${summaryParagraphs[0]}`,
+  );
+  // Phone number stays in the PDF only; the web page lists public channels.
+  const contacts = resumeData.contact.filter((item) => item.kind !== 'phone');
 
   return (
     <SiteShell>
       <Seo
-        title={`Resume | ${siteMeta.name}`}
+        title={title}
         description={description}
         path="/resume"
-        jsonLd={personJsonLd()}
+        type="profile"
+        jsonLd={[
+          profilePageJsonLd('/resume', title),
+          breadcrumbJsonLd([
+            { name: siteMeta.name, path: '/' },
+            { name: 'Resume', path: '/resume' },
+          ]),
+        ]}
       />
       <PageContainer className="max-w-[900px] space-y-16">
         <header className="space-y-6 border-b border-surface-variant pb-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <h1 className="text-4xl font-bold tracking-[-0.04em] text-on-surface md:text-5xl">
-              Muhammad Anwer
-            </h1>
+            <div className="space-y-2">
+              <h1 className="text-4xl font-bold tracking-[-0.04em] text-on-surface md:text-5xl">
+                {resumeData.name}
+              </h1>
+              <p className="text-lg font-medium text-primary">
+                {resumeData.summary.headline}
+              </p>
+            </div>
             {resumePdfAvailable ? (
               <a
                 className="inline-flex w-fit items-center justify-center rounded-lg border border-primary bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary transition-colors duration-200 hover:bg-primary-fixed"
@@ -35,7 +66,46 @@ export default function ResumePage() {
               </a>
             ) : null}
           </div>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-on-surface-variant">
+            {contacts.map((item) => (
+              <li key={item.label} className="flex items-center gap-2">
+                <SymbolIcon name={item.icon} className="h-4 w-4 flex-none text-primary" />
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    className="transition-colors hover:text-on-surface"
+                    {...(item.href.startsWith('http')
+                      ? { target: '_blank', rel: 'noopener noreferrer me' }
+                      : {})}
+                  >
+                    {item.kind === 'linkedin'
+                      ? `LinkedIn: ${item.label}`
+                      : item.kind === 'github'
+                        ? `GitHub: ${item.label}`
+                        : item.label}
+                  </a>
+                ) : (
+                  <span>{item.label}</span>
+                )}
+              </li>
+            ))}
+          </ul>
         </header>
+
+        <section className="space-y-4" aria-labelledby="summary-heading">
+          <h2
+            id="summary-heading"
+            className="flex items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-primary"
+          >
+            <SymbolIcon name="psychology" className="h-5 w-5" />
+            Summary
+          </h2>
+          {resumeData.summary.paragraphs.map((paragraph, index) => (
+            <p key={index} className="text-base leading-7 text-on-surface-variant">
+              <RichText text={paragraph} />
+            </p>
+          ))}
+        </section>
 
         <section className="space-y-6">
           <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-primary">
@@ -68,7 +138,7 @@ export default function ResumePage() {
           </h2>
           <div className="space-y-10">
             {resumeData.experience.map((item, index) => (
-              <div
+              <article
                 key={item.role}
                 className={
                   index === resumeData.experience.length - 1
@@ -87,7 +157,11 @@ export default function ResumePage() {
                   <h3 className="text-xl font-semibold tracking-[-0.02em] text-on-surface">
                     {item.role}
                   </h3>
-                  <span className="text-sm text-outline">{item.companyLine}</span>
+                  <p className="text-sm text-outline">
+                    {item.company} | {item.location} |{' '}
+                    <DateText value={item.startDate} /> -{' '}
+                    <DateText value={item.endDate} />
+                  </p>
                 </div>
                 <ul className="mt-4 list-disc space-y-2 pl-4 text-base leading-7 text-on-surface-variant">
                   {item.bullets.map((bullet, bulletIndex) => (
@@ -96,7 +170,7 @@ export default function ResumePage() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </article>
             ))}
           </div>
         </section>
@@ -115,20 +189,34 @@ export default function ResumePage() {
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-on-surface">
-                      {item.school}
+                      {item.credential}
                     </h3>
                     <p className="mt-1 text-base text-primary">
-                      {item.credential}
+                      {item.school}
                     </p>
                   </div>
                   <span className="mt-2 text-sm text-outline md:mt-0">
-                    {item.details}
+                    {item.location}
                   </span>
                 </div>
               </SurfaceCard>
             ))}
           </div>
         </section>
+
+        {resumeData.interests.length ? (
+          <section className="space-y-6">
+            <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-[-0.02em] text-primary">
+              <SymbolIcon name="favorite" className="h-5 w-5" />
+              Interests &amp; Affiliations
+            </h2>
+            <ul className="list-disc space-y-2 pl-5 text-base leading-7 text-on-surface-variant">
+              {resumeData.interests.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
       </PageContainer>
     </SiteShell>
   );

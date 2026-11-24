@@ -7,6 +7,7 @@ import {
   ProjectFeature,
   ProjectDetail,
 } from '@/lib/types';
+import { contactHref, parsedResume, summaryParagraphs, truncateText } from '@/lib/resume';
 
 // Re-export types for backward compatibility
 export type {
@@ -19,33 +20,38 @@ export type {
   ProjectDetail,
 };
 
+// Identity, headline, summary and contact details come from public/resume.tex
+// (the single source of truth). Only curated, web-only content lives here.
+const resumeHeadline = parsedResume.summary.headline;
+const [summaryLead = '', ...summaryRest] = summaryParagraphs;
+
 export const siteMeta = {
-  name: 'Muhammad Anwer',
-  title: 'Muhammad Anwer | Full-Stack Software Engineer',
-  description:
-    'Portfolio of Muhammad Anwer, a full-stack software engineer building high-impact React, TypeScript, NestJS, and product engineering systems.',
+  name: parsedResume.name,
+  title: `${parsedResume.name} | ${resumeHeadline}`,
+  description: truncateText(`${parsedResume.name} (${parsedResume.location}): ${summaryLead}`),
   url: 'https://muhammadanwer.com',
   image: '/opengraph.jpg',
-  email: 'maanwer0@gmail.com',
-  jobTitle: 'Full-Stack Software Engineer',
-  location: 'Toronto, Canada',
+  email: parsedResume.email,
+  jobTitle: resumeHeadline,
+  location: parsedResume.location,
   navLinks: [
     { label: 'Projects', href: '/projects' },
     { label: 'Resume', href: '/resume' },
   ] satisfies NavLink[],
   socialLinks: {
-    github: 'https://github.com/aarij-anwer/',
-    linkedin: 'https://www.linkedin.com/in/m-a-anwer/',
+    github: contactHref('github') ?? 'https://github.com/aarij-anwer',
+    linkedin: contactHref('linkedin') ?? 'https://www.linkedin.com/in/m-a-anwer',
   } satisfies SocialLinks,
 };
 
 export const homeContent = {
-  title: 'Muhammad Anwer',
-  accent: 'Anwer',
-  description:
-    'Full-stack engineer focused on building high-impact products: from rapid 0→1 MVPs to scalable, production systems. I combine product thinking, strong systems design, and execution speed to deliver meaningful results.',
-  howIWork:
-    'I strongly believe in iterative approaches: identify a problem, prototype a solution, test it with real users, build/pivot accordingly. AI is part of that loop end-to-end, from scoping to development and beyond.',
+  title: parsedResume.name,
+  accent: parsedResume.name.split(' ').slice(-1)[0],
+  headline: resumeHeadline,
+  /** Rich-text summary paragraphs (first is the lead) straight from resume.tex. */
+  paragraphs: parsedResume.summary.paragraphs,
+  description: summaryLead,
+  howIWork: summaryRest.join(' '),
   recentWins: [
     {
       stat: '1 week',

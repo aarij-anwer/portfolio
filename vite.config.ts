@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import fs from "fs";
+import { execSync } from "child_process";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { staticRoutes } from "./src/lib/staticRoutes";
 
@@ -21,6 +22,45 @@ const resumePdfPath = path.resolve(
   "Muhammad_Anwer_Resume.pdf",
 );
 const seoRoutes = staticRoutes;
+
+// AI / answer-engine crawlers we explicitly welcome (in addition to "*").
+const aiCrawlers = [
+  "GPTBot",
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "ClaudeBot",
+  "Claude-SearchBot",
+  "Claude-User",
+  "PerplexityBot",
+  "Perplexity-User",
+  "Google-Extended",
+  "Applebot-Extended",
+  "CCBot",
+];
+
+// Last-modified date (YYYY-MM-DD) for a path, from git history; falls back to
+// today when git is unavailable (e.g. shallow CI clones without history).
+function lastModified(...files: string[]) {
+  try {
+    const date = execSync(`git log -1 --format=%cs -- ${files.join(" ")}`, {
+      cwd: import.meta.dirname,
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .toString()
+      .trim();
+    if (date) return date;
+  } catch {
+    // ignore
+  }
+  return new Date().toISOString().slice(0, 10);
+}
+
+function routeLastModified(route: string) {
+  if (route === "/" || route === "/resume") {
+    return lastModified("public/resume.tex", "src/data/site.ts", "src/pages");
+  }
+  return lastModified("src/data/site.ts", "src/pages", "src/components");
+}
 
 function routeUrl(route: string) {
   const normalizedBase = basePath === "/" ? "" : basePath.replace(/\/$/, "");
@@ -43,6 +83,7 @@ ${seoRoutes
   .map(
     (route) => `  <url>
     <loc>${routeUrl(route)}</loc>
+    <lastmod>${routeLastModified(route)}</lastmod>
     <changefreq>${route === "/" ? "monthly" : "yearly"}</changefreq>
     <priority>${route === "/" ? "1.0" : route === "/projects" ? "0.9" : "0.7"}</priority>
   </url>`,
@@ -50,8 +91,9 @@ ${seoRoutes
   .join("\n")}
 </urlset>
 `;
-      const robots = `User-agent: *
-Allow: /
+      const robots = `${["*", ...aiCrawlers]
+        .map((agent) => `User-agent: ${agent}\nAllow: /`)
+        .join("\n\n")}
 
 Sitemap: ${routeUrl("/sitemap.xml")}
 `;

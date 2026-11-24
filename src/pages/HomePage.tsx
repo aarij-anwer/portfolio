@@ -6,7 +6,7 @@ import SiteShell from '@/components/SiteShell';
 import { PageContainer, PageSection, SurfaceCard } from '@/components/ui';
 import { homeContent, siteMeta } from '@/data/site';
 import { parsedResume } from '@/lib/resume';
-import Seo, { personJsonLd, websiteJsonLd } from '@/lib/seo';
+import Seo, { profilePageJsonLd, websiteJsonLd } from '@/lib/seo';
 import { cn } from '@/lib/utils';
 
 export default function HomePage() {
@@ -20,7 +20,7 @@ export default function HomePage() {
         description={siteMeta.description}
         path="/"
         type="profile"
-        jsonLd={[personJsonLd(), websiteJsonLd()]}
+        jsonLd={[profilePageJsonLd('/', siteMeta.title), websiteJsonLd()]}
       />
       <PageContainer className="space-y-24 md:space-y-32">
         <PageSection className="flex flex-col items-center justify-between gap-12 md:flex-row">
@@ -30,12 +30,21 @@ export default function HomePage() {
               <span className="text-primary">{homeContent.accent}</span>
               {titleParts[1]}
             </h1>
-            <p className="max-w-xl text-lg leading-8 text-on-surface-variant">
-              {homeContent.description}
+            <p className="text-xl font-medium tracking-[-0.01em] text-on-surface md:text-2xl">
+              {homeContent.headline}
+              <span className="text-on-surface-variant"> · {siteMeta.location}</span>
             </p>
-            <p className="max-w-xl text-lg leading-7 text-on-surface-variant">
-              {homeContent.howIWork}
-            </p>
+            {homeContent.paragraphs.map((paragraph, index) => (
+              <p
+                key={index}
+                className={cn(
+                  'max-w-xl text-lg text-on-surface-variant',
+                  index === 0 ? 'leading-8' : 'leading-7',
+                )}
+              >
+                <RichText text={paragraph} />
+              </p>
+            ))}
             <HomeCtas />
           </div>
 

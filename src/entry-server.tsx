@@ -6,6 +6,13 @@ import {
   renderSeoTags,
   type SeoData,
 } from "@/lib/seo";
+import { parsedResume } from "@/lib/resume";
+import { projects, siteMeta } from "@/data/site";
+import {
+  buildLlmsFullTxt,
+  buildLlmsTxt,
+  resumeToMarkdown,
+} from "@/lib/resume-markdown";
 
 export { staticRoutes } from "@/lib/staticRoutes";
 
@@ -24,4 +31,14 @@ export function render(url: string): { html: string; head: string } {
   );
 
   return { html, head: renderSeoTags(collected ?? defaultSeo()) };
+}
+
+// Plain-text files for AI engines, generated from public/resume.tex.
+export function renderTextFiles(): Record<string, string> {
+  const siteUrl = (import.meta.env.VITE_SITE_URL ?? siteMeta.url).replace(/\/$/, "");
+  return {
+    "llms.txt": buildLlmsTxt(parsedResume, projects, siteUrl),
+    "llms-full.txt": buildLlmsFullTxt(parsedResume, projects, siteUrl),
+    "resume.md": resumeToMarkdown(parsedResume, siteUrl),
+  };
 }

@@ -1,4 +1,4 @@
-import type { ParsedResume, ResumeTextSegment } from '@/lib/types';
+import type { ParsedResume, ResumeContact, ResumeSummary, ResumeTextSegment } from '@/lib/types';
 
 const iconByCompetency: Record<string, string> = {
   'Engineering Leadership': 'psychology',
@@ -7,6 +7,7 @@ const iconByCompetency: Record<string, string> = {
   'Architecture & Systems': 'architecture',
   'Reliability & Operations': 'monitoring',
   'Cloud & DevOps': 'cloud',
+  'AI in Practice': 'generative_ai',
   'AI in Practice (Daily)': 'generative_ai',
   'Stakeholder & Delivery': 'psychology',
 };
@@ -16,6 +17,7 @@ type Style = Pick<ResumeTextSegment, 'bold' | 'italic'>;
 
 const decodeInline = (value: string) =>
   value
+    .replace(/\$\\to\$/g, '→')
     .replace(/\\textasciitilde\{\}/g, '%%TILDE%%')
     .replace(/\\&/g, '&')
     .replace(/\\%/g, '%')
@@ -25,7 +27,6 @@ const decodeInline = (value: string) =>
     .replace(/\\,/g, '')
     .replace(/~+/g, ' ')
     .replace(/%%TILDE%%/g, '~')
-    .replace(/→/g, '->')
     .replace(/[–—‑]/g, '-')
     .replace(/\s*--\s*/g, ' - ')
     .replace(/\s+/g, ' ');
@@ -137,22 +138,66 @@ const splitSections = (source: string) => {
   );
 };
 
+const stripComments = (source: string) => source.replace(/(^|[^\\])%.*$/gm, '$1');
+
+const contactKind = (href: string): ResumeContact['kind'] => {
+  if (href.startsWith('mailto:')) return 'email';
+  if (/linkedin\.com/i.test(href)) return 'linkedin';
+  if (/github\.com/i.test(href)) return 'github';
+  return 'link';
+};
+
+const contactIcon: Record<ResumeContact['kind'], string> = {
+  location: 'location_on',
+  phone: 'phone',
+  email: 'mail',
+  linkedin: 'open_in_new',
+  github: 'open_in_new',
+  link: 'open_in_new',
+};
+
 const parseContact = (source: string) => {
-  const heading = source.slice(0, source.indexOf('\\section{'));
+  const heading = stripComments(source.slice(0, source.indexOf('\\section{')));
   const name = decodeLatex(/\{\\Huge \\scshape ([^}]+)\}/.exec(heading)?.[1] ?? '');
+  const location = decodeLatex(/\\faMapMarker\*?~([^$\\]+)/.exec(heading)?.[1] ?? '');
   const phone = decodeLatex(/\\faPhone~([^$]+)/.exec(heading)?.[1] ?? '');
   const links = collectMacro(heading, 'href', 2);
-  return {
-    name,
-    contact: [
-      { label: phone, icon: 'phone' },
-      ...links.map(({ args }) => ({
-        label: plainText(args[1]),
-        href: decodeLatex(args[0]),
-        icon: args[0].startsWith('mailto:') ? 'mail' : 'open_in_new',
-      })),
-    ],
-  };
+  const contact: ResumeContact[] = [];
+  if (location) contact.push({ kind: 'location', label: location, icon: contactIcon.location });
+  if (phone) contact.push({ kind: 'phone', label: phone, icon: contactIcon.phone });
+  links.forEach(({ args }) => {
+    const href = decodeLatex(args[0]);
+    const kind = contactKind(href);
+    contact.push({ kind, label: plainText(args[1]), href, icon: contactIcon[kind] });
+  });
+  const email = contact.find((item) => item.kind === 'email')?.href?.replace(/^mailto:/, '') ?? '';
+  return { name, location, email, contact };
+};
+
+// The Summary section is `\small{ \textbf{Headline}\\ paragraph \n\n paragraph }`.
+// The bold first line becomes the headline; blank-line separated paragraphs follow.
+const parseSummary = (source = ''): ResumeSummary => {
+  let body = stripComments(source).trim();
+  const wrapper = /^\\small\s*\{/.exec(body);
+  if (wrapper) body = readGroup(body, wrapper[0].length - 1).value.trim();
+  let headline = '';
+  if (body.startsWith('\\textbf')) {
+    const match = readMacroAt(body, 0, 'textbf', 1);
+    headline = decodeLatex(match.args[0]);
+    body = body.slice(match.end).replace(/^\s*\\\\(\[[^\]]*\])?/, '');
+  }
+  const paragraphs = body
+    .split(/\n\s*\n/)
+    .map((paragraph) => parseInline(paragraph.replace(/\\\\/g, ' ')))
+    .map((segments) => {
+      if (segments.length) {
+        segments[0].text = segments[0].text.trimStart();
+        segments[segments.length - 1].text = segments[segments.length - 1].text.trimEnd();
+      }
+      return segments.filter((segment) => segment.text);
+    })
+    .filter((segments) => segments.length > 0);
+  return { headline, paragraphs };
 };
 
 const parseCompetencies = (source = '') =>
@@ -167,9 +212,14 @@ const parseExperience = (source = '') => {
   const headings = collectMacro(source, 'resumeSubheading', 4);
   return headings.map(({ args, end }, index) => {
     const [role, date, company, location] = args.map(decodeLatex);
+    const [startDate = '', endDate = ''] = args[1].split('--').map(decodeLatex);
     const body = source.slice(end, headings[index + 1]?.start ?? source.length);
     return {
       role,
+      company,
+      location,
+      startDate,
+      endDate,
       companyLine: `${company} | ${location} | ${date}`,
       current: /Present$/.test(date) || undefined,
       bullets: collectMacro(body, 'resumeItem', 1).map((item) => parseInline(item.args[0])),
@@ -179,19 +229,35 @@ const parseExperience = (source = '') => {
 
 const parseEducation = (source = '') =>
   collectMacro(source, 'resumeSubheading', 4).map(({ args }) => ({
-    school: decodeLatex(args[0]),
-    credential: decodeLatex(args[2]),
-    details: decodeLatex(args[3]),
+    credential: decodeLatex(args[0]),
+    school: decodeLatex(args[2]),
+    location: decodeLatex(args[3]),
   }));
+
+const requireSection = (sections: Map<string, string>, name: string) => {
+  const section = sections.get(name);
+  if (!section) {
+    throw new Error(`resume.tex is missing the required \\section{${name}}`);
+  }
+  return section;
+};
 
 export function parseResumeTex(source: string): ParsedResume {
   const sections = splitSections(source);
-  const { name, contact } = parseContact(source);
+  const { name, location, email, contact } = parseContact(source);
+  const summary = parseSummary(requireSection(sections, 'Summary'));
+  if (!name) throw new Error('resume.tex: could not find the name in the heading');
+  if (!summary.headline || !summary.paragraphs.length) {
+    throw new Error('resume.tex: Summary needs a \\textbf{headline} followed by at least one paragraph');
+  }
   return {
     name,
+    location,
+    email,
     contact,
+    summary,
     competencies: parseCompetencies(sections.get('Core Competencies')),
-    experience: parseExperience(sections.get('Professional Experience')),
+    experience: parseExperience(requireSection(sections, 'Professional Experience')),
     education: parseEducation(sections.get('Education')),
     interests: collectMacro(sections.get('Interests & Affiliations') ?? '', 'resumeItem', 1).map(
       ({ args }) => plainText(args[0]),
