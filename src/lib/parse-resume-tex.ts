@@ -98,7 +98,7 @@ const parseInline = (source: string, style: Style = {}): ResumeTextSegment[] => 
   const segments: ResumeTextSegment[] = [];
   let cursor = 0;
   while (cursor < source.length) {
-    const next = source.slice(cursor).search(/\\(?:textbf|textit|href|fa[A-Za-z]+)/);
+    const next = source.slice(cursor).search(/\\(?:textbf|textit|texttt|emph|underline|href|fa[A-Za-z]+)/);
     if (next === -1) {
       mergeSegment(segments, source.slice(cursor), style);
       break;
@@ -112,6 +112,13 @@ const parseInline = (source: string, style: Style = {}): ResumeTextSegment[] => 
         ...style,
         [name === 'textbf' ? 'bold' : 'italic']: true,
       }));
+      cursor = match.end;
+      continue;
+    }
+    const plain = /^\\(texttt|emph|underline)(?![A-Za-z])/.exec(source.slice(start));
+    if (plain) {
+      const match = readMacroAt(source, start, plain[1], 1);
+      segments.push(...parseInline(match.args[0], plain[1] === 'emph' ? { ...style, italic: true } : style));
       cursor = match.end;
       continue;
     }
@@ -174,9 +181,32 @@ const parseContact = (source: string) => {
   return { name, location, email, contact };
 };
 
-// The Summary section is `\small{ \textbf{Headline}\\ paragraph \n\n paragraph }`.
-// The bold first line becomes the headline; blank-line separated paragraphs follow.
-const parseSummary = (source = ''): ResumeSummary => {
+// Website-only summary, kept in resume.tex as LaTeX comments so it never
+// prints in the PDF:
+//   % web:headline Full-Stack Software Engineer
+//   % web:summary  First hero paragraph (inline LaTeX allowed)
+//   % web:summary  Second hero paragraph
+const parseWebSummary = (source: string): ResumeSummary | null => {
+  const lines = [...source.matchAll(/^[ \t]*%[ \t]*web:(headline|summary)[ \t]+(.+)$/gm)];
+  if (!lines.length) return null;
+  return {
+    headline: decodeLatex(lines.find(([, key]) => key === 'headline')?.[2] ?? ''),
+    paragraphs: lines
+      .filter(([, key]) => key === 'summary')
+      .map(([, , value]) => parseInline(value.trim()))
+      .map((segments) => {
+        if (segments.length) {
+          segments[0].text = segments[0].text.trimStart();
+          segments[segments.length - 1].text = segments[segments.length - 1].text.trimEnd();
+        }
+        return segments.filter((segment) => segment.text);
+      })
+      .filter((segments) => segments.length > 0),
+  };
+};
+
+// Optional printed Summary section: `\small{ \textbf{Headline}\\ paragraph \n\n paragraph }`.
+const parseSummarySection = (source: string): ResumeSummary => {
   let body = stripComments(source).trim();
   const wrapper = /^\\small\s*\{/.exec(body);
   if (wrapper) body = readGroup(body, wrapper[0].length - 1).value.trim();
@@ -245,10 +275,14 @@ const requireSection = (sections: Map<string, string>, name: string) => {
 export function parseResumeTex(source: string): ParsedResume {
   const sections = splitSections(source);
   const { name, location, email, contact } = parseContact(source);
-  const summary = parseSummary(requireSection(sections, 'Summary'));
+  const summarySection = sections.get('Summary');
+  const summary =
+    parseWebSummary(source) ?? (summarySection ? parseSummarySection(summarySection) : null);
   if (!name) throw new Error('resume.tex: could not find the name in the heading');
-  if (!summary.headline || !summary.paragraphs.length) {
-    throw new Error('resume.tex: Summary needs a \\textbf{headline} followed by at least one paragraph');
+  if (!summary?.headline || !summary.paragraphs.length) {
+    throw new Error(
+      'resume.tex needs a website summary: a "% web:headline ..." comment line plus at least one "% web:summary ..." line',
+    );
   }
   return {
     name,
