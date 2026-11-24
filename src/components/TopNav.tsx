@@ -2,12 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { GitHubIcon, LinkedInIcon, MenuIcon, XIcon } from '@/components/icons';
 import { siteMeta } from '@/data/site';
+import { staticRoutes } from '@/lib/staticRoutes';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
 
 function isActive(pathname: string, href: string) {
   if (href === '/projects') {
-    return pathname.startsWith('/projects');
+    // Only real project pages: an unknown /projects/* URL is served the
+    // pre-rendered 404 (rendered at /404, nothing active), and hydration must
+    // produce the same classes.
+    return (
+      pathname === '/projects' ||
+      (pathname.startsWith('/projects/') && staticRoutes.includes(pathname))
+    );
   }
   return pathname === href;
 }

@@ -4,7 +4,14 @@ import { Tag } from '@/components/ui';
 import type { ProjectSummary } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-export default function ProjectCard({ project }: { project: ProjectSummary }) {
+export default function ProjectCard({
+  project,
+  priority = false,
+}: {
+  project: ProjectSummary;
+  /** Above the fold: load the image eagerly (it's likely the LCP element). */
+  priority?: boolean;
+}) {
   const content = (
     <>
       <div className="relative aspect-[16/9] overflow-hidden bg-surface-container">
@@ -13,7 +20,7 @@ export default function ProjectCard({ project }: { project: ProjectSummary }) {
           alt={project.image.alt}
           width={project.image.width}
           height={project.image.height}
-          loading="lazy"
+          loading={priority ? 'eager' : 'lazy'}
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
         />

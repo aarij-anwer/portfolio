@@ -328,6 +328,9 @@ function applySeoData(data: SeoData) {
 
   if (data.jsonLd) {
     upsertJsonLd('page-json-ld', data.jsonLd);
+  } else {
+    // Don't leave the previous page's structured data on a page without any (404).
+    document.getElementById('page-json-ld')?.remove();
   }
 }
 

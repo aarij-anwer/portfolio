@@ -12,8 +12,9 @@ export default function NotFound() {
         path="/404"
         noindex
       />
-      <PageContainer className="max-w-[720px]">
-        <SurfaceCard className="space-y-6 p-8 md:p-10">
+      <PageContainer>
+        {/* max-w goes on the card: on PageContainer it would lose to max-w-container. */}
+        <SurfaceCard className="mx-auto max-w-[720px] space-y-6 p-8 md:p-10">
           <p className="text-sm font-semibold uppercase tracking-[0.12em] text-primary">404</p>
           <h1 className="text-3xl font-bold tracking-[-0.03em] text-on-surface md:text-4xl">
             This page doesn&apos;t exist
