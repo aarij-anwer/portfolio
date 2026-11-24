@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the sitemap's <lastmod> dates come from git.
+          fetch-depth: 0
+
+      # Uses the pnpm version pinned in package.json "packageManager".
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # typecheck + client build + SSR build + prerender (parses resume.tex)
+      - run: pnpm run build
+
+      - name: Check generated output
+        run: |
+          set -e
+          for f in index.html resume/index.html sitemap.xml robots.txt; do
+            test -s "dist/$f" || { echo "::error::missing dist/$f"; exit 1; }
+          done
+          # resume.tex content must be pre-rendered into the static HTML
+          grep -q 'Professional Experience' dist/resume/index.html
