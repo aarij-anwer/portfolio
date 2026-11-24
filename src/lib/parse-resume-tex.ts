@@ -15,8 +15,24 @@ const iconByCompetency: Record<string, string> = {
 type MacroMatch = { args: string[]; end: number; start: number };
 type Style = Pick<ResumeTextSegment, 'bold' | 'italic'>;
 
+/** Thrown when LaTeX we have no rule for survives decoding. */
+export class UnsupportedLatexError extends Error {
+  constructor(readonly token: string) {
+    super(`Unsupported LaTeX "${token}"`);
+    this.name = 'UnsupportedLatexError';
+  }
+}
+
+// Anything left after decoding is LaTeX the parser doesn't understand. Fail
+// loudly instead of publishing it to the site, llms.txt and resume.md.
+const assertNoLatex = (decoded: string) => {
+  const leftover = /\$[^$]*\$?|\\[A-Za-z]+\*?|\\[^\sA-Za-z]|[{}]/.exec(decoded);
+  if (leftover) throw new UnsupportedLatexError(leftover[0]);
+  return decoded;
+};
+
 const decodeInline = (value: string) =>
-  value
+  assertNoLatex(value
     .replace(/\$\\to\$/g, '→')
     .replace(/\$\\rightarrow\$/g, '→')
     .replace(/\\textasciitilde\{\}/g, '%%TILDE%%')
@@ -30,7 +46,7 @@ const decodeInline = (value: string) =>
     .replace(/%%TILDE%%/g, '~')
     .replace(/[–—‑]/g, '-')
     .replace(/\s*--\s*/g, ' - ')
-    .replace(/\s+/g, ' ');
+    .replace(/\s+/g, ' '));
 
 const decodeLatex = (value: string) => decodeInline(value).trim();
 
@@ -300,6 +316,19 @@ const requireSection = (sections: Map<string, string>, name: string) => {
 };
 
 export function parseResumeTex(source: string): ParsedResume {
+  try {
+    return parseSource(source);
+  } catch (error) {
+    if (!(error instanceof UnsupportedLatexError)) throw error;
+    const index = source.indexOf(error.token);
+    const where = index === -1 ? '' : ` (first at line ${source.slice(0, index).split('\n').length})`;
+    throw new Error(
+      `resume.tex: unsupported LaTeX "${error.token}"${where}. Rewrite it, or add a rule to decodeInline in src/lib/parse-resume-tex.ts.`,
+    );
+  }
+}
+
+function parseSource(source: string): ParsedResume {
   const sections = splitSections(source);
   const { name, location, email, contact } = parseContact(source);
   const summarySection = sections.get('Summary');
