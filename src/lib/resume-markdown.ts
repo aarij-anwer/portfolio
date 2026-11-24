@@ -30,12 +30,15 @@ const contactLine = (resume: ParsedResume) =>
     })
     .join(' · ');
 
+// Square brackets in link text would end the Markdown link early.
+const linkText = (text: string) => text.replace(/[[\]]/g, '\\$&');
+
 const winsSection = (resume: ParsedResume, siteUrl: string) =>
   resume.wins.length
     ? `## Recent wins\n\n${resume.wins
         .map((win) => {
           const title = win.href
-            ? `[${win.stat}: ${win.title}](${win.href.startsWith('/') ? siteUrl + win.href : win.href})`
+            ? `[${linkText(`${win.stat}: ${win.title}`)}](${win.href.startsWith('/') ? siteUrl + win.href : win.href})`
             : `**${win.stat}: ${win.title}**`;
           return `- ${title}: ${win.description}`;
         })

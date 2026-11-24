@@ -207,27 +207,31 @@ const parseWebSummary = (source: string): ResumeSummary | null => {
 
 // Home page "Recent Wins" cards, also kept as comments so they never print:
 //   % web:win stat | title | description | /optional/link
-// Fields may use inline LaTeX (\%, \textasciitilde{}, \textbf{...}).
+// Text fields may use inline LaTeX (\%, \textasciitilde{}, \textbf{...}); a
+// literal "|" inside a field is written $\mid$. The link is a plain URL.
 const parseWebWins = (source: string): ResumeWin[] =>
   [...source.matchAll(/^[ \t]*%[ \t]*web:win[ \t]+(.+)$/gm)].map(([line, value]) => {
-    const fields = value.split('|').map((field) => plainText(field.trim()));
-    const [stat, title, description, href] = fields;
-    const looksLikeLink = (field: string) => /^(\/|https?:\/\/)\S*$/.test(field);
-    if (
-      fields.length < 3 ||
-      fields.length > 4 ||
-      !stat ||
-      !title ||
-      !description ||
-      looksLikeLink(title) ||
-      looksLikeLink(description)
-    ) {
-      throw new Error(
-        `resume.tex: a "web:win" line needs "stat | title | description | optional link", got:\n  ${line.trim()}`,
+    const malformed = (reason: string) =>
+      new Error(
+        `resume.tex: a "web:win" line needs "stat | title | description | optional link" (${reason}; write a literal "|" as $\\mid$), got:\n  ${line.trim()}`,
       );
+    const raw = value.split('|').map((field) => field.trim());
+    if (raw.length < 3 || raw.length > 4) throw malformed(`found ${raw.length} fields`);
+    let fields: string[];
+    try {
+      fields = raw.slice(0, 3).map(plainText);
+    } catch (error) {
+      throw malformed(error instanceof Error ? error.message : String(error));
     }
-    if (href !== undefined && !/^(\/|https?:\/\/)\S*$/.test(href)) {
-      throw new Error(`resume.tex: "web:win" link must be a /path or http(s) URL, got "${href}"`);
+    const [stat, title, description] = fields;
+    // Not LaTeX text, so don't decode ~ or -- (valid URL characters); only undo escapes.
+    const href = (raw[3] ?? '').replace(/\\([_%&#])/g, '$1');
+    const looksLikeLink = (field: string) => /^(\/|https?:\/\/)\S*$/.test(field);
+    if (!stat || !title || !description || looksLikeLink(title) || looksLikeLink(description)) {
+      throw malformed('a field is empty or out of order');
+    }
+    if (href && !looksLikeLink(href)) {
+      throw malformed(`the link must be a /path or http(s) URL, got "${href}"`);
     }
     return href ? { stat, title, description, href } : { stat, title, description };
   });

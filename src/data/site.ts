@@ -3,8 +3,9 @@ import { contactHref, parsedResume, summaryParagraphs, truncateText } from '@/li
 import { staticRoutes } from '@/lib/staticRoutes';
 
 // Fail the build if a Recent Wins card links to a page that doesn't exist.
+// A #fragment or ?query on a site path is fine; the path itself must be a route.
 parsedResume.wins.forEach((win) => {
-  if (win.href?.startsWith('/') && !staticRoutes.includes(win.href)) {
+  if (win.href?.startsWith('/') && !staticRoutes.includes(win.href.replace(/[?#].*$/, ''))) {
     throw new Error(`resume.tex: "web:win" card "${win.title}" links to ${win.href}, which is not a site route`);
   }
 });

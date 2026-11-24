@@ -77,7 +77,9 @@ export default function HomePage() {
               Recent Wins
             </h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {homeContent.recentWins.map((win) => {
+              {homeContent.recentWins.map((win, index) => {
+                // Titles come from resume.tex and aren't guaranteed unique.
+                const key = `${index}-${win.title}`;
                 const card = (
                   <SurfaceCard
                     className={`flex h-full flex-col gap-4 p-7 transition-all duration-300 ${
@@ -107,17 +109,23 @@ export default function HomePage() {
 
                 if (win.href?.startsWith('/')) {
                   return (
-                    <Link key={win.title} href={win.href} className="group block h-full">
+                    <Link key={key} href={win.href} className="group block h-full">
                       {card}
                     </Link>
                   );
                 }
                 return win.href ? (
-                  <a key={win.title} href={win.href} className="group block h-full">
+                  <a
+                    key={key}
+                    href={win.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block h-full"
+                  >
                     {card}
                   </a>
                 ) : (
-                  <div key={win.title} className="h-full">
+                  <div key={key} className="h-full">
                     {card}
                   </div>
                 );

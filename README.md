@@ -14,7 +14,7 @@ Portfolio site for Muhammad Anwer: React + TypeScript + Vite + Tailwind CSS, pre
 
 - **`public/resume.tex` is the source of truth.** It's parsed at build time by `src/lib/parse-resume-tex.ts` and drives:
   - the home page hero (the `% web:headline` / `% web:summary` comment lines, which don't print in the PDF) and Core Competencies
-  - the home page Recent Wins cards, one comment line each: `% web:win stat | title | description | /link` (link optional; inline LaTeX like `\%` works). The build fails on a malformed line or a link to a page that doesn't exist.
+  - the home page Recent Wins cards, one comment line each: `% web:win stat | title | description | /link` (link optional; inline LaTeX like `\%` works in the text fields, and a literal `|` is written `$\mid$`). The build fails on a malformed line or a link to a page that doesn't exist.
   - `/resume`
   - site name, title and meta description
   - Person / ProfilePage JSON-LD
