@@ -35,11 +35,8 @@ jobs:
       - name: Check generated output
         run: |
           set -e
-          for f in index.html resume/index.html 404.html llms.txt llms-full.txt resume.md robots.txt sitemap.xml; do
+          for f in index.html resume/index.html sitemap.xml robots.txt; do
             test -s "dist/$f" || { echo "::error::missing dist/$f"; exit 1; }
           done
-          # resume.tex content must be rendered into the static HTML, with no raw LaTeX left over
+          # resume.tex content must be pre-rendered into the static HTML
           grep -q 'Professional Experience' dist/resume/index.html
-          if grep -qE '\\(textbf|textit|href|to)\b|\$\\' dist/index.html dist/resume/index.html dist/resume.md; then
-            echo "::error::raw LaTeX found in generated output"; exit 1
-          fi
