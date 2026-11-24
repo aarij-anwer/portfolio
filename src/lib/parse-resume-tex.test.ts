@@ -1,125 +1,151 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseResumeTex, parseResumeTexLenient } from '@/lib/parse-resume-tex';
-import { resolveResume } from '@/lib/resume-fallback';
+import { iconByCompetency, parseResumeTex } from './parse-resume-tex';
+import type { ResumeTextSegment } from './types';
 
-const valid = String.raw`\begin{center}
-  {\Huge \scshape Ada Lovelace} \\
-  \faMapMarker*~London \quad \href{mailto:ada@example.com}{ada@example.com}
+const realSource = readFileSync(new URL('../../public/resume.tex', import.meta.url), 'utf8');
+
+const text = (segments: ResumeTextSegment[]) => segments.map((segment) => segment.text).join('');
+
+/** Smallest resume the parser accepts, with one experience bullet to poke at. */
+const minimalResume = (bullet: string, extra = '') => String.raw`
+\begin{center}
+  {\Huge \scshape Test Person} \\
+  \href{mailto:test@example.com}{test@example.com}
 \end{center}
-% web:headline Software Engineer
-% web:summary I build \textbf{reliable} systems.
-% web:win 3x | Faster builds | Cut CI time by two thirds. | /projects
-\section{Core Competencies}
-\resumeItem{\textbf{Languages}: TypeScript, Go}
+% web:headline Engineer
+% web:summary A summary.
+${extra}
 \section{Professional Experience}
-\resumeSubheading{Staff Engineer}{2020 -- Present}{Analytical Co.}{London}
-  \resumeItem{Led the \textbf{engine} rewrite.}
-\section{Education}
-\resumeSubheading{BSc Mathematics}{2010}{University}{London}
-\section{Interests & Affiliations}
-\resumeItem{Chess}
+  \resumeSubheading{Engineer}{Jan 2020 -- Present}{Acme}{Remote}
+    \resumeItemListStart
+      \resumeItem{${bullet}}
+    \resumeItemListEnd
 \end{document}
 `;
 
-const snapshot = parseResumeTex(valid.replace('Ada Lovelace', 'Snapshot Name').replace('Staff Engineer', 'Snapshot Role'));
-const routes = ['/', '/projects', '/resume'];
+const firstBullet = (bullet: string) =>
+  text(parseResumeTex(minimalResume(bullet)).experience[0].bullets[0]);
 
-describe('resume.tex fallback', () => {
-  it('parses a valid resume with no issues', () => {
-    const { resume, report } = resolveResume(valid, snapshot, { routes });
-    expect(report.issues).toEqual([]);
-    expect(report.usedFallback).toBe(false);
-    expect(resume.name).toBe('Ada Lovelace');
-    expect(resume.experience[0].role).toBe('Staff Engineer');
+describe('parseResumeTex on the real resume.tex', () => {
+  const resume = parseResumeTex(realSource);
+
+  it('finds the fields the site depends on', () => {
+    expect(resume.name).not.toBe('');
+    expect(resume.email).toMatch(/^[^@\s]+@[^@\s]+$/);
+    expect(resume.contact.some((item) => item.kind === 'email')).toBe(true);
+    expect(resume.summary.headline).not.toBe('');
+    expect(resume.summary.paragraphs.length).toBeGreaterThan(0);
+    expect(resume.competencies.length).toBeGreaterThan(0);
+    expect(resume.education.length).toBeGreaterThan(0);
   });
 
-  it('falls back to the snapshot for the whole resume when the file is missing', () => {
-    const { resume, report } = resolveResume(null, snapshot);
-    expect(resume).toEqual(snapshot);
-    expect(report.issues[0].message).toMatch(/not found/);
+  it('gives every competency an explicit icon instead of the fallback', () => {
+    const unmapped = resume.competencies.map((item) => item.label).filter((label) => !(label in iconByCompetency));
+    expect(unmapped, 'add these labels to iconByCompetency in parse-resume-tex.ts').toEqual([]);
   });
 
-  it('falls back only for the section with an unclosed brace, and reports its line', () => {
-    const broken = valid.replace('\\resumeItem{Led the \\textbf{engine} rewrite.}', '\\resumeItem{Led the \\textbf{engine rewrite.}');
-    const { resume, report } = resolveResume(broken, snapshot);
-    expect(report.fallbackFields).toEqual(['experience']);
-    expect(resume.experience[0].role).toBe('Snapshot Role');
-    expect(resume.name).toBe('Ada Lovelace');
-    expect(report.issues[0].line).toBe(12);
-  });
-
-  it('falls back only for wins when a web:win line is malformed', () => {
-    const broken = valid.replace('3x | Faster builds |', '3x Faster builds');
-    const { resume, report } = resolveResume(broken, snapshot);
-    expect(report.fallbackFields).toEqual(['wins']);
-    expect(resume.wins).toEqual(snapshot.wins);
-    expect(report.issues[0].line).toBe(7);
-  });
-
-  it('treats a removed optional section as empty, not as a fallback', () => {
-    const noEducation = valid.replace(/\\section\{Education\}\n.*\n/, '');
-    const { resume, report } = resolveResume(noEducation, snapshot);
-    expect(resume.education).toEqual([]);
-    expect(report.usedFallback).toBe(false);
-    expect(report.issues).toEqual([expect.objectContaining({ severity: 'warning', fields: ['education'] })]);
-  });
-
-  it('falls back when the required experience section is missing', () => {
-    const renamed = valid.replace('\\section{Professional Experience}', '\\section{Work}');
-    expect(parseResumeTexLenient(renamed).resume.experience).toBeUndefined();
-    const { resume, report: resolved } = resolveResume(renamed, snapshot);
-    expect(resolved.fallbackFields).toEqual(['experience']);
-    expect(resume.experience).toEqual(snapshot.experience);
-  });
-
-  it('drops a Recent Wins link to a missing route (non-strict) and throws in strict mode', () => {
-    const badLink = valid.replace('| /projects', '| /nope');
-    const { resume, report } = resolveResume(badLink, snapshot, { routes });
-    expect(resume.wins[0].href).toBeUndefined();
-    expect(report.issues[0].message).toMatch(/not a site route/);
-    expect(() => resolveResume(badLink, snapshot, { routes, strict: true })).toThrow(/not a site route/);
-  });
-
-  it('throws in strict mode instead of falling back', () => {
-    expect(() => resolveResume(null, snapshot, { strict: true })).toThrow(/strict mode[\s\S]*not found/);
-  });
-
-  it('throws when there is nothing to fall back to', () => {
-    expect(() => resolveResume(null, null)).toThrow(/no "name" to fall back to/);
-  });
-
-  it('falls back for every part when the file is empty or cut short', () => {
-    for (const source of ['', valid.slice(0, valid.indexOf('\\section{'))]) {
-      const { resume, report } = resolveResume(source, snapshot);
-      expect(report.fallbackFields).toEqual(expect.arrayContaining(['competencies', 'experience', 'education', 'interests']));
-      expect(resume.education).toEqual(snapshot.education);
-      expect(resume.wins).toEqual(snapshot.wins);
+  it('has Recent Wins, which CI and llms.txt require', () => {
+    expect(resume.wins.length).toBeGreaterThan(0);
+    for (const win of resume.wins) {
+      expect(win.stat && win.title && win.description).toBeTruthy();
     }
   });
 
-  it('ignores commented-out LaTeX in section bodies', () => {
-    const commented = valid.replace('  \\resumeItem{Led', '  % \\resumeItem{Old draft\n  \\resumeItem{Led');
-    const { resume, report } = resolveResume(commented, snapshot);
-    expect(report.issues).toEqual([]);
-    expect(resume.experience[0].bullets).toHaveLength(1);
+  it('parses every job with dates and bullets', () => {
+    expect(resume.experience.length).toBeGreaterThan(0);
+    for (const job of resume.experience) {
+      expect(job.role).not.toBe('');
+      expect(job.company).not.toBe('');
+      expect(job.startDate).not.toBe('');
+      expect(job.bullets.length).toBeGreaterThan(0);
+    }
   });
 
-  it('falls back for the heading when the name group is unclosed', () => {
-    const broken = valid.replace('Ada Lovelace}', 'Ada Lovelace');
-    const { resume, report } = resolveResume(broken, snapshot);
-    expect(report.fallbackFields).toContain('name');
-    expect(resume.name).toBe('Snapshot Name');
-    expect(report.issues[0].line).toBe(2);
+  it('leaks no raw LaTeX into any parsed string', () => {
+    const leaks: string[] = [];
+    const walk = (value: unknown, path: string) => {
+      if (typeof value === 'string') {
+        if (/[\\${}]/.test(value)) leaks.push(`${path}: ${value}`);
+      } else if (Array.isArray(value)) {
+        value.forEach((item, index) => walk(item, `${path}[${index}]`));
+      } else if (value && typeof value === 'object') {
+        Object.entries(value).forEach(([key, item]) => walk(item, `${path}.${key}`));
+      }
+    };
+    walk(resume, 'resume');
+    expect(leaks).toEqual([]);
+  });
+});
+
+describe('inline decoding', () => {
+  it.each([
+    ['0$\\to$1', '0→1'],
+    ['0$\\rightarrow$1', '0→1'],
+    ['R\\&D', 'R&D'],
+    ['40\\% faster', '40% faster'],
+    ['a $\\mid$ b', 'a | b'],
+    ['a~b', 'a b'],
+    ['\\textasciitilde{}10 users', '~10 users'],
+    ['\\~10 users', '~10 users'],
+    ['2019 -- 2021', '2019 - 2021'],
+    ['a  \n  b', 'a b'],
+  ])('%s -> %s', (input, expected) => {
+    expect(firstBullet(input)).toBe(expected);
   });
 
-  it('decodes LaTeX tildes in a web:win link and rejects other LaTeX there', () => {
-    const tilde = valid.replace('| /projects', '| https://example.com/\\textasciitilde{}ada');
-    expect(resolveResume(tilde, snapshot).resume.wins[0].href).toBe('https://example.com/~ada');
-    const latex = valid.replace('| /projects', '| https://example.com/\\textbf{x}');
-    expect(resolveResume(latex, snapshot).report.fallbackFields).toEqual(['wins']);
+  it('keeps bold and italic styling', () => {
+    const [bullet] = parseResumeTex(minimalResume('\\textbf{Bold}: plain \\textit{slanted}')).experience[0].bullets;
+    expect(bullet).toEqual([
+      { text: 'Bold', bold: true },
+      { text: ': plain ' },
+      { text: 'slanted', italic: true },
+    ]);
+  });
+});
+
+describe('unsupported LaTeX', () => {
+  it.each([
+    ['unknown math symbol', '$\\leftarrow$', '$\\leftarrow$'],
+    ['unknown command', 'See \\textsc{Acme}', '\\textsc'],
+    ['unsupported escape', 'C\\# developer', '\\#'],
+    ['stray dollar sign', 'costs $5', '$5'],
+    ['leftover group braces', 'a {b} c', '{'],
+  ])('fails on %s', (_name, bullet, token) => {
+    expect(() => parseResumeTex(minimalResume(bullet))).toThrow(token);
   });
 
-  it('keeps parseResumeTex strict', () => {
-    expect(() => parseResumeTex(valid.replace('{\\Huge \\scshape Ada Lovelace}', ''))).toThrow(/name/);
+  it('reports the line it first appears on', () => {
+    const source = minimalResume('plain text') + '\n';
+    const bad = source.replace('plain text', 'before $\\leftarrow$ after');
+    const line = bad.slice(0, bad.indexOf('$\\leftarrow$')).split('\n').length;
+    expect(() => parseResumeTex(bad)).toThrow(`resume.tex:${line}`);
+  });
+
+  it('fails in web:win lines too', () => {
+    const extra = '% web:win 5\\% | Title | Uses \\unknown{x}';
+    expect(() => parseResumeTex(minimalResume('ok', extra))).toThrow('\\unknown');
+  });
+});
+
+describe('structure errors', () => {
+  it('requires the Professional Experience section', () => {
+    const source = minimalResume('ok').replace('Professional Experience', 'Work');
+    expect(() => parseResumeTex(source)).toThrow('Professional Experience');
+  });
+
+  it('requires a web headline and summary', () => {
+    const source = minimalResume('ok').replace(/^% web:.*$/gm, '');
+    expect(() => parseResumeTex(source)).toThrow('website summary');
+  });
+
+  it('rejects malformed web:win lines', () => {
+    expect(() => parseResumeTex(minimalResume('ok', '% web:win only | two'))).toThrow('web:win');
+    expect(() => parseResumeTex(minimalResume('ok', '% web:win 1 | t | d | not-a-link'))).toThrow('link');
+  });
+
+  it('parses a valid web:win line', () => {
+    const { wins } = parseResumeTex(minimalResume('ok', '% web:win 40\\% | Faster | Cut load time | /projects'));
+    expect(wins).toEqual([{ stat: '40%', title: 'Faster', description: 'Cut load time', href: '/projects' }]);
   });
 });

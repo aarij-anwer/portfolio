@@ -21,7 +21,12 @@ export class ResumeTexError extends Error {
 /** 1-based line number of a character offset. */
 export const offsetToLine = (source: string, index: number) => source.slice(0, index).split('\n').length;
 
-const iconByCompetency: Record<string, string> = {
+export const iconByCompetency: Record<string, string> = {
+  'Product Engineering (0→1 to scale)': 'bolt',
+  'AI-Native Engineering': 'generative_ai',
+  'Full-Stack': 'layers',
+  'Architecture & Data': 'architecture',
+  'CI/CD & Security': 'build',
   'Engineering Leadership': 'psychology',
   Languages: 'code',
   'Frameworks & Libraries': 'layers',
@@ -36,9 +41,29 @@ const iconByCompetency: Record<string, string> = {
 type MacroMatch = { args: string[]; end: number; start: number };
 type Style = Pick<ResumeTextSegment, 'bold' | 'italic'>;
 
+/** Thrown when LaTeX we have no rule for survives decoding. */
+export class UnsupportedLatexError extends ResumeTexError {
+  constructor(readonly token: string) {
+    super(
+      `unsupported LaTeX "${token}"; rewrite it, or add a rule to decodeInline in src/lib/parse-resume-tex.ts`,
+      token,
+    );
+    this.name = 'UnsupportedLatexError';
+  }
+}
+
+// Anything left after decoding is LaTeX the parser doesn't understand. Fail
+// loudly instead of publishing it to the site, llms.txt and resume.md.
+const assertNoLatex = (decoded: string) => {
+  const leftover = /\$[^$]*\$?|\\[A-Za-z]+\*?|\\[^\sA-Za-z]|[{}]/.exec(decoded);
+  if (leftover) throw new UnsupportedLatexError(leftover[0]);
+  return decoded;
+};
+
 const decodeInline = (value: string) =>
-  value
+  assertNoLatex(value
     .replace(/\$\\to\$/g, '→')
+    .replace(/\$\\rightarrow\$/g, '→')
     .replace(/\\textasciitilde\{\}/g, '%%TILDE%%')
     .replace(/\\&/g, '&')
     .replace(/\\%/g, '%')
@@ -50,7 +75,7 @@ const decodeInline = (value: string) =>
     .replace(/%%TILDE%%/g, '~')
     .replace(/[–—‑]/g, '-')
     .replace(/\s*--\s*/g, ' - ')
-    .replace(/\s+/g, ' ');
+    .replace(/\s+/g, ' '));
 
 const decodeLatex = (value: string) => decodeInline(value).trim();
 

@@ -69,109 +69,138 @@
   ],
   "competencies": [
     {
-      "label": "Languages",
+      "label": "Product Engineering (0→1 to scale)",
       "value": [
         {
-          "text": "TypeScript, JavaScript, Python, SQL"
+          "text": "Turn ambiguous problems into shipped product and iterate from usage data (PostHog, Heap, BigQuery). Scoping, build, and launch stay with me, weighed against cost and customer impact."
         }
       ],
-      "icon": "code"
+      "icon": "bolt"
     },
     {
-      "label": "Frameworks & Libraries",
+      "label": "AI-Native Engineering",
       "value": [
         {
-          "text": "React, Redux, NestJS, Next.js, Vite, Prisma, Tailwind CSS, Jest, React Testing Library, Scikit-learn"
+          "text": "Daily work is agent-first. A shared "
+        },
+        {
+          "text": "AGENTS.md gives Claude Code, Cursor, and OpenCode the same business rules and routes each task to its guides, decision logs, and ticket context. Skills I write for myself and the team take recurring work, such as PR-feedback triage, off the critical path."
+        }
+      ],
+      "icon": "generative_ai"
+    },
+    {
+      "label": "Full-Stack",
+      "value": [
+        {
+          "text": "TypeScript, React, Next.js, Vite, Redux, and Tailwind CSS on the front end; NestJS, Prisma, Drizzle ORM, and PostgreSQL on the back end; Python and SQL for data. Tests in Playwright, Vitest, and Jest."
         }
       ],
       "icon": "layers"
     },
     {
-      "label": "Architecture & Systems",
+      "label": "Architecture & Data",
       "value": [
         {
-          "text": "Microservices, event-driven systems, RabbitMQ, REST/OpenAPI (contract-first APIs), type-safe clients, cross-service integration"
+          "text": "Design multi-tenant SaaS and event-driven services (RabbitMQ) in Nx monorepos, with contract-first REST/OpenAPI, type-safe clients, and PostgreSQL models and migrations to match. RFCs and design reviews are how I lead that design."
         }
       ],
       "icon": "architecture"
     },
     {
+      "label": "CI/CD & Security",
+      "value": [
+        {
+          "text": "Each PR passes GitHub Actions tests and a throwaway preview before merge, and new client-facing features ship behind feature flags. Review is layered the same way: Greptile and Claude, backend and frontend reviewer agents I built, an AI security review on every push, plus secret scanning, SAST, dependency audit, and DAST."
+        }
+      ],
+      "icon": "build"
+    },
+    {
       "label": "Reliability & Operations",
       "value": [
         {
-          "text": "Incident management, production triage and mitigation, root cause analysis (RCA), runbooks, post-incident hardening, on-call rotations, Datadog (logs, monitors)"
+          "text": "On-call runs from triage and mitigation through RCA, runbooks, and post-incident hardening. Datadog, Sentry, and PostHog cover AWS, Docker, and Railway."
         }
       ],
       "icon": "monitoring"
-    },
-    {
-      "label": "Cloud & DevOps",
-      "value": [
-        {
-          "text": "AWS, Docker, Git, GitHub Actions, CI/CD, monitoring and alerting"
-        }
-      ],
-      "icon": "cloud"
-    },
-    {
-      "label": "Engineering Leadership",
-      "value": [
-        {
-          "text": "System design (RFCs), design reviews, product/engineering collaboration, analytics instrumentation (Heap), roadmap input, code reviews, mentoring distributed teams"
-        }
-      ],
-      "icon": "psychology"
-    },
-    {
-      "label": "Stakeholder & Delivery",
-      "value": [
-        {
-          "text": "Align non-technical stakeholders, manage upwards, and partner closely with product and design. Translate ambiguous requirements into scoped deliverables, surface tradeoffs early, and communicate risk before it becomes urgent. Comfortable in "
-        },
-        {
-          "text": "agile",
-          "bold": true
-        },
-        {
-          "text": " (sprints, standups, planning, retros); have led pilots, vendor demos, and post-incident reviews directly with customers and executives."
-        }
-      ],
-      "icon": "psychology"
-    },
-    {
-      "label": "AI in Practice",
-      "value": [
-        {
-          "text": "Force multiplier across the full SDLC, used every day. "
-        },
-        {
-          "text": "Cursor + agentic coding",
-          "bold": true
-        },
-        {
-          "text": " for feature scaffolding, refactors, and codebase navigation; "
-        },
-        {
-          "text": "AI-assisted code review",
-          "bold": true
-        },
-        {
-          "text": " to catch regressions before PR; "
-        },
-        {
-          "text": "debugging triage",
-          "bold": true
-        },
-        {
-          "text": " of incidents and stack traces; Production experience with OpenAI, Cursor, Cleric, Mendral, and Langbase; ML foundations in TensorFlow, PyTorch, Scikit-learn."
-        }
-      ],
-      "icon": "generative_ai"
     }
   ],
   "experience": [
     {
-      "role": "Senior Software Engineer (Contract)",
+      "role": "Senior Software Engineer",
+      "company": "Blackpoint Cyber",
+      "location": "Remote",
+      "startDate": "Aug 2026",
+      "endDate": "Present",
+      "current": true,
+      "bullets": [
+        [
+          {
+            "text": "Build and own billing services for a cybersecurity platform end to end, using "
+          },
+          {
+            "text": "Python",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Django",
+            "bold": true
+          },
+          {
+            "text": ", and "
+          },
+          {
+            "text": "Go",
+            "bold": true
+          },
+          {
+            "text": " on "
+          },
+          {
+            "text": "Kubernetes",
+            "bold": true
+          },
+          {
+            "text": "."
+          }
+        ],
+        [
+          {
+            "text": "Design and consume "
+          },
+          {
+            "text": "gRPC",
+            "bold": true
+          },
+          {
+            "text": " APIs and "
+          },
+          {
+            "text": "Kafka",
+            "bold": true
+          },
+          {
+            "text": " event streams between billing and other platform services, with a focus on secure, reliable handling of customer and usage data."
+          }
+        ],
+        [
+          {
+            "text": "Work with product, finance, and engineering teams to turn billing requirements into technical solutions, and break large initiatives into deliverable work in a fast-paced environment with multiple releases a day."
+          }
+        ],
+        [
+          {
+            "text": "Use agentic AI development workflows, including custom skills, sub-agents, context files, and MCP integrations, to speed up delivery and code quality across the team."
+          }
+        ]
+      ]
+    },
+    {
+      "role": "Fractional Tech Lead",
       "company": "ESGTree",
       "location": "Remote",
       "startDate": "Aug 2025",
@@ -180,14 +209,7 @@
       "bullets": [
         [
           {
-            "text": "Lead product engineering and full-stack development for a multi-tenant SaaS platform that helps financial institutions onboard SME portfolio companies, collect emissions data, and generate PCAF-aligned financed emissions reports. Stack: "
-          },
-          {
-            "text": "Vite",
-            "bold": true
-          },
-          {
-            "text": ", "
+            "text": "Lead product engineering for a multi-tenant SaaS platform that helps financial institutions onboard SME portfolio companies, collect emissions data, and produce PCAF-aligned financed emissions reports. Own architecture and delivery end to end across "
           },
           {
             "text": "React",
@@ -198,6 +220,13 @@
           },
           {
             "text": "TypeScript",
+            "bold": true
+          },
+          {
+            "text": ", "
+          },
+          {
+            "text": "Vite",
             "bold": true
           },
           {
@@ -234,92 +263,97 @@
         ],
         [
           {
-            "text": "Tech leadership:",
+            "text": "Idea to paid pilot to full rollout:",
             "bold": true
           },
           {
-            "text": " built the engineering team and set how it works. I direct architecture and delivery, and I set the working standard the team follows: how a change is scoped, reviewed, and tested before it ships. The same standard applies to the engineers and to the AI-assisted workflow."
+            "text": " took the product from idea to production in under 4 weeks with a team of 2. Won a competitive vendor demo with Desjardins, secured the paid pilot, and led the full-scale rollout, shipping a data-dense dashboard for portfolio analysts and a guided wizard for SMEs on a single backend."
           }
         ],
         [
           {
-            "text": "Idea to pilot to full-scale rollout:",
+            "text": "AI-assisted document parsing:",
             "bold": true
           },
           {
-            "text": " took the product from an idea to production in under 4 weeks with a team of 2. Won a competitive vendor demo with Desjardins, secured the paid pilot, and led the full-scale rollout. Led both a data-dense firm dashboard for portfolio analysts and a guided SME wizard on one backend, and built ingestion that fills emissions forms from CSV, Excel, and PDF through header matching, OpenAI extraction, validation, and human review."
+            "text": " uploads go to an S3 bucket and are parsed in parallel in the background, so users get pre-filled forms with almost no interruption. A provider-agnostic two-tier cascade tries a fast, low-cost model first and escalates to a stronger one only when confidence is low, keeping the UX seamless and token costs down."
           }
         ],
         [
           {
-            "text": "Platform architecture and data model:",
+            "text": "Agent-first planning:",
             "bold": true
           },
           {
-            "text": " led the move to modular "
-          },
-          {
-            "text": "NestJS",
-            "bold": true
-          },
-          {
-            "text": " with tenant-aware data access, session-based dual authentication, invitation flows, and bulk import. Established a database-driven activity model and hash-gated Excel seed system for 13 countries and bilingual English/French entry, so emissions factors and sector data update without code changes."
+            "text": " efficient, thorough scoping built for an agentic team: locked decision logs, a smallest-possible core before iterations, and tickets written so any engineer or coding agent can pick them up cold."
           }
         ],
         [
           {
-            "text": "CI and automated review:",
+            "text": "Team development and engineering standard:",
             "bold": true
           },
           {
-            "text": " split GitHub Actions into typecheck/build, client unit, backend unit, backend e2e on "
+            "text": " joined a team with no CI experience and no automated testing, and coached it into a disciplined engineering team by leading from the front: I set the working agreement ("
           },
           {
-            "text": "Postgres 16",
+            "text": "AGENTS.md and "
+          },
+          {
+            "text": "REVIEW.md) and held my own PRs to it. Introduced CI on "
+          },
+          {
+            "text": "GitHub Actions",
             "bold": true
           },
           {
-            "text": ", and "
+            "text": ", automated unit, e2e, and "
           },
           {
             "text": "Playwright",
             "bold": true
           },
           {
-            "text": ". Draft PRs skip CI, path filters drop irrelevant runs, and a new push cancels the in-progress run. A lockfile check blocks Replit's internal npm proxy. E2E uses a fake email transport and dummy secrets, with the feature-flag-off path as its own step. PRs stay draft until ready: a Claude code review runs once, a security review re-runs on every push, and cheaper backend and frontend agents review only new commits against "
-          },
-          {
-            "text": "REVIEW.md."
-          }
-        ],
-        [
-          {
-            "text": "Ephemeral previews and reliability:",
-            "bold": true
-          },
-          {
-            "text": " every pull request gets a throwaway "
+            "text": " tests, and a throwaway "
           },
           {
             "text": "Railway",
             "bold": true
           },
           {
-            "text": " app and Postgres, destroyed on close and isolated from production on Replit. Pre-deploy migrates, seeds 13 countries, then nine logins covering lender, fund-manager, SME, and agriculture flows. Seeding is identity-gated so the protected base environment is skipped, and a misconfigured target fails the deploy. Grew the suite to 300+ test files across unit, integration, backend e2e, and Playwright. Shipped client-facing work behind "
+            "text": " preview per PR for hands-on verification. Turned each production incident into a written rule enforced in review, so the same mistake is caught once."
+          }
+        ],
+        [
+          {
+            "text": "Defense-in-depth AI review:",
+            "bold": true
+          },
+          {
+            "text": " built layered automated review in CI: a one-time Claude code review, a Claude security review on every push, custom backend and frontend review agents on a lower-cost model, off-the-shelf Greptile, and security scans (gitleaks, Semgrep, dependency audit, OWASP ZAP)."
+          }
+        ],
+        [
+          {
+            "text": "Observability and safe releases:",
+            "bold": true
+          },
+          {
+            "text": " "
           },
           {
             "text": "PostHog",
             "bold": true
           },
           {
-            "text": " feature flags, with "
+            "text": " for error tracking, logs, and feature flags, with "
           },
           {
             "text": "Sentry",
             "bold": true
           },
           {
-            "text": " and PostHog error tracking, and a startup path that binds the port before migrations so a bad deploy serves 503 while the database catches up."
+            "text": " alongside. New client-facing features ship behind flags, so rollback is easy and deployments are safe."
           }
         ]
       ]
@@ -329,18 +363,11 @@
       "company": "LaunchGood",
       "location": "Remote",
       "startDate": "Mar 2022",
-      "endDate": "Sep 2026",
+      "endDate": "Nov 2026",
       "bullets": [
         [
           {
-            "text": "Ship full-stack features for a global fundraising marketplace powering one-time donations and recurring giving across 150+ countries. Work across an "
-          },
-          {
-            "text": "Nx monorepo",
-            "bold": true
-          },
-          {
-            "text": " of 23 services and 17 shared libraries using "
+            "text": "Built full-stack features for a global fundraising marketplace that powers one-time and recurring donations across 150+ countries. Worked across "
           },
           {
             "text": "Next.js",
@@ -403,7 +430,14 @@
             "bold": true
           },
           {
-            "text": "."
+            "text": ", in an "
+          },
+          {
+            "text": "Nx",
+            "bold": true
+          },
+          {
+            "text": " monorepo of 23 services and 17 shared libraries."
           }
         ],
         [
@@ -412,152 +446,34 @@
             "bold": true
           },
           {
-            "text": " delivered subscription guest checkout end-to-end in 1 week as a leadership priority, building the Next.js, Redux, Tailwind, and NestJS flow for subscription creation and one-click account completion. Identified security risks in the initial proposal and implemented safer alternatives. After launch, over 50% of new subscribers used guest checkout, improving conversions by ~40%."
+            "text": " Shipped a leadership priority in one week: guest subscription creation and one-click account completion. Pushed back on security risks in the first proposal and shipped a safer design. Over 50% of new subscribers used guest checkout after launch, and conversion improved by ~40%."
           }
         ],
         [
           {
-            "text": "Recurring-giving enrollment funnels:",
+            "text": "Recurring-giving enrollment:",
             "bold": true
           },
           {
-            "text": " led the donor enrollment flow for scheduled giving programs, replacing the legacy experience with shared amount, review, and giving-grid screens and a mobile currency drawer. Added program-specific state and impact widgets, fixed guest-checkout and referral routing, and moved shared enrollment cards out of React context so new programs could reuse the same route pattern. Kept multi-step subscription state in "
-          },
-          {
-            "text": "Redux",
-            "bold": true
-          },
-          {
-            "text": " behind a server-rendered app shell for faster initial loads."
+            "text": " Led enrollment for scheduled-giving programs and replaced the legacy flow with one shared path: amount, review, and giving-grid screens, a mobile currency drawer, and program-specific impact widgets. Moved shared enrollment cards out of React context so new programs reuse one route, and kept multi-step state in Redux behind a server-rendered shell for faster initial loads."
           }
         ],
         [
           {
-            "text": "Heart & Soul design system:",
+            "text": "Profiling Engine:",
             "bold": true
           },
           {
-            "text": " took the shared component library from an idea to a published private package, "
-          },
-          {
-            "text": "@launchgood/heart-and-soul",
-            "bold": true
-          },
-          {
-            "text": ", through an RFC, a component-by-component plan, and implementation. The RFC set Figma as the source of truth, plain "
-          },
-          {
-            "text": "Tailwind CSS",
-            "bold": true
-          },
-          {
-            "text": ", and a Button pilot before a wider rewrite. Shipped Button, Chip, Campaign Card, Counter, Skeleton, Progress, Switch, Checkbox, Radio, Tabs, and Dropdown with "
-          },
-          {
-            "text": "Storybook",
-            "bold": true
-          },
-          {
-            "text": ", "
-          },
-          {
-            "text": "Vitest",
-            "bold": true
-          },
-          {
-            "text": ", "
-          },
-          {
-            "text": "Playwright",
-            "bold": true
-          },
-          {
-            "text": ", and CI. The product app installs the package, and Button is live on the campaign report drawer."
+            "text": " Turned an ambiguous ask for pageviews and time on route into the plan the build followed: which pageviews count, how a session becomes a user, the BigQuery facts, and who may read them. Shipped it as an hourly PostHog export, campaign pageview facts and per-route duration, an identity map that keeps pre-login views on the user, and a read API for the caller, the campaign owner, and an audited admin route behind a feature flag."
           }
         ],
         [
           {
-            "text": "Server-rendered campaign pages:",
+            "text": "SSR SEO / AEO:",
             "bold": true
           },
           {
-            "text": " found that campaign routes returned about 160 bytes of HTML until JavaScript ran, so search and answer-engine crawlers indexed empty pages. Removed the client-only gate so campaign stories render in the first response, and fixed hydration mismatches that showed goals as 0 USD and raised amounts about 100 below the true figure."
-          }
-        ],
-        [
-          {
-            "text": "Campaign profiling engine:",
-            "bold": true
-          },
-          {
-            "text": " turned an ambiguous request for pageview and time-on-route metrics into a v1 plan covering session-to-user identity, which pageviews count, "
-          },
-          {
-            "text": "BigQuery",
-            "bold": true
-          },
-          {
-            "text": " fact tables, and the read API contract. Moved the "
-          },
-          {
-            "text": "PostHog",
-            "bold": true
-          },
-          {
-            "text": " BigQuery export from a daily snapshot to hourly, and carried the metrics API through campaign-service queries, RPC DTOs, and a REST facade into review."
-          }
-        ],
-        [
-          {
-            "text": "Product analytics:",
-            "bold": true
-          },
-          {
-            "text": " restored production "
-          },
-          {
-            "text": "PostHog",
-            "bold": true
-          },
-          {
-            "text": " on the marketing site after autocapture fell to about 0.05 events per pageview, fixing capture so traffic reported again through the first-party proxy. Integrated the "
-          },
-          {
-            "text": "Customer.io",
-            "bold": true
-          },
-          {
-            "text": " web SDK behind "
-          },
-          {
-            "text": "CookieYes",
-            "bold": true
-          },
-          {
-            "text": " consent. Earlier, defined the "
-          },
-          {
-            "text": "Heap",
-            "bold": true
-          },
-          {
-            "text": " event model for checkout, subscription funnels, A/B experiments, and failure points used to validate launches."
-          }
-        ],
-        [
-          {
-            "text": "On-call and incident management:",
-            "bold": true
-          },
-          {
-            "text": " turned website support from one-off Slack threads into a repeatable triage practice, including a Cursor workflow that joins each request to its ticket and an investigation view for the next on-call. Carried product-caused incidents through to root-cause fixes: cut bulk-billing database load that was pushing CPU over 85% on runs of about 6,800 subscriptions, traced a facade SLO burn to a "
-          },
-          {
-            "text": "Redis",
-            "bold": true
-          },
-          {
-            "text": " auth failure in payout-service after a deploy, and shipped a campaign-update delete API so support could remove an update without a one-off database change."
+            "text": " Server-rendered campaign stories in the first HTML response so search and answer engines could index them. Those routes had been returning about 160 bytes until JavaScript ran, and the same render corrected hydration that showed goals as 0 USD and raised amounts about 100 below the true figure."
           }
         ],
         [
@@ -566,32 +482,25 @@
             "bold": true
           },
           {
-            "text": " built social-media-style public profile pages for partners and influencers, along with companion admin dashboards for engagement and audience insights. Owned end-to-end delivery across Next.js, NestJS services, database schema design, REST APIs, and automated tests covering critical paths."
+            "text": " Built social-style public profiles for partners and influencers and the admin dashboards for engagement and audience insights, from schema design and REST APIs through the Next.js UI and tests for critical paths."
           }
         ],
         [
           {
-            "text": "Proactive Retool operations tooling:",
+            "text": "Design system:",
             "bold": true
           },
           {
-            "text": " built internal tools without a formal request, including a donor lookup console aggregating transactions, subscriptions, failed charges, and recharge actions across multiple data sources. Shipped scheduled-giving KPI dashboards with hourly breakdowns for scheduled, processing, succeeded, and failed donations, reducing on-call billing triage from hours to minutes."
+            "text": " Took a set of Figma files through a plan, a build, and a publish. An RFC set the decisions, a component-by-component plan turned them into tickets, and the build shipped @launchgood/heart-and-soul as a private GitHub Package: source TypeScript and Tailwind, 26 components, Storybook, Vitest, and Playwright. Designers review each component in Storybook and send fixes back to the agent until they mark it ready to ship."
           }
         ],
         [
           {
-            "text": "Event-driven microservices:",
+            "text": "Self-led initiatives:",
             "bold": true
           },
           {
-            "text": " implemented and maintained "
-          },
-          {
-            "text": "RabbitMQ",
-            "bold": true
-          },
-          {
-            "text": " producers and consumers across donation, charge, payout, settlement, and notification domains, keeping async service boundaries explicit through publisher-owned exchanges and consumer-owned queues."
+            "text": " Turned manual runbooks into Retool apps and manual processes into agentic skills. Donor lookup and scheduled-giving dashboards cut billing triage from hours to minutes, and a triage skill ties each website-support request to its ticket and leaves an investigation view for the next on-call."
           }
         ]
       ]

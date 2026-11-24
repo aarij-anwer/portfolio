@@ -29,6 +29,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # Fast feedback: resume.tex parser and fallback unit tests, before the full build.
       - run: pnpm test
 
       # typecheck + client build + SSR build + prerender (parses resume.tex).
