@@ -35,8 +35,12 @@ jobs:
       - name: Check generated output
         run: |
           set -e
-          for f in index.html resume/index.html sitemap.xml robots.txt; do
+          for f in index.html resume.html projects.html 404.html llms.txt llms-full.txt resume.md robots.txt sitemap.xml; do
             test -s "dist/$f" || { echo "::error::missing dist/$f"; exit 1; }
           done
-          # resume.tex content must be pre-rendered into the static HTML
-          grep -q 'Professional Experience' dist/resume/index.html
+          # resume.tex content must be pre-rendered into the static HTML,
+          # with no raw LaTeX leaking through the parser
+          grep -q 'Professional Experience' dist/resume.html
+          if grep -nE '\\[a-zA-Z]+\{|\$\\' dist/index.html dist/resume.html dist/resume.md dist/llms.txt; then
+            echo "::error::raw LaTeX found in generated output"; exit 1
+          fi

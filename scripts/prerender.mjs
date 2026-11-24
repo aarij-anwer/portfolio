@@ -23,11 +23,13 @@ if (!template.includes("<!--app-html-->") || !template.includes("<!--app-head-->
   );
 }
 
-// Map a route path to the file written under dist/ (pretty URLs: a route
-// becomes <route>/index.html, served by Netlify at the clean path).
+// Map a route path to the file written under dist/. A route becomes
+// <route>.html (not <route>/index.html): Netlify serves /resume from
+// resume.html with a 200, whereas a directory index forces a 301 to /resume/,
+// which would contradict the canonical URLs and sitemap (no trailing slash).
 function outputFile(route) {
   if (route === "/") return join(distDir, "index.html");
-  return join(distDir, route.replace(/^\//, ""), "index.html");
+  return join(distDir, `${route.replace(/^\//, "")}.html`);
 }
 
 function renderPage(route) {
