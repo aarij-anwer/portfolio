@@ -30,6 +30,18 @@ const contactLine = (resume: ParsedResume) =>
     })
     .join(' · ');
 
+const winsSection = (resume: ParsedResume, siteUrl: string) =>
+  resume.wins.length
+    ? `## Recent wins\n\n${resume.wins
+        .map((win) => {
+          const title = win.href
+            ? `[${win.stat}: ${win.title}](${win.href.startsWith('/') ? siteUrl + win.href : win.href})`
+            : `**${win.stat}: ${win.title}**`;
+          return `- ${title}: ${win.description}`;
+        })
+        .join('\n')}\n\n`
+    : '';
+
 export function resumeToMarkdown(resume: ParsedResume, siteUrl: string): string {
   const lines: string[] = [
     `# ${resume.name}`,
@@ -89,7 +101,7 @@ Current roles: ${resume.experience
     .join('; ')}.
 Contact: ${contactLine(resume)}
 
-## Resume
+${winsSection(resume, siteUrl)}## Resume
 
 - [Resume (HTML)](${siteUrl}/resume): Full resume — competencies, experience, education
 - [Resume (Markdown)](${siteUrl}/resume.md): The same resume as plain Markdown
@@ -110,7 +122,7 @@ ${projects
 
 export function buildLlmsFullTxt(resume: ParsedResume, projects: ProjectSummary[], siteUrl: string): string {
   return `${resumeToMarkdown(resume, siteUrl)}
-## Projects
+${winsSection(resume, siteUrl)}## Projects
 
 ${projects
   .map(

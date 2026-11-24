@@ -191,6 +191,30 @@ export function profilePageJsonLd(path: string, name: string): JsonLd {
   };
 }
 
+// The home page's Recent Wins cards, as a list of the work they point to.
+// schema.org has no "achievement" type, so each win is a CreativeWork by the Person.
+export function recentWinsJsonLd(
+  wins: Array<{ stat: string; title: string; description: string; href?: string }>,
+): JsonLd {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Recent wins',
+    url: absoluteUrl('/'),
+    itemListElement: wins.map((win, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'CreativeWork',
+        name: `${win.stat}: ${win.title}`,
+        description: win.description,
+        ...(win.href ? { url: absoluteUrl(win.href) } : {}),
+        author: personRef(),
+      },
+    })),
+  };
+}
+
 export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>): JsonLd {
   return {
     '@context': 'https://schema.org',

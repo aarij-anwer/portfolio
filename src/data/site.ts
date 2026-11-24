@@ -1,5 +1,13 @@
 import type { NavLink, ProjectDetail, ProjectSummary, SocialLinks } from '@/lib/types';
 import { contactHref, parsedResume, summaryParagraphs, truncateText } from '@/lib/resume';
+import { staticRoutes } from '@/lib/staticRoutes';
+
+// Fail the build if a Recent Wins card links to a page that doesn't exist.
+parsedResume.wins.forEach((win) => {
+  if (win.href?.startsWith('/') && !staticRoutes.includes(win.href)) {
+    throw new Error(`resume.tex: "web:win" card "${win.title}" links to ${win.href}, which is not a site route`);
+  }
+});
 
 // Identity, headline, summary and contact details come from public/resume.tex
 // (the single source of truth). Only curated, web-only content lives here.
@@ -33,29 +41,8 @@ export const homeContent = {
   paragraphs: parsedResume.summary.paragraphs,
   description: summaryLead,
   howIWork: summaryRest.join(' '),
-  recentWins: [
-    {
-      stat: '1 week',
-      title: 'Guest checkout, shipped',
-      description:
-        'End-to-end at LaunchGood. >50% of new subscribers adopted it, lifting conversions ~40%. Staple feature for onboarding and acquisition ever since.',
-      href: '/projects/launchgood',
-    },
-    {
-      stat: '0 → 1',
-      title: 'MVP wins demo',
-      description:
-        'Built and led an emissions calculation platform from prototype to production, helping client win Desjardins demo.',
-      href: '/projects/esg-financed-emissions',
-    },
-    {
-      stat: '100% AI',
-      title: 'Get Better Together',
-      description:
-        'Designed and shipped a social fitness app end-to-end using AI agents featuring leaderboards, user auth and an anonymous guest mode that lets users join challenges in seconds.',
-      href: '/projects/get-better-together',
-    },
-  ],
+  /** Recent Wins cards: the `% web:win` lines in resume.tex. */
+  recentWins: parsedResume.wins,
   portrait: {
     src: '/muhammad-anwer.webp',
     width: 640,
@@ -174,7 +161,7 @@ export const getBetterTogetherProject: ProjectDetail = {
 export const launchgoodProject: ProjectDetail = {
   slug: 'launchgood',
   title: 'LaunchGood',
-  seoTitle: 'LaunchGood: Guest Checkout & Recurring Giving',
+  seoTitle: 'LaunchGood: Guest Checkout, Design System & Recurring Giving',
   eyebrow: 'Back to Projects',
   summary:
     'A global fundraising marketplace connecting fundraisers and donors, powering one-time donations and recurring giving at scale across 150+ countries.',
@@ -211,94 +198,77 @@ export const launchgoodProject: ProjectDetail = {
     },
   ],
   overview: [
-    'At LaunchGood, I ship full-stack features for a global fundraising marketplace serving millions of donors and tens of thousands of fundraisers each year. A key leadership priority was delivering a guest checkout for subscriptions end-to-end in one week. During this, I identified security vulnerabilities in the initial proposal and implemented safer alternatives. After launch, over 50% of new subscribers used guest checkout, improving conversions by ~40%.',
-    'I led the technical direction for multi-step subscription funnels, utilizing an app-shell pattern for performance, and built follower-facing public profiles with companion admin dashboards backed by NestJS microservices and REST APIs. The work spans an NX monorepo of 23 services and 17 shared libraries, with RabbitMQ powering async messaging between domains like donations, payouts, settlements, and notifications.',
-    'Beyond feature development, I drove operational improvements by proactively building custom Retool dashboards for on-call triage, defining end-to-end Heap product analytics, and leading incident response and system design reviews across the platform. I also contributed to the migration toward a client-library pattern that centralizes per-service RPC contracts, DTOs, and Prisma schemas, reducing cross-service coupling.',
-    'Day to day, I partner closely with product and design to translate ambiguous goals into shipped software: writing RFCs for non-trivial changes, gating releases through CI checks in a conventional-commits workflow, and mentoring teammates on testing, observability, and safe rollouts.',
+    'From March 2022 to September 2026 I shipped full-stack features for LaunchGood, a global fundraising marketplace powering one-time donations and recurring giving across 150+ countries. The work spanned an Nx monorepo of 23 services and 17 shared libraries: Next.js, React, Redux and Tailwind CSS on the front end, NestJS, Prisma and PostgreSQL behind it, and RabbitMQ between domains like donations, payouts, settlements and notifications.',
+    'A leadership priority was subscription guest checkout, which I delivered end-to-end in one week. I identified security risks in the initial proposal and implemented safer alternatives. After launch, over 50% of new subscribers used guest checkout, improving conversions by ~40%. I went on to lead the recurring-giving enrollment funnels, replacing the legacy flow with shared amount, review and giving-grid screens behind a server-rendered app shell.',
+    'I also took the shared component library from an idea to a published package, Heart & Soul (@launchgood/heart-and-soul): an RFC, a component-by-component plan, and 11 components with Storybook, Vitest, Playwright and CI. Separately, I found that campaign pages returned about 160 bytes of HTML before JavaScript ran, so search and answer-engine crawlers indexed empty pages, and moved them to server rendering.',
+    'Beyond features, I owned operational quality: a repeatable on-call triage practice, root-cause fixes for production incidents, Retool tooling that cut billing triage from hours to minutes, and product analytics across PostHog, Heap and Customer.io that the team used to validate launches.',
   ],
   features: [
     {
-      title: 'Guest Checkout & Onboarding Funnels',
+      title: 'Guest Checkout & Enrollment Funnels',
       description:
-        'Delivered guest checkout in one week, securing vulnerabilities surfaced during design review. Implemented multi-step funnels with Next.js and Redux, improving load times via an app-shell pattern and code-split routes.',
+        'Delivered subscription guest checkout in one week with one-click account completion, replacing risky parts of the original proposal with safer alternatives. Led the recurring-giving enrollment flow: shared amount, review and giving-grid screens, a mobile currency drawer, and Redux state behind a server-rendered app shell.',
       icon: 'credit-card',
     },
     {
-      title: 'Public Profiles & Recurring Dashboards',
+      title: 'Heart & Soul Design System',
       description:
-        'Built social-media-style public profiles and admin dashboard views for charities to manage recurring programs, fully backed by Jest + React Testing Library suites and REST APIs over NestJS services.',
-      icon: 'users',
+        'Took the shared component library from RFC to a published private package: Figma as the source of truth, plain Tailwind CSS, and a Button pilot before a wider rewrite. Shipped 11 components (Button, Chip, Campaign Card, Tabs, Dropdown and more) with Storybook, Vitest, Playwright and CI.',
+      icon: 'palette',
     },
     {
-      title: 'Proactive Operational Tooling (Retool)',
+      title: 'Server-Rendered Campaign Pages',
       description:
-        'Built internal dashboards without formal request, delivering a donor lookup console and scheduled-giving KPIs that let on-call engineers identify spikes and triage billing issues in minutes instead of hours.',
-      icon: 'layout',
+        'Campaign routes returned about 160 bytes of HTML until JavaScript ran, so crawlers indexed empty pages. Removed the client-only gate so campaign stories render in the first response, and fixed hydration mismatches that showed goals as 0 USD and raised amounts below the true figure.',
+      icon: 'search',
     },
     {
-      title: 'Incident Response & System Design',
+      title: 'Campaign Profiling & Product Analytics',
       description:
-        'Led production triage using Datadog and AWS, authored runbooks to standardize mitigation, and contributed to system design via RFCs covering subscription billing, settlements, and event-driven messaging.',
+        'Turned an ambiguous metrics request into a v1 plan: identity, pageview rules, BigQuery fact tables and a read API. Moved the PostHog BigQuery export from daily to hourly, restored PostHog capture on the marketing site, added Customer.io behind CookieYes consent, and defined the Heap event model for checkout funnels and A/B tests.',
+      icon: 'bar-chart-2',
+    },
+    {
+      title: 'On-Call & Incident Management',
+      description:
+        'Turned website support into a repeatable triage practice and carried incidents to root-cause fixes: cut bulk-billing database load that pushed CPU over 85%, traced an SLO burn to a Redis auth failure after a deploy, and built Retool consoles that cut billing triage from hours to minutes.',
       icon: 'activity',
     },
     {
-      title: 'Event-Driven Microservices',
+      title: 'Public Profiles & Event-Driven Services',
       description:
-        'Implemented RabbitMQ producers/consumers across donation, charge, payout, and notification services, with publisher-owned exchanges and consumer-owned queues to keep contracts explicit.',
-      icon: 'share-2',
-    },
-    {
-      title: 'Product Analytics & Experimentation',
-      description:
-        'Defined end-to-end Heap analytics for checkout and subscription funnels, instrumented A/B experiments, and partnered with growth to convert insights into prioritized roadmap bets.',
-      icon: 'bar-chart-2',
+        'Built social-media-style public profiles and partner dashboards end-to-end, and maintained RabbitMQ producers and consumers across donation, charge, payout, settlement and notification services with publisher-owned exchanges and consumer-owned queues.',
+      icon: 'users',
     },
   ],
   metrics: [
     'Delivered an end-to-end subscription guest checkout in 1 week (leadership priority).',
-    'Improved subscription conversions by ~40%, with >50% of new subscribers utilizing guest checkout.',
-    'Reduced on-call billing triage time from hours to minutes via custom Retool donor-lookup tooling.',
-    'Coordinated CI-gated monorepo releases across 23 services and mitigated regression risks through rigorous design and code reviews.',
-    'Authored and led RFCs adopted as the standard for recurring-giving and settlement workflows.',
+    'Improved subscription conversions by ~40%, with >50% of new subscribers using guest checkout.',
+    'Took the Heart & Soul design system from RFC to a published package with 11 tested components.',
+    'Fixed campaign pages that served about 160 bytes of HTML to crawlers by moving them to server rendering.',
+    'Cut bulk-billing database load that pushed CPU over 85% on runs of about 6,800 subscriptions.',
+    'Reduced on-call billing triage from hours to minutes with Retool donor-lookup and KPI tooling.',
   ],
   techStack: [
     {
       label: 'Frontend',
-      items: [
-        'Next.js (React)',
-        'Redux',
-        'Tailwind CSS',
-        'TypeScript',
-        'Jest',
-        'React Testing Library',
-      ],
+      items: ['Next.js (React)', 'Redux', 'Tailwind CSS', 'TypeScript', 'Storybook'],
     },
     {
       label: 'Backend',
-      items: [
-        'NestJS',
-        'Prisma',
-        'PostgreSQL',
-        'REST APIs',
-        'OpenAPI',
-        'Node.js',
-      ],
+      items: ['NestJS', 'Prisma', 'PostgreSQL', 'Redis', 'REST APIs', 'OpenAPI', 'Node.js'],
     },
     {
       label: 'Infrastructure & Ops',
-      items: [
-        'AWS',
-        'RabbitMQ',
-        'Datadog',
-        'GitHub Actions',
-        'NX Monorepo',
-        'Docker',
-        'Incident.io',
-      ],
+      items: ['AWS', 'RabbitMQ', 'Datadog', 'GitHub Actions', 'Nx Monorepo', 'Docker', 'Incident.io'],
     },
     {
-      label: 'Tools',
-      items: ['Heap Analytics', 'Retool', 'Cursor', 'Cleric'],
+      label: 'Testing',
+      items: ['Jest', 'React Testing Library', 'Vitest', 'Playwright'],
+    },
+    {
+      label: 'Data & Tools',
+      items: ['PostHog', 'BigQuery', 'Heap', 'Customer.io', 'Retool', 'Cursor'],
     },
   ],
   actions: [
@@ -313,10 +283,10 @@ export const launchgoodProject: ProjectDetail = {
 export const esgProject: ProjectDetail = {
   slug: 'esg-financed-emissions',
   title: 'ESGTree Financed Emissions',
-  seoTitle: 'ESGTree Financed Emissions Platform',
+  seoTitle: 'ESGTree Financed Emissions: Idea to Full-Scale Rollout',
   eyebrow: 'Back to Projects',
   summary:
-    'An enterprise platform for calculating and reporting financed emissions for banks, portfolio managers and their SME portfolio companies.',
+    'A multi-tenant platform for calculating and reporting PCAF-aligned financed emissions for banks, portfolio managers and their SME portfolio companies. Idea to paid pilot in under 4 weeks, then a full-scale rollout.',
   heroImage: {
     src: '/projects/esg.webp',
     width: 1280,
@@ -368,15 +338,16 @@ export const esgProject: ProjectDetail = {
     },
   ],
   overview: [
-    'ESGTree is a multi-tenant SaaS platform that helps financial firms onboard SME portfolio companies, collect emissions data, and generate PCAF-aligned financed emissions reports. It serves two distinct personas through separate interfaces: a data-dense firm dashboard for analysts and a guided step-by-step wizard for SME users entering their own emissions data.',
-    'I led full AI-driven development of a full-stack MVP from prototype to production in under 4 weeks, guiding a team of 2 engineers and owning architecture and delivery. I made deliberate tradeoffs to prioritize speed and validation. The product won a competitive vendor demo with Desjardins, securing a paid pilot with onboarding in progress.',
-    'After validating product-market fit, I led a backend refactor to NestJS to introduce modular architecture, enforce clear boundaries, and improve reliability and data integrity. This included migrating to Drizzle ORM, adding session-based dual authentication (Replit OIDC and email/password), establishing a database-driven emissions activity model, and building a 400+ test suite covering unit, integration, and E2E flows — transitioning the system from a rapid prototype to a production-grade platform.',
+    'ESGTree is a multi-tenant SaaS platform that helps financial institutions onboard SME portfolio companies, collect emissions data, and generate PCAF-aligned financed emissions reports. It serves two personas from one backend: a data-dense firm dashboard for portfolio analysts and a guided step-by-step wizard for SMEs entering their own data.',
+    'As Senior Software Engineer (contract) since August 2025, I built the engineering team and lead architecture and delivery. With a team of 2, I took the product from an idea to production in under 4 weeks, making deliberate tradeoffs for speed and validation. It won a competitive vendor demo with Desjardins, secured a paid pilot, and I then led the full-scale rollout.',
+    'To move from prototype to production platform, I led a refactor to modular NestJS with tenant-aware data access, Drizzle ORM, session-based dual authentication, invitation flows and bulk import, plus a database-driven activity model and an Excel seed system for 13 countries in English and French.',
+    'I also set how the team ships. CI runs typecheck, unit, backend e2e on Postgres 16 and Playwright, with AI code and security review on every pull request. Every PR gets a throwaway Railway preview with its own database, the suite has grown to 300+ test files, and client-facing work ships behind PostHog feature flags with Sentry error tracking.',
   ],
   features: [
     {
-      title: 'AI-Driven 0→1 MVP Delivery',
+      title: 'Idea to Paid Pilot to Rollout',
       description:
-        'Led full AI-driven development of a full-stack MVP from prototype to production in under 4 weeks, making deliberate tradeoffs to prioritize speed and validation. Won a competitive vendor demo with Desjardins, securing a paid pilot.',
+        'Took the product from an idea to production in under 4 weeks with a team of 2. Won a competitive vendor demo with Desjardins, secured the paid pilot, and led the full-scale rollout.',
       icon: 'rocket',
     },
     {
@@ -386,48 +357,48 @@ export const esgProject: ProjectDetail = {
       icon: 'calculator',
     },
     {
-      title: 'AI-Powered Document Parsing',
+      title: 'AI-Powered Document Ingestion',
       description:
-        'SMEs can upload CSV, Excel, or PDF files to auto-populate emissions forms. A multi-stage pipeline extracts data via header matching or OpenAI, then applies post-AI validation with human-in-the-loop verification before acceptance.',
+        'SMEs upload CSV, Excel, or PDF files to fill emissions forms. A multi-stage pipeline extracts data through header matching or OpenAI, validates it, and sends it for human review before acceptance.',
       icon: 'file-scan',
     },
     {
       title: 'Dual-Interface Product Design',
       description:
-        "Designed two tailored interfaces from a single backend: a data-dense firm dashboard for portfolio analysts and a guided step-by-step wizard for SME data entry — each optimized for its persona's workflow and context.",
+        "Two tailored interfaces from a single backend: a data-dense firm dashboard for portfolio analysts and a guided step-by-step wizard for SME data entry, each built for its persona's workflow.",
       icon: 'layout',
     },
     {
-      title: 'Modular Backend Architecture',
+      title: 'Modular Multi-Tenant Architecture',
       description:
-        'Led a backend refactor to NestJS to introduce modular architecture, enforce clear tenant boundaries, and improve reliability and data integrity. Established a database-driven activity model so emissions categories can be updated without code changes.',
+        'Led the move to modular NestJS with tenant-aware data access, session-based dual authentication, invitation flows and bulk import. A database-driven activity model and hash-gated Excel seeds for 13 countries and bilingual entry let emissions factors change without code changes.',
       icon: 'layers',
     },
     {
-      title: 'Multi-Country & Bilingual Support',
+      title: 'CI, AI Review & Preview Environments',
       description:
-        'Supports 13 countries and bilingual (French/English) data entry. Emissions factors and sector data are seeded from Excel workbooks via a hash-gated system — changes to source data propagate automatically on deploy without code changes.',
-      icon: 'globe',
+        'Split GitHub Actions into typecheck/build, unit, backend e2e on Postgres 16, and Playwright, with path filters and cancel-on-push. A Claude code review and a security review run on pull requests, and every PR gets an isolated Railway app and database, seeded with test logins for each user type.',
+      icon: 'git-pull-request',
     },
     {
-      title: 'End-to-End System Ownership',
+      title: 'Safe Releases & Observability',
       description:
-        'Designed the multi-tenant data model, session-based dual auth (Replit OIDC + email/password), invitation flows, bulk import pipeline, and a 400+ test suite across 15 files covering unit, integration, and E2E scenarios.',
-      icon: 'cpu',
+        'Grew the suite to 300+ test files across unit, integration, backend e2e and Playwright. Client-facing work ships behind PostHog feature flags with Sentry error tracking, and the server binds its port before migrations so a bad deploy serves 503 while the database catches up.',
+      icon: 'shield',
     },
   ],
   metrics: [
-    'Led full AI-driven development of a full-stack MVP from prototype to production in under 4 weeks.',
-    'Won a competitive vendor demo with Desjardins, securing a paid pilot with onboarding in progress.',
-    'Transitioned the system from a rapid prototype to a production-grade platform by leading a NestJS backend refactor.',
-    '400+  tests across 15 test files covering unit, integration, and E2E flows.',
-    '5 emissions activity types across Scope 1, 2, and 3 with PCAF-aligned attribution calculations.',
-    '13 countries supported via a hash-gated, Excel-driven seed system — zero code changes required to update emissions factors.',
+    'Took the product from idea to production in under 4 weeks with a team of 2.',
+    'Won a competitive vendor demo with Desjardins, secured the paid pilot, and led the full-scale rollout.',
+    'Built the engineering team and set its scoping, review, and testing standard.',
+    '300+ test files across unit, integration, backend e2e, and Playwright.',
+    'An isolated Railway preview app and database for every pull request.',
+    '13 countries and bilingual (EN/FR) entry via a hash-gated, Excel-driven seed system: no code changes to update emissions factors.',
   ],
   techStack: [
     {
       label: 'Frontend',
-      items: ['Vite (React 18)', 'TypeScript', 'Tailwind CSS'],
+      items: ['Vite', 'React', 'TypeScript', 'Tailwind CSS'],
     },
     {
       label: 'Backend',
@@ -438,8 +409,12 @@ export const esgProject: ProjectDetail = {
       items: ['OpenAI (document parsing)', 'Resend (email)', 'Replit OIDC'],
     },
     {
-      label: 'Testing',
-      items: ['Vitest', '400+ tests — unit, integration, E2E'],
+      label: 'Testing & Delivery',
+      items: ['Vitest', 'Playwright', 'GitHub Actions', 'Railway previews', 'Claude code review'],
+    },
+    {
+      label: 'Observability',
+      items: ['PostHog (feature flags, errors)', 'Sentry'],
     },
     {
       label: 'Focus',
@@ -540,7 +515,7 @@ export const projects: ProjectSummary[] = [
     slug: 'launchgood',
     title: 'LaunchGood',
     summary:
-      'Ship features for a global fundraising marketplace. Deliver high-impact features quickly, e.g. guest checkout in one week, improving conversions by ~40%.',
+      'Shipped features for a global fundraising marketplace (2022-2026): guest checkout in one week (~40% conversion lift), the Heart & Soul design system, and server-rendered campaign pages.',
     tags: [
       'Next.js',
       'React',
@@ -566,7 +541,7 @@ export const projects: ProjectSummary[] = [
     slug: 'esg-financed-emissions',
     title: 'ESGTree Financed Emissions',
     summary:
-      'Led AI-driven MVP development for an emissions platform in under 4 weeks, winning a pilot with Desjardins. Now leading a full rollout.',
+      'Took a financed-emissions platform from idea to production in under 4 weeks with a team of 2, won a paid pilot with Desjardins, and led the full-scale rollout.',
     tags: [
       'React',
       'Vite',

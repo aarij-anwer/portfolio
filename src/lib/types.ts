@@ -98,12 +98,22 @@ export type ResumeSummary = {
   paragraphs: ResumeTextSegment[][];
 };
 
+/** A home page "Recent Wins" card, from a `% web:win` line in resume.tex. */
+export type ResumeWin = {
+  stat: string;
+  title: string;
+  description: string;
+  /** Site path (e.g. /projects/launchgood) or absolute URL. */
+  href?: string;
+};
+
 export type ParsedResume = {
   name: string;
   location: string;
   email: string;
   contact: ResumeContact[];
   summary: ResumeSummary;
+  wins: ResumeWin[];
   competencies: ResumeCompetency[];
   experience: ResumeExperience[];
   education: ResumeEducation[];

@@ -1,4 +1,4 @@
-import type { ParsedResume, ResumeContact, ResumeSummary, ResumeTextSegment } from '@/lib/types';
+import type { ParsedResume, ResumeContact, ResumeSummary, ResumeTextSegment, ResumeWin } from '@/lib/types';
 
 const iconByCompetency: Record<string, string> = {
   'Engineering Leadership': 'psychology',
@@ -205,6 +205,33 @@ const parseWebSummary = (source: string): ResumeSummary | null => {
   };
 };
 
+// Home page "Recent Wins" cards, also kept as comments so they never print:
+//   % web:win stat | title | description | /optional/link
+// Fields may use inline LaTeX (\%, \textasciitilde{}, \textbf{...}).
+const parseWebWins = (source: string): ResumeWin[] =>
+  [...source.matchAll(/^[ \t]*%[ \t]*web:win[ \t]+(.+)$/gm)].map(([line, value]) => {
+    const fields = value.split('|').map((field) => plainText(field.trim()));
+    const [stat, title, description, href] = fields;
+    const looksLikeLink = (field: string) => /^(\/|https?:\/\/)\S*$/.test(field);
+    if (
+      fields.length < 3 ||
+      fields.length > 4 ||
+      !stat ||
+      !title ||
+      !description ||
+      looksLikeLink(title) ||
+      looksLikeLink(description)
+    ) {
+      throw new Error(
+        `resume.tex: a "web:win" line needs "stat | title | description | optional link", got:\n  ${line.trim()}`,
+      );
+    }
+    if (href !== undefined && !/^(\/|https?:\/\/)\S*$/.test(href)) {
+      throw new Error(`resume.tex: "web:win" link must be a /path or http(s) URL, got "${href}"`);
+    }
+    return href ? { stat, title, description, href } : { stat, title, description };
+  });
+
 // Optional printed Summary section: `\small{ \textbf{Headline}\\ paragraph \n\n paragraph }`.
 const parseSummarySection = (source: string): ResumeSummary => {
   let body = stripComments(source).trim();
@@ -289,6 +316,7 @@ export function parseResumeTex(source: string): ParsedResume {
     email,
     contact,
     summary,
+    wins: parseWebWins(source),
     competencies: parseCompetencies(sections.get('Core Competencies')),
     experience: parseExperience(requireSection(sections, 'Professional Experience')),
     education: parseEducation(sections.get('Education')),
