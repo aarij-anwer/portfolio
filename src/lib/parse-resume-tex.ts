@@ -18,6 +18,7 @@ type Style = Pick<ResumeTextSegment, 'bold' | 'italic'>;
 const decodeInline = (value: string) =>
   value
     .replace(/\$\\to\$/g, '→')
+    .replace(/\$\\rightarrow\$/g, '→')
     .replace(/\\textasciitilde\{\}/g, '%%TILDE%%')
     .replace(/\\&/g, '&')
     .replace(/\\%/g, '%')
